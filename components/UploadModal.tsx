@@ -18,7 +18,7 @@ const ModalOptionButton = ({ icon, label }: { icon: React.ReactNode; label: stri
 const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
-  const currentUser = videosData[0]?.user;
+  const currentUser = videosData.length > 0 ? videosData[0].user : null;
 
   return (
     <div 
@@ -33,7 +33,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
           <CloseIcon />
         </button>
         
-        {currentUser && (
+        {currentUser ? (
             <div className="flex flex-col items-center mb-6">
                 <img 
                 src={currentUser.avatar} 
@@ -42,6 +42,10 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
                 />
                 <p className="font-semibold">{currentUser.username}</p>
                 <h2 className="text-2xl font-bold mt-2">Create new content</h2>
+            </div>
+        ) : (
+           <div className="mb-6">
+                 <h2 className="text-2xl font-bold mt-2">Create new content</h2>
             </div>
         )}
 
