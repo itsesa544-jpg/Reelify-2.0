@@ -1,9 +1,10 @@
 
 import React from 'react';
-import type { Video } from '../types';
+import type { Video, User } from '../types';
 
 interface VideoActionsProps {
   video: Video;
+  onSelectUser: (user: User) => void;
 }
 
 const ActionButton = ({ icon, label }: { icon: React.ReactNode, label: string }) => (
@@ -16,17 +17,17 @@ const ActionButton = ({ icon, label }: { icon: React.ReactNode, label: string })
 );
 
 
-const VideoActions: React.FC<VideoActionsProps> = ({ video }) => {
+const VideoActions: React.FC<VideoActionsProps> = ({ video, onSelectUser }) => {
     const iconClasses = "w-7 h-7";
 
   return (
     <div className="flex flex-col items-center gap-5">
-        <div className="relative mb-2">
-            <img src={video.user.avatar} alt={video.user.username} className="w-12 h-12 rounded-full border-2 border-purple-500"/>
-            <button className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-6 bg-gradient-to-tr from-cyan-400 to-purple-600 rounded-full flex items-center justify-center text-white">
+        <button onClick={() => onSelectUser(video.user)} className="relative mb-2 group">
+            <img src={video.user.avatar} alt={video.user.username} className="w-12 h-12 rounded-full border-2 border-purple-500 group-hover:border-cyan-400 transition-colors"/>
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-6 bg-gradient-to-tr from-cyan-400 to-purple-600 rounded-full flex items-center justify-center text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
-            </button>
-        </div>
+            </div>
+        </button>
       
         <ActionButton 
             label={video.likes}

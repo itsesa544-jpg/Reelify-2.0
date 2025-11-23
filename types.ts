@@ -2,6 +2,15 @@
 export interface User {
   username: string;
   avatar: string;
+  name: string;
+  bio: string;
+  coverPhoto: string;
+  stats: {
+    observers: string;
+    observing: string;
+    totalViews: string;
+    joined: string;
+  };
 }
 
 export interface Community {

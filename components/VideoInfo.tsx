@@ -1,15 +1,18 @@
 
 import React from 'react';
-import type { Video } from '../types';
+import type { Video, User } from '../types';
 
 interface VideoInfoProps {
   video: Video;
+  onSelectUser: (user: User) => void;
 }
 
-const VideoInfo: React.FC<VideoInfoProps> = ({ video }) => {
+const VideoInfo: React.FC<VideoInfoProps> = ({ video, onSelectUser }) => {
   return (
     <div className="text-white space-y-2 max-w-[80%]">
-      <h3 className="font-bold text-lg">{video.user.username}</h3>
+      <button onClick={() => onSelectUser(video.user)} className="font-bold text-lg text-left hover:underline">
+        {video.user.username}
+      </button>
       <p className="text-sm">
         {video.caption} {' '}
         {video.hashtags.map((tag, i) => (

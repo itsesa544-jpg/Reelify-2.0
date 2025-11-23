@@ -1,17 +1,23 @@
+
 import React, { useRef, useEffect, useState } from 'react';
 import { videosData } from '../constants';
 import VideoInfo from './VideoInfo';
 import VideoActions from './VideoActions';
-import type { Video } from '../types';
+import type { Video, User } from '../types';
 
-const VideoItem: React.FC<{ video: Video; isActive: boolean }> = ({ video, isActive }) => {
+interface VideoItemProps {
+  video: Video;
+  isActive: boolean;
+  onSelectUser: (user: User) => void;
+}
+
+const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (videoRef.current) {
       if (isActive) {
         videoRef.current.play().catch(error => {
-          // Autoplay was prevented.
           console.log("Autoplay prevented: ", error);
         });
       } else {
@@ -35,11 +41,11 @@ const VideoItem: React.FC<{ video: Video; isActive: boolean }> = ({ video, isAct
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
       
       <div className="absolute bottom-[80px] left-0 right-0 p-4 flex items-end">
-        <VideoInfo video={video} />
+        <VideoInfo video={video} onSelectUser={onSelectUser} />
       </div>
 
       <div className="absolute bottom-[80px] right-2 p-2">
-        <VideoActions video={video} />
+        <VideoActions video={video} onSelectUser={onSelectUser} />
       </div>
       
       {/* Shop Now Buttons */}
@@ -54,8 +60,11 @@ const VideoItem: React.FC<{ video: Video; isActive: boolean }> = ({ video, isAct
   );
 };
 
+interface VideoPlayerProps {
+  onSelectUser: (user: User) => void;
+}
 
-const VideoPlayer: React.FC = () => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ onSelectUser }) => {
     const [currentVideo, setCurrentVideo] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -99,7 +108,11 @@ const VideoPlayer: React.FC = () => {
                     data-index={index}
                     className="video-container w-screen h-screen snap-start relative"
                 >
-                    <VideoItem video={video} isActive={index === currentVideo} />
+                    <VideoItem 
+                      video={video} 
+                      isActive={index === currentVideo} 
+                      onSelectUser={onSelectUser}
+                    />
                 </div>
             ))}
         </div>
