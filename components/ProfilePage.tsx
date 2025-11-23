@@ -19,7 +19,7 @@ const IconButton: React.FC<{children: React.ReactNode}> = ({children}) => (
 );
 
 const StatItem: React.FC<{value: string; label: string}> = ({value, label}) => (
-    <div className="text-center md:text-left">
+    <div className="text-center">
         <p className="text-xl font-bold text-white">{value}</p>
         <p className="text-sm text-gray-400">{label}</p>
     </div>
@@ -93,4 +93,51 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
                     <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
                         Message
                     </button>
-                
+                </div>
+                <div className="flex items-center space-x-3">
+                    <IconButton><LinkIcon /></IconButton>
+                    <IconButton><SettingsIcon /></IconButton>
+                    <IconButton><ShareIcon /></IconButton>
+                </div>
+            </div>
+        </div>
+
+        <div className="mt-4">
+            <h1 className="text-2xl font-bold text-white">{user.name}</h1>
+            <p className="text-gray-400 mt-1">{user.bio}</p>
+        </div>
+      </div>
+      
+      {/* Stats */}
+      <div className="p-4 pt-0">
+        <div className="bg-[#1A1B20] p-4 rounded-xl">
+            <h2 className="text-lg font-semibold text-white mb-4">Overview Section</h2>
+            <div className="flex items-center justify-around">
+                <StatItem value={user.stats.observers} label="Observers" />
+                <StatItem value={user.stats.observing} label="Observing" />
+                <StatItem value={user.stats.totalViews} label="Total Views" />
+                <StatItem value={`${user.stats.joined}, Dubai`} label="Joined" />
+            </div>
+        </div>
+      </div>
+
+      {/* Tabs & Content */}
+      <div className="px-4 mt-2 pb-4">
+         <div className="flex items-center justify-between bg-[#1A1B20] p-1 rounded-xl">
+           <ProfileTab icon={<VideosIcon />} label="Videos" active={activeTab === 'Videos'} />
+           <ProfileTab icon={<JobsIcon />} label="Jobs" />
+           <ProfileTab icon={<PhotosIcon />} label="Photos" />
+           <ProfileTab icon={<OverviewIcon />} label="Overview" />
+         </div>
+
+         <div className="mt-4 space-y-4">
+            {userVideos.map(video => (
+              <PostCard key={video.id} video={video} />
+            ))}
+         </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;
