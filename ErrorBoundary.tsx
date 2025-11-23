@@ -9,23 +9,23 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  // FIX: Removed 'public' keyword for standard React class component syntax.
-  state: State = {
-    hasError: false
-  };
+  // FIX: State initialization moved to the constructor to resolve issues with `this.props` context.
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false
+    };
+  }
 
-  // FIX: Removed 'public' keyword for standard React class component syntax.
   static getDerivedStateFromError(_: Error): State {
     // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }
 
-  // FIX: Removed 'public' keyword for standard React class component syntax.
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
   }
 
-  // FIX: Removed 'public' keyword for standard React class component syntax.
   render() {
     if (this.state.hasError) {
       return (
