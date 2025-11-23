@@ -6,42 +6,63 @@ import Header from './components/Header';
 import UploadModal from './components/UploadModal';
 import ProfilePage from './components/ProfilePage';
 import type { User } from './types';
+import { videosData } from './constants';
 
-type View = 'feed' | 'profile';
+export type View = 'feed' | 'profile';
 
 const App: React.FC = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [currentView, setCurrentView] = useState<View>('feed');
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [viewedUser, setViewedUser] = useState<User | null>(null);
+  
+  const loggedInUser = videosData[0].user;
 
-  const handleSelectUser = (user: User) => {
-    setSelectedUser(user);
+  const handleSelectUserFromFeed = (user: User) => {
+    setViewedUser(user);
     setCurrentView('profile');
   };
 
-  const handleBackToFeed = () => {
-    setSelectedUser(null);
+  const handleNavigate = (view: View) => {
+    if (view === 'profile') {
+      setViewedUser(loggedInUser);
+    }
+    setCurrentView(view);
+  };
+  
+  const handleBackFromProfile = () => {
     setCurrentView('feed');
+    setViewedUser(null);
   };
 
+  let pageContent;
+  if (currentView === 'feed') {
+    pageContent = (
+      <>
+        <Header />
+        <VideoPlayer onSelectUser={handleSelectUserFromFeed} />
+      </>
+    );
+  } else if (currentView === 'profile' && viewedUser) {
+    const isOwnProfile = viewedUser.username === loggedInUser.username;
+    pageContent = <ProfilePage user={viewedUser} onBack={handleBackFromProfile} showBackButton={!isOwnProfile} />;
+  }
+
   return (
-    <div className="w-screen h-screen bg-black font-sans text-white overflow-hidden">
-      <div className="relative w-full h-full">
-        {currentView === 'feed' && (
-          <>
-            <Header />
-            <VideoPlayer onSelectUser={handleSelectUser} />
-            <BottomNav onUploadClick={() => setIsUploadModalOpen(true)} />
-            <UploadModal 
-              isOpen={isUploadModalOpen} 
-              onClose={() => setIsUploadModalOpen(false)} 
-            />
-          </>
-        )}
-        {currentView === 'profile' && selectedUser && (
-          <ProfilePage user={selectedUser} onBack={handleBackToFeed} />
-        )}
-      </div>
+    <div className="w-screen h-screen bg-black font-sans text-white flex flex-col overflow-hidden">
+      <main className="flex-grow h-full overflow-hidden relative">
+        {pageContent}
+      </main>
+      
+      <BottomNav 
+        currentView={currentView}
+        onNavigate={handleNavigate}
+        onUploadClick={() => setIsUploadModalOpen(true)} 
+      />
+      
+      <UploadModal 
+        isOpen={isUploadModalOpen} 
+        onClose={() => setIsUploadModalOpen(false)} 
+      />
     </div>
   );
 };

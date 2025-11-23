@@ -23,6 +23,7 @@ export interface Video {
   user: User;
   videoUrl: string;
   posterUrl: string;
+  title: string;
   caption: string;
   hashtags: string[];
   music: string;

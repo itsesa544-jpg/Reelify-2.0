@@ -24,11 +24,12 @@ export const videosData: Video[] = [
         observers: '1.2M',
         observing: '350',
         totalViews: '50M',
-        joined: 'Jan 2022, Joined, Dubai'
+        joined: 'Jan 2022'
       }
     },
+    title: "Hidden Gems of Italy",
     videoUrl: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4',
-    posterUrl: 'https://images.pexels.com/videos/8357591/pexels-photo-8357591.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+    posterUrl: 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     caption: 'Feeling the neon vibes tonight! Creating some awesome AR magic.',
     hashtags: ['#ARMagic', '#VibeGroove'],
     music: 'Ooolala Heenkoist - Busy P.',
@@ -48,9 +49,10 @@ export const videosData: Video[] = [
         observers: '892K',
         observing: '150',
         totalViews: '35M',
-        joined: 'Mar 2021, Joined, USA'
+        joined: 'Mar 2021'
       }
     },
+    title: "Urban Dance Flow",
     videoUrl: 'https://videos.pexels.com/video-files/4434242/4434242-hd_720_1366_25fps.mp4',
     posterUrl: 'https://images.pexels.com/videos/4434242/pexels-photo-4434242.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     caption: 'New moves for the #VibeGroove challenge! Who is with me?',
@@ -72,9 +74,10 @@ export const videosData: Video[] = [
         observers: '540K',
         observing: '210',
         totalViews: '22M',
-        joined: 'May 2022, Joined, Canada'
+        joined: 'May 2022'
       }
     },
+    title: "React in 60 Seconds",
     videoUrl: 'https://videos.pexels.com/video-files/7578544/7578544-hd_720_1366_25fps.mp4',
     posterUrl: 'https://images.pexels.com/videos/7578544/pexels-photo-7578544.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     caption: 'Quick tutorial on building a React component. #LearnToCode',
@@ -148,5 +151,35 @@ export const SettingsIcon = ({ className = "w-5 h-5" }) => (
 export const ShareIcon = ({ className = "w-5 h-5" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8m-4-6l-4-4m0 0l-4 4m4-4v12" />
+    </svg>
+);
+
+export const SearchIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+);
+
+export const VideosIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+    </svg>
+);
+
+export const JobsIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    </svg>
+);
+
+export const PhotosIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+);
+
+export const OverviewIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
     </svg>
 );
