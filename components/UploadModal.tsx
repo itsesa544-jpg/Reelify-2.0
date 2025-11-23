@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { videoData, CloseIcon, UploadIcon, CameraIcon, TemplatesIcon } from '../constants';
+import { videosData, CloseIcon, UploadIcon, CameraIcon, TemplatesIcon } from '../constants';
 
 interface UploadModalProps {
   isOpen: boolean;
@@ -19,6 +18,8 @@ const ModalOptionButton = ({ icon, label }: { icon: React.ReactNode; label: stri
 const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
+  const currentUser = videosData[0]?.user;
+
   return (
     <div 
       className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center transition-opacity duration-300" 
@@ -32,15 +33,17 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
           <CloseIcon />
         </button>
         
-        <div className="flex flex-col items-center mb-6">
-            <img 
-              src={videoData.user.avatar} 
-              alt={videoData.user.username} 
-              className="w-20 h-20 rounded-full border-4 border-purple-500 mb-3"
-            />
-            <p className="font-semibold">{videoData.user.username}</p>
-            <h2 className="text-2xl font-bold mt-2">Create new content</h2>
-        </div>
+        {currentUser && (
+            <div className="flex flex-col items-center mb-6">
+                <img 
+                src={currentUser.avatar} 
+                alt={currentUser.username} 
+                className="w-20 h-20 rounded-full border-4 border-purple-500 mb-3"
+                />
+                <p className="font-semibold">{currentUser.username}</p>
+                <h2 className="text-2xl font-bold mt-2">Create new content</h2>
+            </div>
+        )}
 
         <div className="grid grid-cols-3 gap-4 text-center">
           <ModalOptionButton icon={<UploadIcon />} label="Upload" />

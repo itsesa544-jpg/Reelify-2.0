@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Community, Video } from './types';
 
@@ -11,21 +10,53 @@ export const featuredCommunities: Community[] = [
   { name: 'SkillShareHub', icon: 'https://picsum.photos/seed/skill/100' },
 ];
 
-export const videoData: Video = {
-  id: 1,
-  user: {
-    username: '@coille_shape',
-    avatar: 'https://picsum.photos/seed/coille/100',
+export const videosData: Video[] = [
+  {
+    id: 1,
+    user: {
+      username: '@coille_shape',
+      avatar: 'https://picsum.photos/seed/coille/100',
+    },
+    videoUrl: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4',
+    posterUrl: 'https://images.pexels.com/videos/8357591/pexels-photo-8357591.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+    caption: 'Feeling the neon vibes tonight! Creating some awesome AR magic.',
+    hashtags: ['#ARMagic', '#VibeGroove'],
+    music: 'Ooolala Heenkoist - Busy P.',
+    likes: '1.2M',
+    comments: '25.7K',
+    shares: '15.1K',
   },
-  videoUrl: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4',
-  posterUrl: 'https://images.pexels.com/videos/8357591/pexels-photo-8357591.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-  caption: 'Feeling the neon vibes tonight! Creating some awesome AR magic.',
-  hashtags: ['#ARMagic', '#VibeGroove'],
-  music: 'Ooolala Heenkoist - Busy P.',
-  likes: '1.2M',
-  comments: '25.7K',
-  shares: '15.1K',
-};
+  {
+    id: 2,
+    user: {
+      username: '@dance_dynamo',
+      avatar: 'https://picsum.photos/seed/dynamo/100',
+    },
+    videoUrl: 'https://videos.pexels.com/video-files/4434242/4434242-hd_720_1366_25fps.mp4',
+    posterUrl: 'https://images.pexels.com/videos/4434242/pexels-photo-4434242.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+    caption: 'New moves for the #VibeGroove challenge! Who is with me?',
+    hashtags: ['#DanceChallenge', '#VibeGroove'],
+    music: 'Groove Machine - Funky Town',
+    likes: '892K',
+    comments: '12.3K',
+    shares: '8.4K',
+  },
+  {
+    id: 3,
+    user: {
+      username: '@code_creator',
+      avatar: 'https://picsum.photos/seed/code/100',
+    },
+    videoUrl: 'https://videos.pexels.com/video-files/7578544/7578544-hd_720_1366_25fps.mp4',
+    posterUrl: 'https://images.pexels.com/videos/7578544/pexels-photo-7578544.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+    caption: 'Quick tutorial on building a React component. #LearnToCode',
+    hashtags: ['#LearnToCode', '#ReactJS'],
+    music: 'Lo-fi Beats to Code To - Study Mix',
+    likes: '540K',
+    comments: '18.9K',
+    shares: '11.2K',
+  },
+];
 
 export const VibeLogo = () => (
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">

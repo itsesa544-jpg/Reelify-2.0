@@ -1,29 +1,45 @@
-
-import React from 'react';
-import { videoData } from '../constants';
+import React, { useRef, useEffect, useState } from 'react';
+import { videosData } from '../constants';
 import VideoInfo from './VideoInfo';
 import VideoActions from './VideoActions';
+import type { Video } from '../types';
 
-const VideoPlayer: React.FC = () => {
+const VideoItem: React.FC<{ video: Video; isActive: boolean }> = ({ video, isActive }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isActive) {
+        videoRef.current.play().catch(error => {
+          // Autoplay was prevented.
+          console.log("Autoplay prevented: ", error);
+        });
+      } else {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
+    }
+  }, [isActive]);
+
   return (
-    <div className="relative w-full h-full bg-black">
+    <div className="relative w-full h-full">
       <video
+        ref={videoRef}
         className="w-full h-full object-cover"
-        src={videoData.videoUrl}
-        poster={videoData.posterUrl}
+        src={video.videoUrl}
+        poster={video.posterUrl}
         loop
-        autoPlay
         muted
         playsInline
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
       
       <div className="absolute bottom-[80px] left-0 right-0 p-4 flex items-end">
-        <VideoInfo video={videoData} />
+        <VideoInfo video={video} />
       </div>
 
       <div className="absolute bottom-[80px] right-2 p-2">
-        <VideoActions video={videoData} />
+        <VideoActions video={video} />
       </div>
       
       {/* Shop Now Buttons */}
@@ -36,6 +52,58 @@ const VideoPlayer: React.FC = () => {
 
     </div>
   );
+};
+
+
+const VideoPlayer: React.FC = () => {
+    const [currentVideo, setCurrentVideo] = useState(0);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const options = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = entry.target.getAttribute('data-index');
+                    if (index) {
+                        setCurrentVideo(parseInt(index, 10));
+                    }
+                }
+            });
+        }, options);
+
+        const currentContainer = containerRef.current;
+        if (currentContainer) {
+            const videoElements = currentContainer.querySelectorAll('.video-container');
+            videoElements.forEach(video => observer.observe(video));
+        }
+
+        return () => {
+            if (currentContainer) {
+                const videoElements = currentContainer.querySelectorAll('.video-container');
+                videoElements.forEach(video => observer.unobserve(video));
+            }
+        };
+    }, []);
+
+    return (
+        <div ref={containerRef} className="w-full h-full bg-black overflow-y-auto snap-y snap-mandatory">
+            {videosData.map((video, index) => (
+                <div 
+                    key={video.id} 
+                    data-index={index}
+                    className="video-container w-screen h-screen snap-start relative"
+                >
+                    <VideoItem video={video} isActive={index === currentVideo} />
+                </div>
+            ))}
+        </div>
+    );
 };
 
 export default VideoPlayer;
