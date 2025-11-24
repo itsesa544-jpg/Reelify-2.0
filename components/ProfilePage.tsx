@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import type { User } from '../types';
 import { 
   BackIcon, LinkIcon, SettingsIcon, ShareIcon, videosData,
-  SearchIcon, VideosIcon, JobsIcon, PhotosIcon, OverviewIcon
+  VideosIcon, JobsIcon, PhotosIcon, OverviewIcon
 } from '../constants';
 
 interface ProfilePageProps {
@@ -60,15 +60,13 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
   return (
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto">
       {/* Header */}
-      <header className="p-4 bg-[#1A1B20]/80 backdrop-blur-sm sticky top-0 z-20 flex items-center gap-4">
-        {showBackButton && (
-          <button onClick={onBack} className="text-white">
-            <BackIcon />
-          </button>
-        )}
-        <div className="relative flex-grow">
-          <SearchIcon className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500" />
-          <input type="text" placeholder="Search videos..." className="bg-[#282A36] text-white w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" />
+      <header className="p-4 bg-[#1A1B20]/80 backdrop-blur-sm sticky top-0 z-20 flex items-center justify-between gap-4">
+        <div>
+          {showBackButton && (
+            <button onClick={onBack} className="text-white">
+              <BackIcon />
+            </button>
+          )}
         </div>
         <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-full" />
       </header>
