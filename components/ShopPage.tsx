@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { shopPostsData } from '../constants';
 import type { ShopPost } from '../types';
@@ -21,7 +20,7 @@ const ShopPage: React.FC = () => {
   return (
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto pb-20">
       <header className="p-4 bg-[#1A1B20]/80 backdrop-blur-sm sticky top-0 z-20 flex items-center justify-center">
-        <h1 className="text-xl font-bold text-white">For You</h1>
+        <h1 className="text-xl font-bold text-white">Shop</h1>
       </header>
       <div className="p-4 grid grid-cols-2 gap-4">
         {shopPostsData.map(post => (

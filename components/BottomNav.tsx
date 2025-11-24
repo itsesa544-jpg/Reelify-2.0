@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { View } from '../App';
 
@@ -36,8 +35,8 @@ const BottomNav: React.FC<BottomNavProps> = ({ onUploadClick, currentView, onNav
         </button>
         <button onClick={() => onNavigate('foryou')} className="flex-1">
           <NavItem
-            label="For You"
-            icon={<svg xmlns="http://www.w3.org/2000/svg" className={iconClasses} fill={currentView === 'foryou' ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>}
+            label="Shop"
+            icon={<svg xmlns="http://www.w3.org/2000/svg" className={iconClasses} fill={currentView === 'foryou' ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>}
             active={currentView === 'foryou'}
           />
         </button>
@@ -49,8 +48,8 @@ const BottomNav: React.FC<BottomNavProps> = ({ onUploadClick, currentView, onNav
         </button>
         <button className="flex-1">
           <NavItem
-            label="Communities"
-            icon={<svg xmlns="http://www.w3.org/2000/svg" className={iconClasses} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a3.002 3.002 0 013.39-2.142 3.002 3.002 0 013.39 2.142m0 0A3 3 0 0112 18c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3z" /></svg>}
+            label="Inbox"
+            icon={<svg xmlns="http://www.w3.org/2000/svg" className={iconClasses} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>}
           />
         </button>
         <button onClick={() => onNavigate('profile')} className="flex-1">
