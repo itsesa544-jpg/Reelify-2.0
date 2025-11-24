@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import type { User } from '../types';
 import { 
   BackIcon, LinkIcon, SettingsIcon, ShareIcon, videosData,
-  VideosIcon, JobsIcon, PhotosIcon, OverviewIcon
+  VideosIcon, ShopIcon, PhotosIcon,
+  PlayIconSimple, GalleryIcon
 } from '../constants';
 
 interface ProfilePageProps {
@@ -20,37 +21,40 @@ const IconButton: React.FC<{children: React.ReactNode}> = ({children}) => (
 
 const StatItem: React.FC<{value: string; label: string}> = ({value, label}) => (
     <div className="text-center">
-        <p className="text-xl font-bold text-white">{value}</p>
-        <p className="text-sm text-gray-400">{label}</p>
+        <p className="text-lg font-bold text-white">{value}</p>
+        <p className="text-xs text-gray-400 uppercase tracking-wide">{label}</p>
     </div>
 );
 
-const ProfileTab: React.FC<{icon: React.ReactNode, label: string, active?: boolean}> = ({ icon, label, active }) => (
-  <button className={`flex items-center gap-2 py-3 px-4 rounded-lg transition-colors ${active ? 'bg-gray-700/50' : 'hover:bg-gray-800/50'}`}>
+const ProfileTab: React.FC<{icon: React.ReactNode, label: string, active?: boolean, onClick: () => void}> = ({ icon, label, active, onClick }) => (
+  <button onClick={onClick} className={`flex items-center gap-2 py-3 px-4 rounded-lg transition-colors ${active ? 'bg-gray-700/50' : 'hover:bg-gray-800/50'}`}>
     {icon}
     <span className={`font-semibold ${active ? 'text-white' : 'text-gray-400'}`}>{label}</span>
   </button>
 );
 
-const PostCard: React.FC<{video: (typeof videosData)[0]}> = ({ video }) => (
-  <div className="bg-[#1A1B20] rounded-xl overflow-hidden">
-    <img src={video.posterUrl} alt={video.title} className="w-full h-48 object-cover" />
-    <div className="p-4">
-      <h3 className="font-bold text-white text-lg">{video.title}</h3>
-      <div className="flex items-center gap-2 mt-2">
-        <img src={video.user.avatar} alt={video.user.name} className="w-6 h-6 rounded-full" />
-        <span className="text-sm text-gray-400">{video.user.name}</span>
-      </div>
-      <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-          <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-        </svg>
-        <span>{video.likes} views</span>
-      </div>
-    </div>
-  </div>
-);
+const VideoGridItem: React.FC<{ video: (typeof videosData)[0]; index: number }> = ({ video, index }) => {
+    const neonClasses = index % 4 < 2 
+        ? "border-cyan-400 shadow-[0_0_8px_theme(colors.cyan.400)] group-hover:shadow-[0_0_15px_theme(colors.cyan.400)]" 
+        : "border-fuchsia-500 shadow-[0_0_8px_theme(colors.fuchsia.500)] group-hover:shadow-[0_0_15px_theme(colors.fuchsia.500)]";
+
+    return (
+        <div className="relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer group">
+            <img src={video.posterUrl} alt={video.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <div className={`absolute inset-0 border-2 ${neonClasses} rounded-2xl pointer-events-none`}></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none"></div>
+
+            <div className="absolute top-2 right-2 text-white pointer-events-none">
+                <GalleryIcon className="w-5 h-5" />
+            </div>
+
+            <div className="absolute bottom-2 left-2 flex items-center gap-1.5 text-white text-sm font-bold [text-shadow:_1px_1px_2px_rgb(0_0_0_/_80%)] pointer-events-none">
+                <PlayIconSimple className="w-4 h-4" />
+                <span>{video.likes}</span>
+            </div>
+        </div>
+    );
+};
 
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton }) => {
@@ -112,8 +116,11 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
             <h2 className="text-lg font-semibold text-white mb-4">Overview Section</h2>
             <div className="flex items-center justify-around">
                 <StatItem value={user.stats.observers} label="Observers" />
+                <div className="h-10 w-px bg-white/10"></div>
                 <StatItem value={user.stats.observing} label="Observing" />
+                <div className="h-10 w-px bg-white/10"></div>
                 <StatItem value={user.stats.totalViews} label="Total Views" />
+                <div className="h-10 w-px bg-white/10"></div>
                 <StatItem value={`${user.stats.joined}, Dubai`} label="Joined" />
             </div>
         </div>
@@ -121,17 +128,34 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
 
       {/* Tabs & Content */}
       <div className="px-4 mt-2 pb-4">
-         <div className="flex items-center justify-between bg-[#1A1B20] p-1 rounded-xl">
-           <ProfileTab icon={<VideosIcon />} label="Videos" active={activeTab === 'Videos'} />
-           <ProfileTab icon={<JobsIcon />} label="Jobs" />
-           <ProfileTab icon={<PhotosIcon />} label="Photos" />
-           <ProfileTab icon={<OverviewIcon />} label="Overview" />
+         <div className="flex items-center justify-around bg-[#1A1B20] p-1 rounded-xl">
+           <ProfileTab icon={<VideosIcon />} label="Videos" active={activeTab === 'Videos'} onClick={() => setActiveTab('Videos')} />
+           <ProfileTab icon={<ShopIcon />} label="Shop" active={activeTab === 'Shop'} onClick={() => setActiveTab('Shop')} />
+           <ProfileTab icon={<PhotosIcon />} label="Photos" active={activeTab === 'Photos'} onClick={() => setActiveTab('Photos')} />
          </div>
 
-         <div className="mt-4 space-y-4">
-            {userVideos.map(video => (
-              <PostCard key={video.id} video={video} />
-            ))}
+         <div className="mt-4">
+            {activeTab === 'Videos' && (
+              <div className="grid grid-cols-3 gap-1">
+                  {userVideos.map((video, index) => (
+                    <VideoGridItem key={video.id} video={video} index={index} />
+                  ))}
+              </div>
+            )}
+            {activeTab === 'Shop' && (
+              <div className="text-center py-10 text-gray-500">
+                  <ShopIcon className="w-12 h-12 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold">This user's shop is empty.</h3>
+                  <p>Check back later for cool products!</p>
+              </div>
+            )}
+            {activeTab === 'Photos' && (
+                <div className="text-center py-10 text-gray-500">
+                    <PhotosIcon className="w-12 h-12 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold">No photos yet.</h3>
+                    <p>This user hasn't posted any photos.</p>
+                </div>
+            )}
          </div>
       </div>
     </div>

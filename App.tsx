@@ -5,10 +5,11 @@ import BottomNav from './components/BottomNav';
 import Header from './components/Header';
 import UploadModal from './components/UploadModal';
 import ProfilePage from './components/ProfilePage';
+import ShopPage from './components/ShopPage';
 import type { User } from './types';
 import { videosData } from './constants';
 
-export type View = 'feed' | 'profile';
+export type View = 'feed' | 'profile' | 'foryou';
 
 const App: React.FC = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -39,13 +40,16 @@ const App: React.FC = () => {
     pageContent = (
       <>
         <Header />
-        <VideoPlayer onSelectUser={handleSelectUserFromFeed} />
+        <VideoPlayer onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} />
       </>
     );
   } else if (currentView === 'profile' && viewedUser) {
     const isOwnProfile = viewedUser.username === loggedInUser.username;
     pageContent = <ProfilePage user={viewedUser} onBack={handleBackFromProfile} showBackButton={!isOwnProfile} />;
+  } else if (currentView === 'foryou') {
+    pageContent = <ShopPage />;
   }
+
 
   return (
     <div className="w-screen h-screen bg-black font-sans text-white flex flex-col overflow-hidden">

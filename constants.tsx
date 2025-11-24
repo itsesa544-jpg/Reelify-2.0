@@ -1,6 +1,6 @@
 
 import React from 'react';
-import type { Community, Video } from './types';
+import type { Community, Video, ShopPost } from './types';
 
 export const trendingTopics: string[] = ['#ARMagic', '#VibeGroove', '#LearnToCode', '#VibeGroove'];
 
@@ -33,7 +33,7 @@ export const videosData: Video[] = [
     caption: 'Feeling the neon vibes tonight! Creating some awesome AR magic.',
     hashtags: ['#ARMagic', '#VibeGroove'],
     music: 'Ooolala Heenkoist - Busy P.',
-    likes: '1.2M',
+    likes: '1.5K',
     comments: '25.7K',
     shares: '15.1K',
   },
@@ -58,7 +58,7 @@ export const videosData: Video[] = [
     caption: 'New moves for the #VibeGroove challenge! Who is with me?',
     hashtags: ['#DanceChallenge', '#VibeGroove'],
     music: 'Groove Machine - Funky Town',
-    likes: '892K',
+    likes: '1.1K',
     comments: '12.3K',
     shares: '8.4K',
   },
@@ -83,11 +83,125 @@ export const videosData: Video[] = [
     caption: 'Quick tutorial on building a React component. #LearnToCode',
     hashtags: ['#LearnToCode', '#ReactJS'],
     music: 'Lo-fi Beats to Code To - Study Mix',
-    likes: '540K',
+    likes: '381',
     comments: '18.9K',
     shares: '11.2K',
   },
+  {
+    id: 4,
+    user: {
+      username: '@maria_khan',
+      name: 'Maria_Khan',
+      avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      bio: 'Content Creator | Storyteller | Traveler. ✨',
+      coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      stats: {
+        observers: '1.2M',
+        observing: '350',
+        totalViews: '50M',
+        joined: 'Jan 2022'
+      }
+    },
+    title: "Morning Coffee",
+    videoUrl: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4',
+    posterUrl: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    caption: 'A perfect start to the day.',
+    hashtags: ['#coffee', '#morning'],
+    music: 'Acoustic Breeze - Bensound',
+    likes: '94',
+    comments: '1.2K',
+    shares: '300',
+  },
+  {
+    id: 5,
+    user: {
+      username: '@maria_khan',
+      name: 'Maria_Khan',
+      avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      bio: 'Content Creator | Storyteller | Traveler. ✨',
+      coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      stats: {
+        observers: '1.2M',
+        observing: '350',
+        totalViews: '50M',
+        joined: 'Jan 2022'
+      }
+    },
+    title: "City Lights",
+    videoUrl: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4',
+    posterUrl: 'https://images.pexels.com/photos/1563256/pexels-photo-1563256.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    caption: 'City that never sleeps.',
+    hashtags: ['#city', '#night'],
+    music: 'Electronic Vibes - Mixkit',
+    likes: '280',
+    comments: '3.5K',
+    shares: '800',
+  },
 ];
+
+export const shopPostsData: ShopPost[] = [
+  {
+    id: 1,
+    imageUrl: 'https://images.pexels.com/photos/1793525/pexels-photo-1793525.jpeg?auto=compress&cs=tinysrgb&w=600',
+    title: 'Cyberpunk Cityscape Canvas',
+    price: '$89.99',
+    seller: {
+      name: 'Future Art',
+      avatar: 'https://picsum.photos/seed/seller1/100',
+    },
+  },
+  {
+    id: 2,
+    imageUrl: 'https://images.pexels.com/photos/2088205/pexels-photo-2088205.jpeg?auto=compress&cs=tinysrgb&w=600',
+    title: 'Holographic AR Filter Pack',
+    price: '$19.99',
+    seller: {
+      name: 'Vibe Filters',
+      avatar: 'https://picsum.photos/seed/seller2/100',
+    },
+  },
+  {
+    id: 3,
+    imageUrl: 'https://images.pexels.com/photos/267301/pexels-photo-267301.jpeg?auto=compress&cs=tinysrgb&w=600',
+    title: 'Luminous Sole Sneakers',
+    price: '$149.50',
+    seller: {
+      name: 'GlowGear',
+      avatar: 'https://picsum.photos/seed/seller3/100',
+    },
+  },
+  {
+    id: 4,
+    imageUrl: 'https://images.pexels.com/photos/3944377/pexels-photo-3944377.jpeg?auto=compress&cs=tinysrgb&w=600',
+    title: 'Portable RGB Light Stick',
+    price: '$75.00',
+    seller: {
+      name: 'Creator Tools',
+      avatar: 'https://picsum.photos/seed/seller4/100',
+    },
+  },
+  {
+    id: 5,
+    imageUrl: 'https://images.pexels.com/photos/716107/pexels-photo-716107.jpeg?auto=compress&cs=tinysrgb&w=600',
+    title: 'VibeWave Oversized Hoodie',
+    price: '$65.00',
+    seller: {
+      name: 'Vibe Apparel',
+      avatar: 'https://picsum.photos/seed/seller5/100',
+    },
+  },
+  {
+    id: 6,
+    imageUrl: 'https://images.pexels.com/photos/3183164/pexels-photo-3183164.jpeg?auto=compress&cs=tinysrgb&w=600',
+    title: 'Neon Room Sign "VIBE"',
+    price: '$120.00',
+    seller: {
+      name: 'Neon Dreams',
+      avatar: 'https://picsum.photos/seed/seller6/100',
+    },
+  },
+];
+
 
 export const VibeLogo = () => (
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
@@ -166,9 +280,9 @@ export const VideosIcon = ({ className = "w-5 h-5" }) => (
     </svg>
 );
 
-export const JobsIcon = ({ className = "w-5 h-5" }) => (
+export const ShopIcon = ({ className = "w-5 h-5" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
     </svg>
 );
 
@@ -181,5 +295,18 @@ export const PhotosIcon = ({ className = "w-5 h-5" }) => (
 export const OverviewIcon = ({ className = "w-5 h-5" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+);
+
+export const PlayIconSimple = ({ className = "w-3 h-3" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8 5v14l11-7z" />
+    </svg>
+);
+
+export const GalleryIcon = ({ className = "w-4 h-4" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <rect x="3" y="3" width="13" height="13" rx="2"></rect>
+        <path d="M8 21h11a2 2 0 002-2V8"></path>
     </svg>
 );

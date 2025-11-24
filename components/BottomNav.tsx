@@ -34,10 +34,11 @@ const BottomNav: React.FC<BottomNavProps> = ({ onUploadClick, currentView, onNav
             active={currentView === 'feed'}
           />
         </button>
-        <button className="flex-1">
+        <button onClick={() => onNavigate('foryou')} className="flex-1">
           <NavItem
             label="For You"
-            icon={<svg xmlns="http://www.w3.org/2000/svg" className={iconClasses} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>}
+            icon={<svg xmlns="http://www.w3.org/2000/svg" className={iconClasses} fill={currentView === 'foryou' ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>}
+            active={currentView === 'foryou'}
           />
         </button>
         <button 

@@ -31,3 +31,14 @@ export interface Video {
   comments: string;
   shares: string;
 }
+
+export interface ShopPost {
+  id: number;
+  imageUrl: string;
+  title: string;
+  price: string;
+  seller: {
+    name: string;
+    avatar: string;
+  };
+}
