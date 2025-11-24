@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import type { User } from '../types';
 import { 
-  BackIcon, LinkIcon, SettingsIcon, ShareIcon, videosData,
+  BackIcon, EditProfileIcon, SettingsIcon, ShareIcon, videosData,
   VideosIcon, ShopIcon, PhotosIcon,
   PlayIconSimple, GalleryIcon
 } from '../constants';
@@ -60,6 +60,30 @@ const VideoGridItem: React.FC<{ video: (typeof videosData)[0]; index: number }> 
 const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton }) => {
   const userVideos = videosData.filter(video => video.user.username === user.username);
   const [activeTab, setActiveTab] = useState('Videos');
+  const [isBioExpanded, setIsBioExpanded] = useState(false);
+  
+  const BioText: React.FC<{text: string}> = ({text}) => {
+    const maxLength = 80;
+    if (text.length <= maxLength) {
+        return <p className="text-gray-400 mt-1">{text}</p>;
+    }
+    
+    if (isBioExpanded) {
+        return (
+            <p className="text-gray-400 mt-1">
+                {text}
+                <button onClick={() => setIsBioExpanded(false)} className="text-cyan-400 font-semibold ml-2">See less</button>
+            </p>
+        );
+    }
+    
+    return (
+        <p className="text-gray-400 mt-1">
+            {`${text.substring(0, maxLength)}...`}
+            <button onClick={() => setIsBioExpanded(true)} className="text-cyan-400 font-semibold ml-2">See more</button>
+        </p>
+    );
+  };
 
   return (
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto">
@@ -80,32 +104,35 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
       <div className="p-4">
         <div className="flex justify-between items-start">
             {/* Left side: Avatar and subsequent info */}
-            <div className="relative">
+            <div className="relative flex-shrink-0">
                 <img 
                     src={user.avatar} 
                     alt={user.name} 
                     className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover -mt-14" 
                 />
-                <div className="mt-4">
-                    <h1 className="text-2xl font-bold text-white">{user.name}</h1>
-                    <p className="text-gray-400 mt-1">{user.bio}</p>
-                </div>
             </div>
-
-            {/* Right side: Buttons */}
-            <div className="flex flex-col items-end gap-3 pt-2">
-                <div className="flex">
-                    <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
-                        Observe
-                    </button>
-                    <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
-                        Message
-                    </button>
+            
+            <div className="flex-grow flex justify-between items-start ml-4">
+                 <div className="mt-0">
+                    <h1 className="text-2xl font-bold text-white">{user.name}</h1>
+                    <BioText text={user.bio} />
                 </div>
-                <div className="flex items-center space-x-3">
-                    <IconButton><LinkIcon /></IconButton>
-                    <IconButton><SettingsIcon /></IconButton>
-                    <IconButton><ShareIcon /></IconButton>
+
+                {/* Right side: Buttons */}
+                <div className="flex flex-col items-end gap-3 pt-2 flex-shrink-0">
+                    <div className="flex">
+                        <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
+                            Observe
+                        </button>
+                        <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
+                            Message
+                        </button>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                        <IconButton><EditProfileIcon /></IconButton>
+                        <IconButton><SettingsIcon /></IconButton>
+                        <IconButton><ShareIcon /></IconButton>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,8 +140,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
       
       {/* Stats */}
       <div className="p-4 pt-0">
-        <div className="bg-[#1A1B20] p-4 rounded-xl">
-            <h2 className="text-lg font-semibold text-white mb-4">Overview Section</h2>
+        <div className="bg-[#1A1B20] p-3 rounded-xl">
             <div className="flex items-center justify-around">
                 <StatItem value={user.stats.observers} label="Observers" />
                 <div className="h-10 w-px bg-white/10"></div>
@@ -122,7 +148,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
                 <div className="h-10 w-px bg-white/10"></div>
                 <StatItem value={user.stats.totalViews} label="Total Views" />
                 <div className="h-10 w-px bg-white/10"></div>
-                <StatItem value={`${user.stats.joined}, Dubai`} label="Joined" />
+                <StatItem value={`${user.stats.joined}`} label="Joined" />
             </div>
         </div>
       </div>
