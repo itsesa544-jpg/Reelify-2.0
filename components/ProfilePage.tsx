@@ -21,8 +21,8 @@ const IconButton: React.FC<{children: React.ReactNode}> = ({children}) => (
 
 const StatItem: React.FC<{value: string; label: string}> = ({value, label}) => (
     <div className="text-center">
-        <p className="text-lg font-bold text-white">{value}</p>
-        <p className="text-xs text-gray-400 uppercase tracking-wide">{label}</p>
+        <p className="text-base font-bold text-white">{value}</p>
+        <p className="text-[11px] text-gray-400 uppercase tracking-wider">{label}</p>
     </div>
 );
 
