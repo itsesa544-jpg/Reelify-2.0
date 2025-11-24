@@ -18,7 +18,7 @@ export const videosData: Video[] = [
       username: '@maria_khan',
       name: 'Maria_Khan',
       avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      bio: 'Content Creator | Storyteller | Traveler. ✨',
+      bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
       coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
       stats: {
         observers: '1.2M',
@@ -93,7 +93,7 @@ export const videosData: Video[] = [
       username: '@maria_khan',
       name: 'Maria_Khan',
       avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      bio: 'Content Creator | Storyteller | Traveler. ✨',
+      bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
       coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
       stats: {
         observers: '1.2M',
@@ -118,7 +118,7 @@ export const videosData: Video[] = [
       username: '@maria_khan',
       name: 'Maria_Khan',
       avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      bio: 'Content Creator | Storyteller | Traveler. ✨',
+      bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
       coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
       stats: {
         observers: '1.2M',
