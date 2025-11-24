@@ -2,10 +2,11 @@
 import React, { useState } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
-import Header from './components/Header';
 import UploadModal from './components/UploadModal';
 import ProfilePage from './components/ProfilePage';
 import ShopPage from './components/ShopPage';
+import LeftSidebar from './components/LeftSidebar';
+import RightSidebar from './components/RightSidebar';
 import type { User } from './types';
 import { videosData } from './constants';
 
@@ -37,12 +38,7 @@ const App: React.FC = () => {
 
   let pageContent;
   if (currentView === 'feed') {
-    pageContent = (
-      <>
-        <Header />
-        <VideoPlayer onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} />
-      </>
-    );
+    pageContent = <VideoPlayer onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} />;
   } else if (currentView === 'profile' && viewedUser) {
     const isOwnProfile = viewedUser.username === loggedInUser.username;
     pageContent = <ProfilePage user={viewedUser} onBack={handleBackFromProfile} showBackButton={!isOwnProfile} />;
@@ -50,23 +46,40 @@ const App: React.FC = () => {
     pageContent = <ShopPage />;
   }
 
-
   return (
-    <div className="w-screen h-screen bg-black font-sans text-white flex flex-col overflow-hidden">
-      <main className="flex-grow h-full overflow-hidden relative">
-        {pageContent}
-      </main>
-      
-      <BottomNav 
-        currentView={currentView}
-        onNavigate={handleNavigate}
-        onUploadClick={() => setIsUploadModalOpen(true)} 
-      />
-      
-      <UploadModal 
-        isOpen={isUploadModalOpen} 
-        onClose={() => setIsUploadModalOpen(false)} 
-      />
+    <div className="w-screen h-screen bg-[#0D0F13] text-white font-sans">
+        <div className="container mx-auto h-full max-w-screen-xl flex lg:gap-6 lg:p-4">
+            
+            {/* Left Sidebar (Desktop Nav) */}
+            <nav className="hidden lg:block w-[280px] shrink-0">
+                <LeftSidebar onNavigate={handleNavigate} currentView={currentView} />
+            </nav>
+
+            {/* Main content + Mobile Nav */}
+            <div className="flex-grow flex flex-col h-full overflow-hidden">
+                <main className="flex-grow h-full overflow-hidden relative bg-black lg:rounded-2xl">
+                    {pageContent}
+                </main>
+                <div className="lg:hidden">
+                     <BottomNav 
+                        currentView={currentView}
+                        onNavigate={handleNavigate}
+                        onUploadClick={() => setIsUploadModalOpen(true)} 
+                    />
+                </div>
+            </div>
+
+            {/* Right Sidebar (Desktop Suggestions) */}
+            <aside className="hidden lg:block w-[320px] shrink-0">
+                <RightSidebar onSelectUser={handleSelectUserFromFeed} />
+            </aside>
+            
+            {/* Modal - outside the layout flow */}
+            <UploadModal 
+                isOpen={isUploadModalOpen} 
+                onClose={() => setIsUploadModalOpen(false)} 
+            />
+        </div>
     </div>
   );
 };
