@@ -11,10 +11,11 @@ interface ProfilePageProps {
   user: User;
   onBack: () => void;
   showBackButton: boolean;
+  onEdit?: () => void;
 }
 
-const IconButton: React.FC<{children: React.ReactNode}> = ({children}) => (
-    <button className="w-10 h-10 bg-[#282A36]/80 rounded-full flex items-center justify-center text-gray-300 hover:bg-[#3b3d4d] transition-colors">
+const IconButton: React.FC<{children: React.ReactNode, onClick?: () => void}> = ({children, onClick}) => (
+    <button onClick={onClick} className="w-10 h-10 bg-[#282A36]/80 rounded-full flex items-center justify-center text-gray-300 hover:bg-[#3b3d4d] transition-colors">
         {children}
     </button>
 );
@@ -57,7 +58,7 @@ const VideoGridItem: React.FC<{ video: (typeof videosData)[0]; index: number }> 
 };
 
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton }) => {
+const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton, onEdit }) => {
   const userVideos = videosData.filter(video => video.user.username === user.username);
   const [activeTab, setActiveTab] = useState('Videos');
   const [isBioExpanded, setIsBioExpanded] = useState(false);
@@ -103,11 +104,13 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
 
       <div className="p-4">
         <div className="relative h-12">
-            <img 
-                src={user.avatar} 
-                alt={user.name} 
-                className="absolute -top-16 w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover" 
-            />
+            <div className="absolute -top-16">
+                <img 
+                    src={user.avatar} 
+                    alt={user.name} 
+                    className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover" 
+                />
+            </div>
             <div className="absolute top-0 right-0 flex flex-col items-end gap-3">
                 <div className="flex">
                     <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
@@ -118,7 +121,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
                     </button>
                 </div>
                 <div className="flex items-center space-x-3">
-                    <IconButton><EditProfileIcon /></IconButton>
+                    {!showBackButton && onEdit && <IconButton onClick={onEdit}><EditProfileIcon /></IconButton>}
                     <IconButton><SettingsIcon /></IconButton>
                     <IconButton><ShareIcon /></IconButton>
                 </div>

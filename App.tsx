@@ -9,20 +9,25 @@ import ShopPage from './components/ShopPage';
 import LeftSidebar from './components/LeftSidebar';
 import RightSidebar from './components/RightSidebar';
 import InboxPage from './components/InboxPage';
+import EditProfilePage from './components/EditProfilePage';
 import type { User } from './types';
 import { videosData } from './constants';
 
-export type View = 'feed' | 'profile' | 'foryou' | 'inbox';
+export type View = 'feed' | 'profile' | 'foryou' | 'inbox' | 'editProfile';
 
 const App: React.FC = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [currentView, setCurrentView] = useState<View>('feed');
   const [viewedUser, setViewedUser] = useState<User | null>(null);
   
-  const loggedInUser = videosData[0].user;
+  const [loggedInUser, setLoggedInUser] = useState<User>(videosData[0].user);
 
   const handleSelectUserFromFeed = (user: User) => {
-    setViewedUser(user);
+    if (user.username === loggedInUser.username) {
+        setViewedUser(loggedInUser);
+    } else {
+        setViewedUser(user);
+    }
     setCurrentView('profile');
   };
 
@@ -38,16 +43,40 @@ const App: React.FC = () => {
     setViewedUser(null);
   };
 
+  const handleSaveProfile = (updatedUser: User) => {
+    setLoggedInUser(updatedUser);
+    setViewedUser(updatedUser);
+    setCurrentView('profile');
+  };
+
   let pageContent;
   if (currentView === 'feed') {
     pageContent = <VideoPlayer onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} />;
   } else if (currentView === 'profile' && viewedUser) {
     const isOwnProfile = viewedUser.username === loggedInUser.username;
-    pageContent = <ProfilePage user={viewedUser} onBack={handleBackFromProfile} showBackButton={!isOwnProfile} />;
+    pageContent = (
+        <ProfilePage 
+            user={viewedUser} 
+            onBack={handleBackFromProfile} 
+            showBackButton={!isOwnProfile}
+            onEdit={() => setCurrentView('editProfile')}
+        />
+    );
   } else if (currentView === 'foryou') {
     pageContent = <ShopPage />;
   } else if (currentView === 'inbox') {
     pageContent = <InboxPage onSelectUser={handleSelectUserFromFeed} />;
+  } else if (currentView === 'editProfile') {
+    pageContent = (
+        <EditProfilePage
+            user={loggedInUser}
+            onSave={handleSaveProfile}
+            onCancel={() => {
+                setViewedUser(loggedInUser);
+                setCurrentView('profile');
+            }}
+        />
+    );
   }
 
   return (
