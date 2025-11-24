@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
@@ -7,10 +8,11 @@ import ProfilePage from './components/ProfilePage';
 import ShopPage from './components/ShopPage';
 import LeftSidebar from './components/LeftSidebar';
 import RightSidebar from './components/RightSidebar';
+import InboxPage from './components/InboxPage';
 import type { User } from './types';
 import { videosData } from './constants';
 
-export type View = 'feed' | 'profile' | 'foryou';
+export type View = 'feed' | 'profile' | 'foryou' | 'inbox';
 
 const App: React.FC = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -44,6 +46,8 @@ const App: React.FC = () => {
     pageContent = <ProfilePage user={viewedUser} onBack={handleBackFromProfile} showBackButton={!isOwnProfile} />;
   } else if (currentView === 'foryou') {
     pageContent = <ShopPage />;
+  } else if (currentView === 'inbox') {
+    pageContent = <InboxPage onSelectUser={handleSelectUserFromFeed} />;
   }
 
   return (

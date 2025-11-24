@@ -77,13 +77,23 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
         )}
       </div>
 
-      <div className="p-4 relative">
-        <div className="absolute -top-14 left-4">
-          <img src={user.avatar} alt={user.name} className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover" />
-        </div>
+      <div className="p-4">
+        <div className="flex justify-between items-start">
+            {/* Left side: Avatar and subsequent info */}
+            <div className="relative">
+                <img 
+                    src={user.avatar} 
+                    alt={user.name} 
+                    className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover -mt-14" 
+                />
+                <div className="mt-4">
+                    <h1 className="text-2xl font-bold text-white">{user.name}</h1>
+                    <p className="text-gray-400 mt-1">{user.bio}</p>
+                </div>
+            </div>
 
-        <div className="flex justify-end pt-2">
-            <div className="flex flex-col items-end gap-3">
+            {/* Right side: Buttons */}
+            <div className="flex flex-col items-end gap-3 pt-2">
                 <div className="flex">
                     <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
                         Observe
@@ -98,11 +108,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
                     <IconButton><ShareIcon /></IconButton>
                 </div>
             </div>
-        </div>
-
-        <div className="mt-4">
-            <h1 className="text-2xl font-bold text-white">{user.name}</h1>
-            <p className="text-gray-400 mt-1">{user.bio}</p>
         </div>
       </div>
       

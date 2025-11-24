@@ -1,4 +1,5 @@
 
+
 export interface User {
   username: string;
   avatar: string;
@@ -41,4 +42,32 @@ export interface ShopPost {
     name: string;
     avatar: string;
   };
+}
+
+export interface Message {
+  id: number;
+  sender: 'me' | 'other';
+  text: string;
+  timestamp: string;
+}
+
+export interface Conversation {
+  id: number;
+  user: User;
+  lastMessage: string;
+  timestamp: string;
+  unread: number;
+  messages: Message[];
+}
+
+export interface Notification {
+  id: number;
+  type: 'like' | 'comment' | 'follow';
+  user: User;
+  post?: {
+    id: number;
+    thumbnail: string;
+  };
+  read: boolean;
+  timestamp: string;
 }

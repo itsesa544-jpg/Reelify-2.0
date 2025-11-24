@@ -1,5 +1,6 @@
+
 import React from 'react';
-import type { Community, Video, ShopPost } from './types';
+import type { Community, Video, ShopPost, Conversation, Notification } from './types';
 
 export const trendingTopics: string[] = ['#ARMagic', '#VibeGroove', '#LearnToCode', '#VibeGroove'];
 
@@ -201,6 +202,105 @@ export const shopPostsData: ShopPost[] = [
   },
 ];
 
+const user1 = videosData[0].user;
+const user2 = videosData[1].user;
+const user3 = videosData[2].user;
+
+export const conversationsData: Conversation[] = [
+  {
+    id: 1,
+    user: user2,
+    lastMessage: 'Sure, I will send it over by tonight!',
+    timestamp: '5:45 PM',
+    unread: 2,
+    messages: [
+      { id: 1, sender: 'other', text: 'Hey, did you get a chance to look at the draft?', timestamp: '5:40 PM' },
+      { id: 2, sender: 'me', text: 'Hey Alex, yes I did. Looks great!', timestamp: '5:42 PM' },
+      { id: 3, sender: 'other', text: 'Awesome! Can you add the final transitions?', timestamp: '5:44 PM' },
+      { id: 4, sender: 'me', text: 'Sure, I will send it over by tonight!', timestamp: '5:45 PM' },
+    ],
+  },
+  {
+    id: 2,
+    user: user3,
+    lastMessage: 'You: Perfect, thanks!',
+    timestamp: '3:10 PM',
+    unread: 0,
+    messages: [
+      { id: 1, sender: 'other', text: 'The new component is ready for review.', timestamp: '3:05 PM' },
+      { id: 2, sender: 'me', text: 'Perfect, thanks!', timestamp: '3:10 PM' },
+    ],
+  },
+   {
+    id: 3,
+    user: {
+      username: '@food_blogger',
+      name: 'Jasmine Foodie',
+      avatar: 'https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      bio: 'Exploring the world one dish at a time. 🍲',
+      coverPhoto: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      stats: {
+        observers: '750K',
+        observing: '400',
+        totalViews: '42M',
+        joined: 'Feb 2021'
+      }
+    },
+    lastMessage: 'That recipe was amazing!',
+    timestamp: 'Yesterday',
+    unread: 0,
+    messages: [
+       { id: 1, sender: 'me', text: 'That recipe was amazing!', timestamp: 'Yesterday' },
+    ],
+  },
+];
+
+export const notificationsData: Notification[] = [
+  {
+    id: 1,
+    type: 'like',
+    user: videosData[1].user,
+    post: { id: 1, thumbnail: videosData[0].posterUrl },
+    read: false,
+    timestamp: '2m ago',
+  },
+  {
+    id: 2,
+    type: 'comment',
+    user: videosData[2].user,
+    post: { id: 1, thumbnail: videosData[0].posterUrl },
+    read: false,
+    timestamp: '15m ago',
+  },
+  {
+    id: 3,
+    type: 'follow',
+    user: {
+      username: '@food_blogger',
+      name: 'Jasmine Foodie',
+      avatar: 'https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      bio: 'Exploring the world one dish at a time. 🍲',
+      coverPhoto: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      stats: {
+        observers: '750K',
+        observing: '400',
+        totalViews: '42M',
+        joined: 'Feb 2021'
+      }
+    },
+    read: true,
+    timestamp: '1h ago',
+  },
+    {
+    id: 4,
+    type: 'like',
+    user: videosData[2].user,
+    post: { id: 2, thumbnail: videosData[1].posterUrl },
+    read: true,
+    timestamp: '3h ago',
+  },
+];
+
 
 export const VibeLogo = () => (
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
@@ -319,5 +419,29 @@ export const HomeIcon = ({ className = "w-6 h-6", active = false }) => (
 export const ProfileIcon = ({ className = "w-6 h-6", active = false }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+);
+
+export const InboxIcon = ({ className = "w-6 h-6", active = false }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    </svg>
+);
+
+export const NotificationIcon = ({ className = "w-6 h-6" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+    </svg>
+);
+
+export const LikeIcon = ({ className = "w-5 h-5 text-red-500" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+    </svg>
+);
+
+export const CommentIcon = ({ className = "w-5 h-5 text-cyan-400" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.157-3.471A8.962 8.962 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.416 11.584A6.962 6.962 0 004 10c0-2.667 2.686-5 6-5s6 2.333 6 5-2.686 5-6 5a6.962 6.962 0 01-1.584-.233L6.5 14.5l-2.084-2.916z" clipRule="evenodd" />
     </svg>
 );
