@@ -102,39 +102,32 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
       </div>
 
       <div className="p-4">
-        <div className="flex justify-between items-start">
-            {/* Left side: Avatar and subsequent info */}
-            <div className="relative flex-shrink-0">
-                <img 
-                    src={user.avatar} 
-                    alt={user.name} 
-                    className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover -mt-14" 
-                />
-            </div>
-            
-            <div className="flex-grow flex justify-between items-start ml-4">
-                 <div className="mt-0">
-                    <h1 className="text-2xl font-bold text-white">{user.name}</h1>
-                    <BioText text={user.bio} />
+        <div className="relative h-12">
+            <img 
+                src={user.avatar} 
+                alt={user.name} 
+                className="absolute -top-16 w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover" 
+            />
+            <div className="absolute top-0 right-0 flex flex-col items-end gap-3">
+                <div className="flex">
+                    <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
+                        Observe
+                    </button>
+                    <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
+                        Message
+                    </button>
                 </div>
+                <div className="flex items-center space-x-3">
+                    <IconButton><EditProfileIcon /></IconButton>
+                    <IconButton><SettingsIcon /></IconButton>
+                    <IconButton><ShareIcon /></IconButton>
+                </div>
+            </div>
+        </div>
 
-                {/* Right side: Buttons */}
-                <div className="flex flex-col items-end gap-3 pt-2 flex-shrink-0">
-                    <div className="flex">
-                        <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
-                            Observe
-                        </button>
-                        <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
-                            Message
-                        </button>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                        <IconButton><EditProfileIcon /></IconButton>
-                        <IconButton><SettingsIcon /></IconButton>
-                        <IconButton><ShareIcon /></IconButton>
-                    </div>
-                </div>
-            </div>
+        <div className="mt-2">
+            <h1 className="text-2xl font-bold text-white">{user.name}</h1>
+            <BioText text={user.bio} />
         </div>
       </div>
       
