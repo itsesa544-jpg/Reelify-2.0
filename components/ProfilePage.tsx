@@ -63,22 +63,18 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton 
 
   return (
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto">
-      {/* Header */}
-      <header className="p-4 bg-[#1A1B20]/80 backdrop-blur-sm sticky top-0 z-20 flex items-center justify-between gap-4">
-        <div>
-          {showBackButton && (
-            <button onClick={onBack} className="text-white">
-              <BackIcon />
-            </button>
-          )}
-        </div>
-        <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-full" />
-      </header>
-      
       {/* Profile Info */}
       <div className="relative">
         <img src={user.coverPhoto} alt="Cover" className="w-full h-36 object-cover" />
         <div className="absolute inset-0 bg-black/40"></div>
+        {showBackButton && (
+            <button 
+                onClick={onBack} 
+                className="absolute top-4 left-4 z-10 p-2 bg-black/50 rounded-full text-white hover:bg-black/75 transition-colors"
+            >
+              <BackIcon />
+            </button>
+        )}
       </div>
 
       <div className="p-4 relative">
