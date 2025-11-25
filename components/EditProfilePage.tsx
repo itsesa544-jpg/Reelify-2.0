@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { User } from '../types';
 import { BackIcon } from '../constants';
 
@@ -12,18 +12,65 @@ interface EditProfilePageProps {
 const EditProfilePage: React.FC<EditProfilePageProps> = ({ user, onSave, onCancel }) => {
   const [name, setName] = useState(user.name);
   const [bio, setBio] = useState(user.bio);
+  const [coverPhotoPreview, setCoverPhotoPreview] = useState(user.coverPhoto);
+  const [avatarPreview, setAvatarPreview] = useState(user.avatar);
+
+  const coverPhotoInputRef = useRef<HTMLInputElement>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // Cleanup blob URLs to prevent memory leaks when component unmounts
+    return () => {
+      if (coverPhotoPreview && coverPhotoPreview.startsWith('blob:')) {
+        URL.revokeObjectURL(coverPhotoPreview);
+      }
+      if (avatarPreview && avatarPreview.startsWith('blob:')) {
+        URL.revokeObjectURL(avatarPreview);
+      }
+    };
+  }, []);
+
 
   const handleSave = () => {
     const updatedUser = {
       ...user,
       name,
       bio,
+      coverPhoto: coverPhotoPreview,
+      avatar: avatarPreview,
     };
     onSave(updatedUser);
   };
+  
+  const handleImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>, 
+    setter: React.Dispatch<React.SetStateAction<string>>
+  ) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const newPreviewUrl = URL.createObjectURL(file);
+      setter(newPreviewUrl);
+    }
+  };
+
 
   return (
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto text-white">
+      <input 
+        type="file" 
+        ref={coverPhotoInputRef} 
+        onChange={(e) => handleImageChange(e, setCoverPhotoPreview)}
+        className="hidden" 
+        accept="image/*" 
+      />
+      <input 
+        type="file" 
+        ref={avatarInputRef}
+        onChange={(e) => handleImageChange(e, setAvatarPreview)}
+        className="hidden" 
+        accept="image/*" 
+      />
+
       {/* Header */}
       <header className="p-4 bg-[#1A1B20]/80 backdrop-blur-sm sticky top-0 z-20 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -51,9 +98,12 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({ user, onSave, onCance
         <div>
           <label className="text-sm font-semibold text-gray-400">Cover Photo</label>
           <div className="relative mt-2">
-            <img src={user.coverPhoto} alt="Cover" className="w-full h-36 object-cover rounded-lg" />
+            <img src={coverPhotoPreview} alt="Cover" className="w-full h-36 object-cover rounded-lg" />
             <div className="absolute inset-0 bg-black/40 rounded-lg flex items-center justify-center">
-              <button className="bg-black/50 backdrop-blur-sm text-white font-semibold py-2 px-4 rounded-lg border border-white/20">
+              <button 
+                onClick={() => coverPhotoInputRef.current?.click()}
+                className="bg-black/50 backdrop-blur-sm text-white font-semibold py-2 px-4 rounded-lg border border-white/20"
+              >
                 Change
               </button>
             </div>
@@ -64,9 +114,12 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({ user, onSave, onCance
         <div>
           <label className="text-sm font-semibold text-gray-400">Profile Picture</label>
           <div className="relative mt-2 w-24 h-24">
-            <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover rounded-full" />
-            <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-              <button className="text-white text-xs font-semibold">Change</button>
+            <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover rounded-full" />
+            <div 
+              onClick={() => avatarInputRef.current?.click()}
+              className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+            >
+              <button className="text-white text-xs font-semibold pointer-events-none">Change</button>
             </div>
           </div>
         </div>
