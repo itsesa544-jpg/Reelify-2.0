@@ -9,8 +9,7 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  // FIX: To resolve an issue where TypeScript was not correctly inferring the type of `this.props`,
-  // state initialization has been moved to a classic constructor.
+  // FIX: Replaced class property state initialization with a constructor to ensure `this.props` is correctly initialized via `super(props)`, resolving the "Property 'props' does not exist" error.
   constructor(props: Props) {
     super(props);
     this.state = { hasError: false };

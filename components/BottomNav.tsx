@@ -17,12 +17,12 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, active = false }) => (
 );
 
 interface BottomNavProps {
-  onUploadClick: () => void;
   currentView: View;
   onNavigate: (view: View) => void;
+  onUploadClick: () => void;
 }
 
-const BottomNav: React.FC<BottomNavProps> = ({ onUploadClick, currentView, onNavigate }) => {
+const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, onUploadClick }) => {
   const iconClasses = "w-6 h-6";
 
   return (

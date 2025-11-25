@@ -43,12 +43,14 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSelectUplo
         
         {currentUser ? (
             <div className="flex flex-col items-center mb-6">
-                <img 
-                src={currentUser.avatar} 
-                alt={currentUser.username} 
-                className="w-20 h-20 rounded-full border-4 border-purple-500 mb-3"
-                />
-                <p className="font-semibold">{currentUser.username}</p>
+                 <div className="p-1 rounded-full bg-gradient-to-tr from-yellow-300 via-purple-500 to-pink-500">
+                    <img 
+                    src={currentUser.avatar} 
+                    alt={currentUser.username} 
+                    className="w-20 h-20 rounded-full border-2 border-[#1f1b2d] object-cover"
+                    />
+                </div>
+                <p className="font-semibold mt-3">{currentUser.username}</p>
                 <h2 className="text-2xl font-bold mt-2">Create new content</h2>
             </div>
         ) : (
@@ -58,9 +60,9 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSelectUplo
         )}
 
         <div className="grid grid-cols-3 gap-4 text-center">
-          <ModalOptionButton icon={<UploadIcon />} label="Upload" onClick={onSelectUpload} />
-          <ModalOptionButton icon={<CameraIcon />} label="Camera" />
-          <ModalOptionButton icon={<TemplatesIcon />} label="Templates" />
+          <ModalOptionButton icon={<UploadIcon className="w-8 h-8 text-purple-400" />} label="Upload" onClick={onSelectUpload} />
+          <ModalOptionButton icon={<CameraIcon className="w-8 h-8 text-cyan-400" />} label="Camera" />
+          <ModalOptionButton icon={<TemplatesIcon className="w-8 h-8 text-pink-400" />} label="Templates" />
         </div>
       </div>
     </div>

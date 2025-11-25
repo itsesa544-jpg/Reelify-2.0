@@ -8,12 +8,12 @@ import LeftSidebar from './components/LeftSidebar';
 import RightSidebar from './components/RightSidebar';
 import InboxPage from './components/InboxPage';
 import EditProfilePage from './components/EditProfilePage';
-import UploadPage from './components/UploadPage';
+import PostCreationPage from './components/PostCreationPage';
 import UploadModal from './components/UploadModal';
 import type { User } from './types';
 import { videosData } from './constants';
 
-export type View = 'feed' | 'profile' | 'foryou' | 'inbox' | 'editProfile' | 'upload';
+export type View = 'feed' | 'profile' | 'foryou' | 'inbox' | 'editProfile' | 'postCreation';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('feed');
@@ -48,9 +48,13 @@ const App: React.FC = () => {
     setCurrentView('profile');
   };
 
+  const handleUploadClick = () => {
+    setIsUploadModalOpen(true);
+  };
+
   const handleSelectUpload = () => {
     setIsUploadModalOpen(false);
-    handleNavigate('upload');
+    setCurrentView('postCreation');
   };
 
   let pageContent;
@@ -81,12 +85,17 @@ const App: React.FC = () => {
             }}
         />
     );
-  } else if (currentView === 'upload') {
-    pageContent = <UploadPage onClose={() => setCurrentView('feed')} />;
+  } else if (currentView === 'postCreation') {
+    pageContent = <PostCreationPage onBack={() => setCurrentView('feed')} />;
   }
 
   return (
     <div className="w-screen h-screen bg-[#0D0F13] text-white font-sans">
+        <UploadModal
+            isOpen={isUploadModalOpen}
+            onClose={() => setIsUploadModalOpen(false)}
+            onSelectUpload={handleSelectUpload}
+        />
         <div className="container mx-auto h-full max-w-screen-xl flex lg:gap-6 lg:p-4">
             
             {/* Left Sidebar (Desktop Nav) */}
@@ -103,7 +112,7 @@ const App: React.FC = () => {
                      <BottomNav 
                         currentView={currentView}
                         onNavigate={handleNavigate}
-                        onUploadClick={() => setIsUploadModalOpen(true)} 
+                        onUploadClick={handleUploadClick}
                     />
                 </div>
             </div>
@@ -114,14 +123,6 @@ const App: React.FC = () => {
             </aside>
             
         </div>
-        
-        {isUploadModalOpen && (
-            <UploadModal 
-                isOpen={isUploadModalOpen} 
-                onClose={() => setIsUploadModalOpen(false)}
-                onSelectUpload={handleSelectUpload}
-            />
-        )}
     </div>
   );
 };
