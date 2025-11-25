@@ -136,66 +136,10 @@ export const videosData: Video[] = [
 ];
 
 export const shopPostsData: ShopPost[] = [
-  {
-    id: 1,
-    imageUrl: 'https://images.pexels.com/photos/1793525/pexels-photo-1793525.jpeg?auto=compress&cs=tinysrgb&w=600',
-    title: 'Cyberpunk Cityscape Canvas',
-    price: '$89.99',
-    seller: {
-      name: 'Future Art',
-      avatar: 'https://picsum.photos/seed/seller1/100',
-    },
-  },
-  {
-    id: 2,
-    imageUrl: 'https://images.pexels.com/photos/2088205/pexels-photo-2088205.jpeg?auto=compress&cs=tinysrgb&w=600',
-    title: 'Holographic AR Filter Pack',
-    price: '$19.99',
-    seller: {
-      name: 'Vibe Filters',
-      avatar: 'https://picsum.photos/seed/seller2/100',
-    },
-  },
-  {
-    id: 3,
-    imageUrl: 'https://images.pexels.com/photos/267301/pexels-photo-267301.jpeg?auto=compress&cs=tinysrgb&w=600',
-    title: 'Luminous Sole Sneakers',
-    price: '$149.50',
-    seller: {
-      name: 'GlowGear',
-      avatar: 'https://picsum.photos/seed/seller3/100',
-    },
-  },
-  {
-    id: 4,
-    imageUrl: 'https://images.pexels.com/photos/3944377/pexels-photo-3944377.jpeg?auto=compress&cs=tinysrgb&w=600',
-    title: 'Portable RGB Light Stick',
-    price: '$75.00',
-    seller: {
-      name: 'Creator Tools',
-      avatar: 'https://picsum.photos/seed/seller4/100',
-    },
-  },
-  {
-    id: 5,
-    imageUrl: 'https://images.pexels.com/photos/716107/pexels-photo-716107.jpeg?auto=compress&cs=tinysrgb&w=600',
-    title: 'VibeWave Oversized Hoodie',
-    price: '$65.00',
-    seller: {
-      name: 'Vibe Apparel',
-      avatar: 'https://picsum.photos/seed/seller5/100',
-    },
-  },
-  {
-    id: 6,
-    imageUrl: 'https://images.pexels.com/photos/3183164/pexels-photo-3183164.jpeg?auto=compress&cs=tinysrgb&w=600',
-    title: 'Neon Room Sign "VIBE"',
-    price: '$120.00',
-    seller: {
-      name: 'Neon Dreams',
-      avatar: 'https://picsum.photos/seed/seller6/100',
-    },
-  },
+  { id: 1, imageUrl: 'https://picsum.photos/seed/product1/400/400', title: 'Aesthetic Vase', price: '$49.99', seller: { name: 'DecorFinds', avatar: 'https://picsum.photos/seed/seller1/50' } },
+  { id: 2, imageUrl: 'https://picsum.photos/seed/product2/400/400', title: 'Minimalist Lamp', price: '$89.00', seller: { name: 'LightUp', avatar: 'https://picsum.photos/seed/seller2/50' } },
+  { id: 3, imageUrl: 'https://picsum.photos/seed/product3/400/400', title: 'Cozy Knit Blanket', price: '$120.00', seller: { name: 'ComfyHome', avatar: 'https://picsum.photos/seed/seller3/50' } },
+  { id: 4, imageUrl: 'https://picsum.photos/seed/product4/400/400', title: 'Abstract Wall Art', price: '$250.00', seller: { name: 'ArtHouse', avatar: 'https://picsum.photos/seed/seller4/50' } },
 ];
 
 export const galleryMediaData: GalleryMedia[] = [
@@ -402,6 +346,13 @@ export const HomeIcon = ({ className = "w-6 h-6", active = false }) => (
     </svg>
 );
 
+export const DiscoverIcon = ({ className = "w-6 h-6", active = false }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.5 8.5L8.5 15.5M8.5 8.5l-2.121 2.121" />
+    </svg>
+);
+
 export const ProfileIcon = ({ className = "w-6 h-6", active = false }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -482,27 +433,31 @@ export const ChatBubbleIcon = ({ className = "w-5 h-5" }) => (
 
 export const DuetIcon = ({ className = "w-5 h-5" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M11 16.5A5.5 5.5 0 105.5 11 5.5 5.5 0 0011 16.5z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M18.5 11A5.5 5.5 0 1113 5.5 5.5 5.5 0 0118.5 11z" />
     </svg>
+);
+
+export const UploadIcon = ({ className = "w-8 h-8 text-purple-400" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+  </svg>
+);
+
+export const TemplatesIcon = ({ className = "w-8 h-8 text-pink-400" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+  </svg>
 );
 
 export const PublishIcon = ({ className = "w-5 h-5" }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
     </svg>
 );
 
-{/* FIX: Renamed UploadPlaceholderIcon to UploadIcon to fix import error in UploadModal. */}
-export const UploadIcon = ({ className = "w-8 h-8" }) => (
+export const ShopBagIcon = ({ className = "w-5 h-5" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-    </svg>
-);
-
-{/* FIX: Added TemplatesIcon to fix import error in UploadModal. */}
-export const TemplatesIcon = ({ className = "w-8 h-8 text-cyan-400" }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
     </svg>
 );

@@ -1,19 +1,21 @@
 
+
 import React, { useState } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
 import ProfilePage from './components/ProfilePage';
-import ShopPage from './components/ShopPage';
 import LeftSidebar from './components/LeftSidebar';
 import RightSidebar from './components/RightSidebar';
 import InboxPage from './components/InboxPage';
+import ShopPage from './components/ShopPage';
 import EditProfilePage from './components/EditProfilePage';
 import PostCreationPage from './components/PostCreationPage';
 import UploadModal from './components/UploadModal';
+import PhotosPage from './components/PhotosPage';
 import type { User } from './types';
 import { videosData } from './constants';
 
-export type View = 'feed' | 'profile' | 'foryou' | 'inbox' | 'editProfile' | 'postCreation';
+export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('feed');
@@ -59,7 +61,11 @@ const App: React.FC = () => {
 
   let pageContent;
   if (currentView === 'feed') {
-    pageContent = <VideoPlayer onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} />;
+    pageContent = <VideoPlayer onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} />;
+  } else if (currentView === 'photos') {
+    pageContent = <PhotosPage onNavigate={handleNavigate} currentView={currentView} />;
+  } else if (currentView === 'foryou') {
+    pageContent = <ShopPage />;
   } else if (currentView === 'profile' && viewedUser) {
     const isOwnProfile = viewedUser.username === loggedInUser.username;
     pageContent = (
@@ -70,8 +76,6 @@ const App: React.FC = () => {
             onEdit={() => setCurrentView('editProfile')}
         />
     );
-  } else if (currentView === 'foryou') {
-    pageContent = <ShopPage />;
   } else if (currentView === 'inbox') {
     pageContent = <InboxPage onSelectUser={handleSelectUserFromFeed} />;
   } else if (currentView === 'editProfile') {

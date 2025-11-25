@@ -1,6 +1,7 @@
 
+
 import React, { useRef, useEffect, useState } from 'react';
-import { videosData } from '../constants';
+import { videosData, SearchIcon } from '../constants';
 import VideoInfo from './VideoInfo';
 import VideoActions from './VideoActions';
 import type { Video, User } from '../types';
@@ -42,12 +43,13 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, on
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
       
-      <div className="absolute bottom-[80px] left-0 right-0 p-4 flex items-end">
-        <VideoInfo video={video} onSelectUser={onSelectUser} />
-      </div>
-
-      <div className="absolute bottom-[80px] right-2 p-2">
-        <VideoActions video={video} onSelectUser={onSelectUser} />
+      <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end">
+        <div className="flex-grow">
+          <VideoInfo video={video} onSelectUser={onSelectUser} />
+        </div>
+        <div className="shrink-0">
+          <VideoActions video={video} onSelectUser={onSelectUser} />
+        </div>
       </div>
       
       {/* Shop Now Buttons */}
@@ -71,9 +73,23 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, on
 interface VideoPlayerProps {
   onSelectUser: (user: User) => void;
   onNavigate: (view: View) => void;
+  currentView: View;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ onSelectUser, onNavigate }) => {
+const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> = ({ label, active, onClick }) => (
+  <button 
+    onClick={onClick} 
+    className={`relative py-1 text-lg font-semibold transition-colors duration-200 ${active ? 'text-white' : 'text-gray-400 hover:text-white'}`}
+  >
+    {label}
+    {active && 
+      <div className="absolute bottom-[-4px] left-0 right-0 h-1 bg-white rounded-full"></div>
+    }
+  </button>
+);
+
+
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ onSelectUser, onNavigate, currentView }) => {
     const [currentVideo, setCurrentVideo] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -110,21 +126,35 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ onSelectUser, onNavigate }) =
     }, []);
 
     return (
-        <div ref={containerRef} className="w-full h-full bg-black overflow-y-auto snap-y snap-mandatory">
-            {videosData.map((video, index) => (
-                <div 
-                    key={video.id} 
-                    data-index={index}
-                    className="video-container w-screen h-screen snap-start relative"
-                >
-                    <VideoItem 
-                      video={video} 
-                      isActive={index === currentVideo} 
-                      onSelectUser={onSelectUser}
-                      onNavigate={onNavigate}
-                    />
+        <div className="w-full h-full relative">
+            <div ref={containerRef} className="w-full h-full bg-black overflow-y-auto snap-y snap-mandatory">
+                {videosData.map((video, index) => (
+                    <div 
+                        key={video.id} 
+                        data-index={index}
+                        className="video-container w-full h-full snap-start relative"
+                    >
+                        <VideoItem 
+                          video={video} 
+                          isActive={index === currentVideo} 
+                          onSelectUser={onSelectUser}
+                          onNavigate={onNavigate}
+                        />
+                    </div>
+                ))}
+            </div>
+
+            <header className="absolute top-0 left-0 right-0 z-10 p-4 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent">
+                <button className="p-2">
+                    <SearchIcon className="w-6 h-6 text-white" />
+                </button>
+                <div className="flex items-center gap-6">
+                    <NavTab label="For You" active={currentView === 'feed'} onClick={() => onNavigate('feed')} />
+                    <NavTab label="Photos" active={currentView === 'photos'} onClick={() => onNavigate('photos')} />
+                    <NavTab label="Followers" active={false} onClick={() => {}} />
                 </div>
-            ))}
+                <div className="w-10 h-10"></div>
+            </header>
         </div>
     );
 };
