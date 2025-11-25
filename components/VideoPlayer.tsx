@@ -1,7 +1,8 @@
 
 
 import React, { useRef, useEffect, useState } from 'react';
-import { videosData, SearchIcon } from '../constants';
+// FIX: The `videosData` import has been removed as the component now receives videos via props, resolving an error where `videosData` was not an exported member of the `constants` module.
+import { SearchIcon } from '../constants';
 import VideoInfo from './VideoInfo';
 import VideoActions from './VideoActions';
 import type { Video, User } from '../types';
@@ -71,6 +72,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, on
 };
 
 interface VideoPlayerProps {
+  videos: Video[];
   onSelectUser: (user: User) => void;
   onNavigate: (view: View) => void;
   currentView: View;
@@ -89,7 +91,7 @@ const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> 
 );
 
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ onSelectUser, onNavigate, currentView }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView }) => {
     const [currentVideo, setCurrentVideo] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -128,7 +130,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ onSelectUser, onNavigate, cur
     return (
         <div className="w-full h-full relative">
             <div ref={containerRef} className="w-full h-full bg-black overflow-y-auto snap-y snap-mandatory">
-                {videosData.map((video, index) => (
+                {videos.map((video, index) => (
                     <div 
                         key={video.id} 
                         data-index={index}

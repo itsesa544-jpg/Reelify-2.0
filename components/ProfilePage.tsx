@@ -1,14 +1,18 @@
 
+
 import React, { useState } from 'react';
-import type { User } from '../types';
+// FIX: The `Video` type is now explicitly imported to ensure type safety and resolve errors related to missing type definitions.
+import type { User, Video } from '../types';
 import { 
-  BackIcon, EditProfileIcon, SettingsIcon, ShareIcon, videosData,
+  BackIcon, EditProfileIcon, SettingsIcon, ShareIcon,
   VideosIcon, ShopIcon, PhotosIcon,
   PlayIconSimple, GalleryIcon
+// FIX: The `videosData` import has been removed as the component now receives videos via props, resolving an error where `videosData` was not an exported member of the `constants` module.
 } from '../constants';
 
 interface ProfilePageProps {
   user: User;
+  allVideos: Video[];
   onBack: () => void;
   showBackButton: boolean;
   onEdit?: () => void;
@@ -34,7 +38,8 @@ const ProfileTab: React.FC<{icon: React.ReactNode, label: string, active?: boole
   </button>
 );
 
-const VideoGridItem: React.FC<{ video: (typeof videosData)[0]; index: number }> = ({ video, index }) => {
+// FIX: The `video` prop is now explicitly typed as `Video`, improving type safety and resolving an error where `videosData` was used to infer the type.
+const VideoGridItem: React.FC<{ video: Video; index: number }> = ({ video, index }) => {
     const neonClasses = index % 4 < 2 
         ? "border-cyan-400 shadow-[0_0_8px_theme(colors.cyan.400)] group-hover:shadow-[0_0_15px_theme(colors.cyan.400)]" 
         : "border-fuchsia-500 shadow-[0_0_8px_theme(colors.fuchsia.500)] group-hover:shadow-[0_0_15px_theme(colors.fuchsia.500)]";
@@ -58,8 +63,8 @@ const VideoGridItem: React.FC<{ video: (typeof videosData)[0]; index: number }> 
 };
 
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack, showBackButton, onEdit }) => {
-  const userVideos = videosData.filter(video => video.user.username === user.username);
+const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, showBackButton, onEdit }) => {
+  const userVideos = allVideos.filter(video => video.user.username === user.username);
   const [activeTab, setActiveTab] = useState('Videos');
   const [isBioExpanded, setIsBioExpanded] = useState(false);
   

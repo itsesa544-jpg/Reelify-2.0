@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia } from './types';
+import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User } from './types';
 
 export const trendingTopics: string[] = ['#ARMagic', '#VibeGroove', '#LearnToCode', '#VibeGroove'];
 
@@ -12,22 +12,71 @@ export const featuredCommunities: Community[] = [
   { name: 'SkillShareHub', icon: 'https://picsum.photos/seed/skill/100' },
 ];
 
-export const videosData: Video[] = [
+const mariaKhan: User = {
+  username: '@maria_khan',
+  name: 'Maria_Khan',
+  avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
+  coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  stats: {
+    observers: '1.2M',
+    observing: '350',
+    totalViews: '50M',
+    joined: 'Jan 2022'
+  },
+  observing: ['@dance_dynamo']
+};
+
+const alexDynamo: User = {
+  username: '@dance_dynamo',
+  name: 'Alex Dynamo',
+  avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  bio: 'Just here to dance. 🕺💃',
+  coverPhoto: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  stats: {
+    observers: '892K',
+    observing: '150',
+    totalViews: '35M',
+    joined: 'Mar 2021'
+  },
+  observing: ['@code_creator']
+};
+
+const samiraChen: User = {
+  username: '@code_creator',
+  name: 'Samira Chen',
+  avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  bio: 'Coding tutorials and tech talks. 💻',
+  coverPhoto: 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  stats: {
+    observers: '540K',
+    observing: '210',
+    totalViews: '22M',
+    joined: 'May 2022'
+  },
+  observing: []
+};
+
+const jasmineFoodie: User = {
+  username: '@food_blogger',
+  name: 'Jasmine Foodie',
+  avatar: 'https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  bio: 'Exploring the world one dish at a time. 🍲',
+  coverPhoto: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  stats: {
+    observers: '750K',
+    observing: '400',
+    totalViews: '42M',
+    joined: 'Feb 2021'
+  },
+  observing: []
+};
+
+
+export const initialVideosData: Video[] = [
   {
     id: 1,
-    user: {
-      username: '@maria_khan',
-      name: 'Maria_Khan',
-      avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
-      coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      stats: {
-        observers: '1.2M',
-        observing: '350',
-        totalViews: '50M',
-        joined: 'Jan 2022'
-      }
-    },
+    user: mariaKhan,
     title: "Hidden Gems of Italy",
     videoUrl: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4',
     posterUrl: 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -39,19 +88,7 @@ export const videosData: Video[] = [
   },
   {
     id: 2,
-    user: {
-      username: '@dance_dynamo',
-      name: 'Alex Dynamo',
-      avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      bio: 'Just here to dance. 🕺💃',
-      coverPhoto: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      stats: {
-        observers: '892K',
-        observing: '150',
-        totalViews: '35M',
-        joined: 'Mar 2021'
-      }
-    },
+    user: alexDynamo,
     title: "Urban Dance Flow",
     videoUrl: 'https://videos.pexels.com/video-files/4434242/4434242-hd_720_1366_25fps.mp4',
     posterUrl: 'https://images.pexels.com/videos/4434242/pexels-photo-4434242.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
@@ -63,19 +100,7 @@ export const videosData: Video[] = [
   },
   {
     id: 3,
-    user: {
-      username: '@code_creator',
-      name: 'Samira Chen',
-      avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      bio: 'Coding tutorials and tech talks. 💻',
-      coverPhoto: 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      stats: {
-        observers: '540K',
-        observing: '210',
-        totalViews: '22M',
-        joined: 'May 2022'
-      }
-    },
+    user: samiraChen,
     title: "React in 60 Seconds",
     videoUrl: 'https://videos.pexels.com/video-files/7578544/7578544-hd_720_1366_25fps.mp4',
     posterUrl: 'https://images.pexels.com/videos/7578544/pexels-photo-7578544.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
@@ -87,19 +112,7 @@ export const videosData: Video[] = [
   },
   {
     id: 4,
-    user: {
-      username: '@maria_khan',
-      name: 'Maria_Khan',
-      avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
-      coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      stats: {
-        observers: '1.2M',
-        observing: '350',
-        totalViews: '50M',
-        joined: 'Jan 2022'
-      }
-    },
+    user: mariaKhan,
     title: "Morning Coffee",
     videoUrl: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4',
     posterUrl: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -111,19 +124,7 @@ export const videosData: Video[] = [
   },
   {
     id: 5,
-    user: {
-      username: '@maria_khan',
-      name: 'Maria_Khan',
-      avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
-      coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      stats: {
-        observers: '1.2M',
-        observing: '350',
-        totalViews: '50M',
-        joined: 'Jan 2022'
-      }
-    },
+    user: mariaKhan,
     title: "City Lights",
     videoUrl: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4',
     posterUrl: 'https://images.pexels.com/photos/1563256/pexels-photo-1563256.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -153,14 +154,10 @@ export const galleryMediaData: GalleryMedia[] = [
     { id: 8, type: 'video', url: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4', thumbnailUrl: 'https://images.pexels.com/videos/8357591/pexels-photo-8357591.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' },
 ];
 
-const user1 = videosData[0].user;
-const user2 = videosData[1].user;
-const user3 = videosData[2].user;
-
 export const conversationsData: Conversation[] = [
   {
     id: 1,
-    user: user2,
+    user: alexDynamo,
     lastMessage: 'Sure, I will send it over by tonight!',
     timestamp: '5:45 PM',
     unread: 2,
@@ -173,7 +170,7 @@ export const conversationsData: Conversation[] = [
   },
   {
     id: 2,
-    user: user3,
+    user: samiraChen,
     lastMessage: 'You: Perfect, thanks!',
     timestamp: '3:10 PM',
     unread: 0,
@@ -184,19 +181,7 @@ export const conversationsData: Conversation[] = [
   },
    {
     id: 3,
-    user: {
-      username: '@food_blogger',
-      name: 'Jasmine Foodie',
-      avatar: 'https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      bio: 'Exploring the world one dish at a time. 🍲',
-      coverPhoto: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      stats: {
-        observers: '750K',
-        observing: '400',
-        totalViews: '42M',
-        joined: 'Feb 2021'
-      }
-    },
+    user: jasmineFoodie,
     lastMessage: 'That recipe was amazing!',
     timestamp: 'Yesterday',
     unread: 0,
@@ -210,43 +195,31 @@ export const notificationsData: Notification[] = [
   {
     id: 1,
     type: 'like',
-    user: videosData[1].user,
-    post: { id: 1, thumbnail: videosData[0].posterUrl },
+    user: alexDynamo,
+    post: { id: 1, thumbnail: initialVideosData[0].posterUrl },
     read: false,
     timestamp: '2m ago',
   },
   {
     id: 2,
     type: 'comment',
-    user: videosData[2].user,
-    post: { id: 1, thumbnail: videosData[0].posterUrl },
+    user: samiraChen,
+    post: { id: 1, thumbnail: initialVideosData[0].posterUrl },
     read: false,
     timestamp: '15m ago',
   },
   {
     id: 3,
     type: 'follow',
-    user: {
-      username: '@food_blogger',
-      name: 'Jasmine Foodie',
-      avatar: 'https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      bio: 'Exploring the world one dish at a time. 🍲',
-      coverPhoto: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      stats: {
-        observers: '750K',
-        observing: '400',
-        totalViews: '42M',
-        joined: 'Feb 2021'
-      }
-    },
+    user: jasmineFoodie,
     read: true,
     timestamp: '1h ago',
   },
     {
     id: 4,
     type: 'like',
-    user: videosData[2].user,
-    post: { id: 2, thumbnail: videosData[1].posterUrl },
+    user: samiraChen,
+    post: { id: 2, thumbnail: initialVideosData[1].posterUrl },
     read: true,
     timestamp: '3h ago',
   },
@@ -451,7 +424,7 @@ export const TemplatesIcon = ({ className = "w-8 h-8 text-pink-400" }) => (
 );
 
 export const PublishIcon = ({ className = "w-5 h-5" }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
     </svg>
 );

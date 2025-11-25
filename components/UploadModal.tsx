@@ -1,6 +1,8 @@
 
+
 import React from 'react';
-import { videosData, CloseIcon, UploadIcon, CameraIcon, TemplatesIcon } from '../constants';
+// FIX: Replaced the incorrect import of `videosData` with `initialVideosData` to align with the exported members of the `constants` module. This resolves an error where the application was attempting to import a non-existent variable, causing a module resolution failure.
+import { initialVideosData, CloseIcon, UploadIcon, CameraIcon, TemplatesIcon } from '../constants';
 
 interface UploadModalProps {
   isOpen: boolean;
@@ -26,7 +28,7 @@ const ModalOptionButton: React.FC<ModalOptionButtonProps> = ({ icon, label, onCl
 const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSelectUpload }) => {
   if (!isOpen) return null;
 
-  const currentUser = videosData.length > 0 ? videosData[0].user : null;
+  const currentUser = initialVideosData.length > 0 ? initialVideosData[0].user : null;
 
   return (
     <div 

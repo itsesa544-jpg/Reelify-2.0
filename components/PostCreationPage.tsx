@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useRef } from 'react';
 import { 
     BackIcon, 
@@ -17,6 +18,8 @@ import {
 
 interface PostCreationPageProps {
     onBack: () => void;
+    // FIX: The `onPublish` prop has been added to the interface to align with its usage in the parent component, resolving a type error where the prop was not recognized.
+    onPublish: (videoData: { title: string; description: string; videoUrl: string; posterUrl: string; hashtags: string[] }) => void;
 }
 
 const ToggleSwitch: React.FC<{ enabled: boolean; onChange: (enabled: boolean) => void }> = ({ enabled, onChange }) => {
@@ -51,7 +54,7 @@ const VisibilityOption: React.FC<{label: string, value: string, selectedValue: s
 );
 
 
-const PostCreationPage: React.FC<PostCreationPageProps> = ({ onBack }) => {
+const PostCreationPage: React.FC<PostCreationPageProps> = ({ onBack, onPublish }) => {
     const [videoPreview, setVideoPreview] = useState<string | null>(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -73,6 +76,27 @@ const PostCreationPage: React.FC<PostCreationPageProps> = ({ onBack }) => {
         } else {
             alert('Please select a video file.');
         }
+    };
+
+    const handlePublish = () => {
+        if (!videoPreview) {
+            alert('Please select a video file.');
+            return;
+        }
+        if (!title.trim()) {
+            alert('Please enter a title.');
+            return;
+        }
+
+        const extractedHashtags = description.match(/#\w+/g) || [];
+
+        onPublish({
+            title,
+            description,
+            videoUrl: videoPreview,
+            posterUrl: '', // Poster can be generated in parent
+            hashtags: extractedHashtags,
+        });
     };
 
     return (
@@ -190,7 +214,7 @@ const PostCreationPage: React.FC<PostCreationPageProps> = ({ onBack }) => {
             {/* Footer */}
             <footer className="p-4 flex items-center gap-4 shrink-0 border-t bg-white">
                 <button className="flex-1 bg-gray-200 text-black font-bold py-3 rounded-lg">Save as Draft</button>
-                <button className="flex-1 bg-red-500 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2">
+                <button onClick={handlePublish} className="flex-1 bg-red-500 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2">
                     <PublishIcon /> Publish
                 </button>
             </footer>

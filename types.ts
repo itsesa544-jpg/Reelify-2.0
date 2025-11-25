@@ -12,6 +12,7 @@ export interface User {
     totalViews: string;
     joined: string;
   };
+  observing: string[];
 }
 
 export interface Community {
