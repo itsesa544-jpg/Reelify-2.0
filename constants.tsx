@@ -1,6 +1,7 @@
 
+
 import React from 'react';
-import type { Community, Video, ShopPost, Conversation, Notification } from './types';
+import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia } from './types';
 
 export const trendingTopics: string[] = ['#ARMagic', '#VibeGroove', '#LearnToCode', '#VibeGroove'];
 
@@ -197,6 +198,17 @@ export const shopPostsData: ShopPost[] = [
   },
 ];
 
+export const galleryMediaData: GalleryMedia[] = [
+    { id: 1, type: 'photo', url: 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300' },
+    { id: 2, type: 'video', url: 'https://videos.pexels.com/video-files/4434242/4434242-hd_720_1366_25fps.mp4', thumbnailUrl: 'https://images.pexels.com/videos/4434242/pexels-photo-4434242.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' },
+    { id: 3, type: 'photo', url: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=300' },
+    { id: 4, type: 'photo', url: 'https://images.pexels.com/photos/1563256/pexels-photo-1563256.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/1563256/pexels-photo-1563256.jpeg?auto=compress&cs=tinysrgb&w=300' },
+    { id: 5, type: 'video', url: 'https://videos.pexels.com/video-files/7578544/7578544-hd_720_1366_25fps.mp4', thumbnailUrl: 'https://images.pexels.com/videos/7578544/pexels-photo-7578544.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' },
+    { id: 6, type: 'photo', url: 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=300' },
+    { id: 7, type: 'photo', url: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=300' },
+    { id: 8, type: 'video', url: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4', thumbnailUrl: 'https://images.pexels.com/videos/8357591/pexels-photo-8357591.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' },
+];
+
 const user1 = videosData[0].user;
 const user2 = videosData[1].user;
 const user3 = videosData[2].user;
@@ -309,6 +321,7 @@ export const VibeLogo = () => (
     </svg>
 );
 
+// FIX: Exported all icon components to make them available for use in other components.
 export const CloseIcon = ({ className = "w-6 h-6" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -438,5 +451,17 @@ export const LikeIcon = ({ className = "w-5 h-5 text-red-500" }) => (
 export const CommentIcon = ({ className = "w-5 h-5 text-cyan-400" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
         <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.157-3.471A8.962 8.962 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.416 11.584A6.962 6.962 0 004 10c0-2.667 2.686-5 6-5s6 2.333 6 5-2.686 5-6 5a6.962 6.962 0 01-1.584-.233L6.5 14.5l-2.084-2.916z" clipRule="evenodd" />
+    </svg>
+);
+
+export const CheckmarkIcon = ({ className = "w-4 h-4 text-black" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+    </svg>
+);
+
+export const VideoIconSimple = ({ className = "w-5 h-5 text-white drop-shadow-lg" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
     </svg>
 );

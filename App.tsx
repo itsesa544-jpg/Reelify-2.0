@@ -1,26 +1,25 @@
 
-
 import React, { useState } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
-import UploadModal from './components/UploadModal';
 import ProfilePage from './components/ProfilePage';
 import ShopPage from './components/ShopPage';
 import LeftSidebar from './components/LeftSidebar';
 import RightSidebar from './components/RightSidebar';
 import InboxPage from './components/InboxPage';
 import EditProfilePage from './components/EditProfilePage';
+import UploadPage from './components/UploadPage';
+import UploadModal from './components/UploadModal';
 import type { User } from './types';
 import { videosData } from './constants';
 
-export type View = 'feed' | 'profile' | 'foryou' | 'inbox' | 'editProfile';
+export type View = 'feed' | 'profile' | 'foryou' | 'inbox' | 'editProfile' | 'upload';
 
 const App: React.FC = () => {
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [currentView, setCurrentView] = useState<View>('feed');
   const [viewedUser, setViewedUser] = useState<User | null>(null);
-  
   const [loggedInUser, setLoggedInUser] = useState<User>(videosData[0].user);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const handleSelectUserFromFeed = (user: User) => {
     if (user.username === loggedInUser.username) {
@@ -47,6 +46,11 @@ const App: React.FC = () => {
     setLoggedInUser(updatedUser);
     setViewedUser(updatedUser);
     setCurrentView('profile');
+  };
+
+  const handleSelectUpload = () => {
+    setIsUploadModalOpen(false);
+    handleNavigate('upload');
   };
 
   let pageContent;
@@ -77,6 +81,8 @@ const App: React.FC = () => {
             }}
         />
     );
+  } else if (currentView === 'upload') {
+    pageContent = <UploadPage onClose={() => setCurrentView('feed')} />;
   }
 
   return (
@@ -107,12 +113,15 @@ const App: React.FC = () => {
                 <RightSidebar onSelectUser={handleSelectUserFromFeed} />
             </aside>
             
-            {/* Modal - outside the layout flow */}
+        </div>
+        
+        {isUploadModalOpen && (
             <UploadModal 
                 isOpen={isUploadModalOpen} 
-                onClose={() => setIsUploadModalOpen(false)} 
+                onClose={() => setIsUploadModalOpen(false)}
+                onSelectUpload={handleSelectUpload}
             />
-        </div>
+        )}
     </div>
   );
 };

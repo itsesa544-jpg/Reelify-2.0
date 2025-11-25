@@ -70,3 +70,10 @@ export interface Notification {
   read: boolean;
   timestamp: string;
 }
+
+export interface GalleryMedia {
+  id: number;
+  type: 'photo' | 'video';
+  url: string;
+  thumbnailUrl: string;
+}

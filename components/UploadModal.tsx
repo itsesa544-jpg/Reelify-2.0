@@ -1,9 +1,11 @@
-import React, { useRef } from 'react';
+
+import React from 'react';
 import { videosData, CloseIcon, UploadIcon, CameraIcon, TemplatesIcon } from '../constants';
 
 interface UploadModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSelectUpload: () => void;
 }
 
 interface ModalOptionButtonProps {
@@ -21,27 +23,10 @@ const ModalOptionButton: React.FC<ModalOptionButtonProps> = ({ icon, label, onCl
   </div>
 );
 
-const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
+const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSelectUpload }) => {
   if (!isOpen) return null;
 
   const currentUser = videosData.length > 0 ? videosData[0].user : null;
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      console.log('Selected file:', file);
-      // In a real app, you would handle the upload process here.
-      // For now, we'll just show an alert.
-      alert(`File selected: ${file.name}`);
-      onClose();
-    }
-  };
 
   return (
     <div 
@@ -52,13 +37,6 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
         className="bg-gradient-to-br from-[#1f1b2d] to-[#110e1b] rounded-2xl shadow-xl p-6 w-11/12 max-w-sm text-white text-center relative border border-purple-500/20" 
         onClick={e => e.stopPropagation()}
       >
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          className="hidden"
-          accept="video/*"
-        />
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
           <CloseIcon />
         </button>
@@ -80,7 +58,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
         )}
 
         <div className="grid grid-cols-3 gap-4 text-center">
-          <ModalOptionButton icon={<UploadIcon />} label="Upload" onClick={handleUploadClick} />
+          <ModalOptionButton icon={<UploadIcon />} label="Upload" onClick={onSelectUpload} />
           <ModalOptionButton icon={<CameraIcon />} label="Camera" />
           <ModalOptionButton icon={<TemplatesIcon />} label="Templates" />
         </div>
