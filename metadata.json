@@ -1,5 +1,8 @@
 {
   "name": "Vibe Social Video App",
   "description": "A React-based web application mimicking the UI of a modern, vibrant social video platform called Vibe, designed with a dark theme and neon accents for a dynamic user experience.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
 }
