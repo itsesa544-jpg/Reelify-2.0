@@ -9,7 +9,7 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  // FIX: Replaced class property state initialization with a constructor to resolve a TypeScript error where `this.props` was not being recognized.
+  // FIX: Reinstated the constructor for state initialization. This ensures `this.props` is correctly initialized and typed by calling `super(props)`, which resolves the error.
   constructor(props: Props) {
     super(props);
     this.state = { hasError: false };

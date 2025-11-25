@@ -27,7 +27,6 @@ export interface Video {
   title: string;
   caption: string;
   hashtags: string[];
-  music: string;
   likes: string;
   comments: string;
   shares: string;
