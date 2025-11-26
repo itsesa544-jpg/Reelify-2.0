@@ -2,10 +2,12 @@
 import React from 'react';
 import { galleryMediaData, SearchIcon } from '../constants';
 import type { View } from '../App';
+import type { GalleryMedia } from '../types';
 
 interface PhotosPageProps {
     onNavigate: (view: View) => void;
     currentView: View;
+    onSelectPhoto: (photo: GalleryMedia) => void;
 }
 
 const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> = ({ label, active, onClick }) => (
@@ -20,7 +22,7 @@ const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> 
     </button>
   );
 
-const PhotosPage: React.FC<PhotosPageProps> = ({ onNavigate, currentView }) => {
+const PhotosPage: React.FC<PhotosPageProps> = ({ onNavigate, currentView, onSelectPhoto }) => {
     const photos = galleryMediaData.filter(media => media.type === 'photo');
 
     return (
@@ -32,7 +34,7 @@ const PhotosPage: React.FC<PhotosPageProps> = ({ onNavigate, currentView }) => {
                 <div className="flex items-center gap-6">
                     <NavTab label="For You" active={currentView === 'feed'} onClick={() => onNavigate('feed')} />
                     <NavTab label="Photos" active={currentView === 'photos'} onClick={() => onNavigate('photos')} />
-                    <NavTab label="Followers" active={false} onClick={() => {}} />
+                    <NavTab label="Observing" active={currentView === 'observing'} onClick={() => onNavigate('observing')} />
                 </div>
                 <div className="w-10 h-10"></div>
             </header>
@@ -41,9 +43,9 @@ const PhotosPage: React.FC<PhotosPageProps> = ({ onNavigate, currentView }) => {
                 {photos.length > 0 ? (
                     <div className="grid grid-cols-3 gap-1 p-1">
                         {photos.map(photo => (
-                            <div key={photo.id} className="aspect-square bg-gray-800">
+                            <button key={photo.id} onClick={() => onSelectPhoto(photo)} className="aspect-square bg-gray-800">
                                 <img src={photo.thumbnailUrl} alt="photo" className="w-full h-full object-cover" />
-                            </div>
+                            </button>
                         ))}
                     </div>
                 ) : (

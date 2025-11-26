@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState, useRef } from 'react';
 import { 
     BackIcon, 
@@ -18,8 +19,9 @@ import {
 
 interface PostCreationPageProps {
     onBack: () => void;
-    // FIX: The `onPublish` prop has been added to the interface to align with its usage in the parent component, resolving a type error where the prop was not recognized.
-    onPublish: (videoData: { title: string; description: string; videoUrl: string; posterUrl: string; hashtags: string[] }) => void;
+    // FIX: The `onPublish` prop has been updated to align with its usage in the parent component.
+    onPublish: (videoData: { title: string; description: string; videoUrl: string; hashtags: string[] }) => void;
+    videoUrl: string;
 }
 
 const ToggleSwitch: React.FC<{ enabled: boolean; onChange: (enabled: boolean) => void }> = ({ enabled, onChange }) => {
@@ -54,8 +56,8 @@ const VisibilityOption: React.FC<{label: string, value: string, selectedValue: s
 );
 
 
-const PostCreationPage: React.FC<PostCreationPageProps> = ({ onBack, onPublish }) => {
-    const [videoPreview, setVideoPreview] = useState<string | null>(null);
+const PostCreationPage: React.FC<PostCreationPageProps> = ({ onBack, onPublish, videoUrl }) => {
+    const [videoPreview, setVideoPreview] = useState<string | null>(videoUrl);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [visibility, setVisibility] = useState('Public');
@@ -94,7 +96,6 @@ const PostCreationPage: React.FC<PostCreationPageProps> = ({ onBack, onPublish }
             title,
             description,
             videoUrl: videoPreview,
-            posterUrl: '', // Poster can be generated in parent
             hashtags: extractedHashtags,
         });
     };

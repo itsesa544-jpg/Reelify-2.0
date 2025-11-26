@@ -1,5 +1,4 @@
 
-
 export interface User {
   username: string;
   avatar: string;
@@ -31,6 +30,10 @@ export interface Video {
   likes: string;
   comments: string;
   shares: string;
+  audio?: {
+    title: string;
+    artist: string;
+  };
 }
 
 export interface ShopPost {
@@ -77,4 +80,13 @@ export interface GalleryMedia {
   type: 'photo' | 'video';
   url: string;
   thumbnailUrl: string;
+  user?: User;
+  caption?: string;
+  timestamp?: string;
+  stats?: {
+    likes: string;
+    comments: string;
+    shares: string;
+    views: string;
+  };
 }

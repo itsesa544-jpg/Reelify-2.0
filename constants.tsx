@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User } from './types';
 
@@ -72,6 +71,16 @@ const jasmineFoodie: User = {
   observing: []
 };
 
+const tusharEmran: User = {
+  username: 'Tushar Emran',
+  name: 'Tushar Emran',
+  avatar: 'https://scontent.fdac135-1.fna.fbcdn.net/v/t39.30808-1/410065022_122108394412120192_8828020922442294136_n.jpg?stp=dst-jpg_p200x200&_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeG71M-r8L2Y4sTfL7vB0L76_z5b5dJ5zZn_Plvl0nnNmd2mFk-t79v9l-L8z1g1K0g4h2iA134uU3M7_119lQYc&_nc_ohc=y-m-qFwL4k4Q7kNvgFX0uDx&_nc_ht=scontent.fdac135-1.fna&oh=00_AYDBuylbIeMLa_0yY13tWjIq4G_tT33T7mY17k39T5_pTQ&oe=66567280',
+  bio: 'Photographer',
+  coverPhoto: '',
+  stats: { observers: '', observing: '', totalViews: '', joined: ''},
+  observing: [],
+};
+
 
 export const initialVideosData: Video[] = [
   {
@@ -85,6 +94,10 @@ export const initialVideosData: Video[] = [
     likes: '1.5K',
     comments: '25.7K',
     shares: '15.1K',
+    audio: {
+      title: 'Synthwave Dreams',
+      artist: 'Vibe Tracks'
+    }
   },
   {
     id: 2,
@@ -97,6 +110,10 @@ export const initialVideosData: Video[] = [
     likes: '1.1K',
     comments: '12.3K',
     shares: '8.4K',
+    audio: {
+      title: 'City Groove',
+      artist: 'Alex Dynamo'
+    }
   },
   {
     id: 3,
@@ -144,7 +161,21 @@ export const shopPostsData: ShopPost[] = [
 ];
 
 export const galleryMediaData: GalleryMedia[] = [
-    { id: 1, type: 'photo', url: 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300' },
+    { 
+      id: 1, 
+      type: 'photo', 
+      url: 'https://scontent.fdac135-1.fna.fbcdn.net/v/t39.30808-6/410034449_122108394236120192_4380921085202473467_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeF4tqL1X0g1eXQ2-4H_yT65F9a7V9nLAkUX1rtX2csCRbT7zYg93Xg5Dqf4Lw_Tz0yB7nB1D2-v0QYgC51c_uO2&_nc_ohc=WkU3oOk-8qgQ7kNvgEg99-I&_nc_ht=scontent.fdac135-1.fna&oh=00_AYB7q-PyFhN27m6hJz0G_GCHo3nVy5t1q8nO_xWl238-Ag&oe=665675F1', 
+      thumbnailUrl: 'https://scontent.fdac135-1.fna.fbcdn.net/v/t39.30808-6/410034449_122108394236120192_4380921085202473467_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeF4tqL1X0g1eXQ2-4H_yT65F9a7V9nLAkUX1rtX2csCRbT7zYg93Xg5Dqf4Lw_Tz0yB7nB1D2-v0QYgC51c_uO2&_nc_ohc=WkU3oOk-8qgQ7kNvgEg99-I&_nc_ht=scontent.fdac135-1.fna&oh=00_AYB7q-PyFhN27m6hJz0G_GCHo3nVy5t1q8nO_xWl238-Ag&oe=665675F1',
+      user: tusharEmran,
+      caption: 'নির্বাচনের আগে আগে full Protection 🙂😂',
+      timestamp: '1d',
+      stats: {
+        likes: '1.2K',
+        comments: '150',
+        shares: '50',
+        views: '5.5K',
+      },
+    },
     { id: 2, type: 'video', url: 'https://videos.pexels.com/video-files/4434242/4434242-hd_720_1366_25fps.mp4', thumbnailUrl: 'https://images.pexels.com/videos/4434242/pexels-photo-4434242.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' },
     { id: 3, type: 'photo', url: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=300' },
     { id: 4, type: 'photo', url: 'https://images.pexels.com/photos/1563256/pexels-photo-1563256.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/1563256/pexels-photo-1563256.jpeg?auto=compress&cs=tinysrgb&w=300' },
@@ -265,7 +296,7 @@ export const EditProfileIcon = ({ className = "w-5 h-5" }) => (
 
 export const SettingsIcon = ({ className = "w-5 h-5" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066 2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
     </svg>
 );
@@ -433,4 +464,72 @@ export const ShopBagIcon = ({ className = "w-5 h-5" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
     </svg>
+);
+
+export const MusicNoteIcon = ({ className = "w-4 h-4" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z" />
+    </svg>
+);
+
+export const TextIcon = ({ className = "w-6 h-6" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m-4-8h8" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 8h1" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 8h1" />
+    </svg>
+);
+
+export const StickersIcon = ({ className = "w-6 h-6" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21.5 7.5c-1.2-1.2-3.1-1.2-4.2 0L12 12.7 6.7 7.5c-1.2-1.2-3.1-1.2-4.2 0-1.2 1.2-1.2 3.1 0 4.2L7.8 17 2.5 22.2c-1.2 1.2-1.2 3.1 0 4.2 1.2 1.2 3.1 1.2 4.2 0L12 21.2l5.3 5.3c1.2 1.2 3.1 1.2 4.2 0 1.2-1.2 1.2-3.1 0-4.2L16.2 17l5.3-5.3c1.2-1.2 1.2-3.1 0-4.2z" />
+    </svg>
+);
+
+export const FiltersIcon = ({ className = "w-6 h-6" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.5l-6 6h12l-6-6z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 11.5l-6 6h12l-6-6z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5l-6 6h12l-6-6z" />
+    </svg>
+);
+
+export const CropIcon = ({ className = "w-6 h-6" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7 1H1v6" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17 1h6v6" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7 23H1v-6" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17 23h6v-6" />
+    </svg>
+);
+
+export const PrivacySettingsIcon = ({ className = "w-6 h-6" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zm0 2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+    </svg>
+);
+
+export const HeartIconFilled = ({ className = 'w-6 h-6' }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+  </svg>
+);
+
+export const CommentBubbleIconSimple = ({ className = 'w-6 h-6' }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+  </svg>
+);
+
+export const ShareIconSimple = ({ className = 'w-6 h-6' }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+  </svg>
+);
+
+export const EyeIcon = ({ className = 'w-6 h-6' }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+  </svg>
 );

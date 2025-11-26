@@ -1,13 +1,11 @@
 
 
 import React, { useState } from 'react';
-// FIX: The `Video` type is now explicitly imported to ensure type safety and resolve errors related to missing type definitions.
 import type { User, Video } from '../types';
 import { 
   BackIcon, EditProfileIcon, SettingsIcon, ShareIcon,
   VideosIcon, ShopIcon, PhotosIcon,
   PlayIconSimple, GalleryIcon
-// FIX: The `videosData` import has been removed as the component now receives videos via props, resolving an error where `videosData` was not an exported member of the `constants` module.
 } from '../constants';
 
 interface ProfilePageProps {
@@ -16,6 +14,7 @@ interface ProfilePageProps {
   onBack: () => void;
   showBackButton: boolean;
   onEdit?: () => void;
+  onPlayVideo: (videoId: number) => void;
 }
 
 const IconButton: React.FC<{children: React.ReactNode, onClick?: () => void}> = ({children, onClick}) => (
@@ -38,14 +37,13 @@ const ProfileTab: React.FC<{icon: React.ReactNode, label: string, active?: boole
   </button>
 );
 
-// FIX: The `video` prop is now explicitly typed as `Video`, improving type safety and resolving an error where `videosData` was used to infer the type.
-const VideoGridItem: React.FC<{ video: Video; index: number }> = ({ video, index }) => {
+const VideoGridItem: React.FC<{ video: Video; index: number; onPlay: () => void; }> = ({ video, index, onPlay }) => {
     const neonClasses = index % 4 < 2 
         ? "border-cyan-400 shadow-[0_0_8px_theme(colors.cyan.400)] group-hover:shadow-[0_0_15px_theme(colors.cyan.400)]" 
         : "border-fuchsia-500 shadow-[0_0_8px_theme(colors.fuchsia.500)] group-hover:shadow-[0_0_15px_theme(colors.fuchsia.500)]";
 
     return (
-        <div className="relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer group">
+        <button onClick={onPlay} className="relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer group">
             <img src={video.posterUrl} alt={video.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
             <div className={`absolute inset-0 border-2 ${neonClasses} rounded-2xl pointer-events-none`}></div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none"></div>
@@ -58,12 +56,12 @@ const VideoGridItem: React.FC<{ video: Video; index: number }> = ({ video, index
                 <PlayIconSimple className="w-4 h-4" />
                 <span>{video.likes}</span>
             </div>
-        </div>
+        </button>
     );
 };
 
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, showBackButton, onEdit }) => {
+const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, showBackButton, onEdit, onPlayVideo }) => {
   const userVideos = allVideos.filter(video => video.user.username === user.username);
   const [activeTab, setActiveTab] = useState('Videos');
   const [isBioExpanded, setIsBioExpanded] = useState(false);
@@ -93,8 +91,8 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
 
   return (
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto">
-      {/* Profile Info */}
-      <div className="relative">
+      {/* Profile Info Section */}
+      <div className="relative mb-4">
         <img src={user.coverPhoto} alt="Cover" className="w-full h-36 object-cover" />
         <div className="absolute inset-0 bg-black/40"></div>
         {showBackButton && (
@@ -105,37 +103,37 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
               <BackIcon />
             </button>
         )}
-      </div>
-
-      <div className="p-4">
-        <div className="relative h-12">
-            <div className="absolute -top-16">
-                <img 
-                    src={user.avatar} 
-                    alt={user.name} 
-                    className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover" 
-                />
-            </div>
-            <div className="absolute top-0 right-0 flex flex-col items-end gap-3">
-                <div className="flex">
-                    <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
-                        Observe
-                    </button>
-                    <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
-                        Message
-                    </button>
+        
+        <div className="p-4">
+            <div className="flex items-start justify-between">
+                <div className="flex-shrink-0 -mt-16">
+                    <img 
+                        src={user.avatar} 
+                        alt={user.name} 
+                        className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover" 
+                    />
                 </div>
-                <div className="flex items-center space-x-3">
-                    {!showBackButton && onEdit && <IconButton onClick={onEdit}><EditProfileIcon /></IconButton>}
-                    <IconButton><SettingsIcon /></IconButton>
-                    <IconButton><ShareIcon /></IconButton>
+                <div className="flex flex-col items-end gap-3 pt-4">
+                     <div className="flex">
+                        <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
+                            Observe
+                        </button>
+                        <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
+                            Message
+                        </button>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                        {onEdit && <IconButton onClick={onEdit}><EditProfileIcon /></IconButton>}
+                        <IconButton><SettingsIcon /></IconButton>
+                        <IconButton><ShareIcon /></IconButton>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div className="mt-2">
-            <h1 className="text-2xl font-bold text-white">{user.name}</h1>
-            <BioText text={user.bio} />
+            <div className="mt-2">
+                <h1 className="text-2xl font-bold text-white">{user.name}</h1>
+                <BioText text={user.bio} />
+            </div>
         </div>
       </div>
       
@@ -166,7 +164,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
             {activeTab === 'Videos' && (
               <div className="grid grid-cols-3 gap-1">
                   {userVideos.map((video, index) => (
-                    <VideoGridItem key={video.id} video={video} index={index} />
+                    <VideoGridItem key={video.id} video={video} index={index} onPlay={() => onPlayVideo(video.id)} />
                   ))}
               </div>
             )}

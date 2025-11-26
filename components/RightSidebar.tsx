@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 // FIX: The `videosData` import has been removed and replaced with a `Video` type import. The component now receives data via props, resolving an error where `videosData` was not an exported member of the `constants` module.
 import type { User, Video } from '../types';
@@ -13,7 +11,8 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ allVideos, onSelectUser }) 
     // Get unique users, excluding the logged-in user
     // FIX: The component now uses the `allVideos` prop to derive user data. This change ensures that the component is using the correct, strongly-typed data source, which resolves multiple errors where properties were not found on type `unknown`.
     const loggedInUser = allVideos[0].user;
-    const suggestedUsers = Array.from(new Map(allVideos.map(v => [v.user.username, v.user])).values())
+    // FIX: The type inference for `suggestedUsers` was failing. By explicitly typing the new Map and using the spread syntax, we ensure TypeScript correctly infers `suggestedUsers` as an array of `User` objects, resolving property access errors.
+    const suggestedUsers = [...new Map<string, User>(allVideos.map(v => [v.user.username, v.user])).values()]
         .filter(u => u.username !== loggedInUser.username);
 
     return (

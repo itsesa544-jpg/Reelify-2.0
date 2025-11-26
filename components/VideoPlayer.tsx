@@ -1,8 +1,7 @@
 
 
 import React, { useRef, useEffect, useState } from 'react';
-// FIX: The `videosData` import has been removed as the component now receives videos via props, resolving an error where `videosData` was not an exported member of the `constants` module.
-import { SearchIcon } from '../constants';
+import { SearchIcon, BackIcon } from '../constants';
 import VideoInfo from './VideoInfo';
 import VideoActions from './VideoActions';
 import type { Video, User } from '../types';
@@ -12,24 +11,79 @@ interface VideoItemProps {
   video: Video;
   isActive: boolean;
   onSelectUser: (user: User) => void;
-  onNavigate: (view: View) => void;
 }
 
-const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, onNavigate }) => {
+const PlayPauseIcon = ({ isPlaying }: { isPlaying: boolean }) => (
+    <div className="w-20 h-20 bg-black/50 rounded-full flex items-center justify-center">
+        {isPlaying ? (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+        ) : (
+             <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+        )}
+    </div>
+);
+
+
+const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showPlayPauseIcon, setShowPlayPauseIcon] = useState(false);
+  const iconTimer = useRef<number | null>(null);
 
   useEffect(() => {
-    if (videoRef.current) {
-      if (isActive) {
-        videoRef.current.play().catch(error => {
-          console.log("Autoplay prevented: ", error);
-        });
-      } else {
-        videoRef.current.pause();
-        videoRef.current.currentTime = 0;
-      }
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    if (isActive) {
+      videoElement.play().catch(error => {
+        console.log("Autoplay with sound was prevented:", error);
+      });
+    } else {
+      videoElement.pause();
+      videoElement.currentTime = 0;
     }
   }, [isActive]);
+  
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+    
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    
+    videoElement.addEventListener('play', handlePlay);
+    videoElement.addEventListener('pause', handlePause);
+    
+    setIsPlaying(!videoElement.paused);
+    
+    return () => {
+      videoElement.removeEventListener('play', handlePlay);
+      videoElement.removeEventListener('pause', handlePause);
+    };
+  }, []);
+  
+  const togglePlayPause = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause();
+    }
+
+    setShowPlayPauseIcon(true);
+    if (iconTimer.current) {
+      clearTimeout(iconTimer.current);
+    }
+    iconTimer.current = window.setTimeout(() => {
+      setShowPlayPauseIcon(false);
+    }, 1000);
+  };
 
   return (
     <div className="relative w-full h-full">
@@ -39,11 +93,18 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, on
         src={video.videoUrl}
         poster={video.posterUrl}
         loop
-        muted
         playsInline
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
       
+       <div className="absolute inset-0 z-0" onClick={togglePlayPause}></div>
+      
+      {showPlayPauseIcon && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-100">
+           <PlayPauseIcon isPlaying={!videoRef.current?.paused} />
+        </div>
+      )}
+
       <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end">
         <div className="flex-grow">
           <VideoInfo video={video} onSelectUser={onSelectUser} />
@@ -52,21 +113,6 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, on
           <VideoActions video={video} onSelectUser={onSelectUser} />
         </div>
       </div>
-      
-      {/* Shop Now Buttons */}
-      <button 
-        onClick={() => onNavigate('foryou')}
-        className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-cyan-400/80 backdrop-blur-sm text-black font-bold py-2 px-5 rounded-lg border-2 border-cyan-200 shadow-lg shadow-cyan-500/50 hover:bg-cyan-300 transition-all"
-      >
-        Shop Now
-      </button>
-       <button 
-        onClick={() => onNavigate('foryou')}
-        className="absolute bottom-1/3 left-1/2 transform -translate-x-1/2 translate-y-1/2 bg-purple-500/80 backdrop-blur-sm text-white font-bold py-2 px-5 rounded-lg border-2 border-purple-300 shadow-lg shadow-purple-500/50 hover:bg-purple-400 transition-all"
-       >
-        Shop Now
-      </button>
-
     </div>
   );
 };
@@ -76,6 +122,8 @@ interface VideoPlayerProps {
   onSelectUser: (user: User) => void;
   onNavigate: (view: View) => void;
   currentView: View;
+  startIndex?: number;
+  onBack?: () => void;
 }
 
 const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> = ({ label, active, onClick }) => (
@@ -91,9 +139,18 @@ const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> 
 );
 
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView }) => {
-    const [currentVideo, setCurrentVideo] = useState(0);
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView, startIndex, onBack }) => {
+    const [currentVideo, setCurrentVideo] = useState(startIndex || 0);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (startIndex !== undefined && containerRef.current) {
+            const targetElement = containerRef.current.children[startIndex] as HTMLElement;
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'auto' });
+            }
+        }
+    }, [startIndex]);
 
     useEffect(() => {
         const options = {
@@ -125,14 +182,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavig
                 videoElements.forEach(video => observer.unobserve(video));
             }
         };
-    }, []);
+    }, [videos]);
 
     return (
         <div className="w-full h-full relative">
             <div ref={containerRef} className="w-full h-full bg-black overflow-y-auto snap-y snap-mandatory">
                 {videos.map((video, index) => (
                     <div 
-                        key={video.id} 
+                        key={`${video.id}-${index}`}
                         data-index={index}
                         className="video-container w-full h-full snap-start relative"
                     >
@@ -140,21 +197,29 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavig
                           video={video} 
                           isActive={index === currentVideo} 
                           onSelectUser={onSelectUser}
-                          onNavigate={onNavigate}
                         />
                     </div>
                 ))}
             </div>
 
             <header className="absolute top-0 left-0 right-0 z-10 p-4 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent">
-                <button className="p-2">
-                    <SearchIcon className="w-6 h-6 text-white" />
-                </button>
-                <div className="flex items-center gap-6">
-                    <NavTab label="For You" active={currentView === 'feed'} onClick={() => onNavigate('feed')} />
-                    <NavTab label="Photos" active={currentView === 'photos'} onClick={() => onNavigate('photos')} />
-                    <NavTab label="Followers" active={false} onClick={() => {}} />
-                </div>
+                {onBack ? (
+                    <button onClick={onBack} className="p-2">
+                        <BackIcon className="w-6 h-6 text-white" />
+                    </button>
+                ) : (
+                    <button className="p-2">
+                        <SearchIcon className="w-6 h-6 text-white" />
+                    </button>
+                )}
+                
+                {!onBack && (
+                    <div className="flex items-center gap-6">
+                        <NavTab label="For You" active={currentView === 'feed'} onClick={() => onNavigate('feed')} />
+                        <NavTab label="Photos" active={currentView === 'photos'} onClick={() => onNavigate('photos')} />
+                        <NavTab label="Observing" active={currentView === 'observing'} onClick={() => onNavigate('observing')} />
+                    </div>
+                )}
                 <div className="w-10 h-10"></div>
             </header>
         </div>

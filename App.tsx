@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
@@ -12,10 +11,12 @@ import EditProfilePage from './components/EditProfilePage';
 import PostCreationPage from './components/PostCreationPage';
 import UploadModal from './components/UploadModal';
 import PhotosPage from './components/PhotosPage';
-import type { User, Video } from './types';
+import VideoEditorPage from './components/VideoEditorPage';
+import PhotoPostPage from './components/PhotoPostPage'; // Import the new component
+import type { User, Video, GalleryMedia } from './types';
 import { initialVideosData } from './constants';
 
-export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing';
+export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('feed');
@@ -23,6 +24,11 @@ const App: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<User>(initialVideosData[0].user);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [allVideos, setAllVideos] = useState<Video[]>(initialVideosData);
+  const [userFeedVideos, setUserFeedVideos] = useState<Video[]>([]);
+  const [userFeedStartIndex, setUserFeedStartIndex] = useState(0);
+  const [videoToPost, setVideoToPost] = useState<string | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<GalleryMedia | null>(null);
+
 
   const handleSelectUserFromFeed = (user: User) => {
     if (user.username === loggedInUser.username) {
@@ -64,17 +70,22 @@ const App: React.FC = () => {
 
   const handleSelectUpload = () => {
     setIsUploadModalOpen(false);
+    setCurrentView('videoEditor');
+  };
+
+  const handleEditorNext = (videoUrl: string) => {
+    setVideoToPost(videoUrl);
     setCurrentView('postCreation');
   };
 
-  const handlePublishVideo = (videoData: { title: string; description: string; videoUrl: string; posterUrl: string; hashtags: string[] }) => {
+  const handlePublishVideo = (videoData: { title: string; description: string; videoUrl: string; hashtags: string[] }) => {
     const newVideo: Video = {
       id: Date.now(),
       user: loggedInUser,
       title: videoData.title,
       caption: videoData.description,
       videoUrl: videoData.videoUrl,
-      posterUrl: videoData.posterUrl || `https://picsum.photos/seed/${Date.now()}/400/600`,
+      posterUrl: videoData.videoUrl, // Use video URL as poster for simplicity
       hashtags: videoData.hashtags,
       likes: '0',
       comments: '0',
@@ -85,6 +96,29 @@ const App: React.FC = () => {
     setCurrentView('feed');
   };
 
+  const handlePlayFromProfile = (user: User, videoId: number) => {
+    const userVideos = allVideos.filter(v => v.user.username === user.username);
+    const startIndex = userVideos.findIndex(v => v.id === videoId);
+    
+    if (startIndex !== -1) {
+        setUserFeedVideos(userVideos);
+        setUserFeedStartIndex(startIndex);
+        setViewedUser(user); // Keep track of the user whose feed we are watching
+        setCurrentView('userFeed');
+    }
+  };
+  
+  const handleSelectPhoto = (photo: GalleryMedia) => {
+    setSelectedPhoto(photo);
+    setCurrentView('photoPost');
+  };
+
+
+  const handleBackFromUserFeed = () => {
+      setCurrentView('profile');
+      // viewedUser is already set, so it will return to the correct profile
+  };
+
   const observingVideos = allVideos.filter(video => 
     loggedInUser.observing.includes(video.user.username)
   );
@@ -92,15 +126,30 @@ const App: React.FC = () => {
   let pageContent;
   switch (currentView) {
     case 'feed':
-      // FIX: The `VideoPlayer` component now correctly receives the `videos` prop, aligning with its updated interface and resolving a type error.
       pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} />;
       break;
     case 'observing':
-      // FIX: The `VideoPlayer` component now correctly receives the `videos` prop, aligning with its updated interface and resolving a type error.
       pageContent = <VideoPlayer videos={observingVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} />;
       break;
+    case 'userFeed':
+        pageContent = <VideoPlayer 
+            videos={userFeedVideos} 
+            onSelectUser={handleSelectUserFromFeed} 
+            onNavigate={handleNavigate} 
+            currentView={currentView}
+            startIndex={userFeedStartIndex}
+            onBack={handleBackFromUserFeed}
+        />;
+        break;
     case 'photos':
-      pageContent = <PhotosPage onNavigate={handleNavigate} currentView={currentView} />;
+      pageContent = <PhotosPage onNavigate={handleNavigate} currentView={currentView} onSelectPhoto={handleSelectPhoto} />;
+      break;
+    case 'photoPost':
+      if (selectedPhoto) {
+        pageContent = <PhotoPostPage post={selectedPhoto} onBack={() => setCurrentView('photos')} />;
+      } else {
+        setCurrentView('photos');
+      }
       break;
     case 'foryou':
       pageContent = <ShopPage />;
@@ -111,11 +160,11 @@ const App: React.FC = () => {
         pageContent = (
             <ProfilePage 
                 user={viewedUser} 
-                // FIX: The `ProfilePage` component now correctly receives the `allVideos` prop, aligning with its updated interface and resolving a type error.
                 allVideos={allVideos}
                 onBack={handleBackFromProfile} 
                 showBackButton={!isOwnProfile}
-                onEdit={() => setCurrentView('editProfile')}
+                onEdit={isOwnProfile ? () => setCurrentView('editProfile') : undefined}
+                onPlayVideo={(videoId) => handlePlayFromProfile(viewedUser, videoId)}
             />
         );
       }
@@ -135,12 +184,22 @@ const App: React.FC = () => {
           />
       );
       break;
+    case 'videoEditor':
+      pageContent = <VideoEditorPage onNext={handleEditorNext} onBack={() => setCurrentView('feed')} />;
+      break;
     case 'postCreation':
-      // FIX: The `PostCreationPage` component now correctly receives the `onPublish` prop, aligning with its updated interface and resolving a type error.
-      pageContent = <PostCreationPage onBack={() => setCurrentView('feed')} onPublish={handlePublishVideo} />;
+       if (videoToPost) {
+            pageContent = <PostCreationPage 
+                videoUrl={videoToPost}
+                onBack={() => setCurrentView('videoEditor')} 
+                onPublish={handlePublishVideo} 
+            />;
+       } else {
+           setCurrentView('feed');
+           pageContent = null;
+       }
       break;
     default:
-      // FIX: The `VideoPlayer` component now correctly receives the `videos` prop, aligning with its updated interface and resolving a type error.
       pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView='feed' />;
   }
 
@@ -172,7 +231,6 @@ const App: React.FC = () => {
             </div>
 
             <aside className="hidden lg:block w-[320px] shrink-0">
-                {/* FIX: The `RightSidebar` component now correctly receives the `allVideos` prop, aligning with its updated interface and resolving a type error. */}
                 <RightSidebar allVideos={allVideos} onSelectUser={handleSelectUserFromFeed} />
             </aside>
             
