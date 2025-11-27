@@ -176,13 +176,84 @@ export const galleryMediaData: GalleryMedia[] = [
         views: '5.5K',
       },
     },
-    { id: 2, type: 'video', url: 'https://videos.pexels.com/video-files/4434242/4434242-hd_720_1366_25fps.mp4', thumbnailUrl: 'https://images.pexels.com/videos/4434242/pexels-photo-4434242.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' },
-    { id: 3, type: 'photo', url: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=300' },
-    { id: 4, type: 'photo', url: 'https://images.pexels.com/photos/1563256/pexels-photo-1563256.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/1563256/pexels-photo-1563256.jpeg?auto=compress&cs=tinysrgb&w=300' },
-    { id: 5, type: 'video', url: 'https://videos.pexels.com/video-files/7578544/7578544-hd_720_1366_25fps.mp4', thumbnailUrl: 'https://images.pexels.com/videos/7578544/pexels-photo-7578544.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' },
-    { id: 6, type: 'photo', url: 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=300' },
-    { id: 7, type: 'photo', url: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=800', thumbnailUrl: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=300' },
-    { id: 8, type: 'video', url: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4', thumbnailUrl: 'https://images.pexels.com/videos/8357591/pexels-photo-8357591.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' },
+    { 
+      id: 2, 
+      type: 'video', 
+      url: 'https://videos.pexels.com/video-files/4434242/4434242-hd_720_1366_25fps.mp4', 
+      thumbnailUrl: 'https://images.pexels.com/videos/4434242/pexels-photo-4434242.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' 
+    },
+    { 
+      id: 3, 
+      type: 'photo', 
+      url: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=800', 
+      thumbnailUrl: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=300',
+      user: jasmineFoodie,
+      caption: 'A morning without coffee is like... sleep.',
+      timestamp: '3d',
+      stats: {
+        likes: '2.5K',
+        comments: '210',
+        shares: '80',
+        views: '10.1K',
+      },
+    },
+    { 
+      id: 4, 
+      type: 'photo', 
+      url: 'https://images.pexels.com/photos/1563256/pexels-photo-1563256.jpeg?auto=compress&cs=tinysrgb&w=800', 
+      thumbnailUrl: 'https://images.pexels.com/photos/1563256/pexels-photo-1563256.jpeg?auto=compress&cs=tinysrgb&w=300',
+      user: mariaKhan,
+      caption: 'Lost in the city lights.',
+      timestamp: '5d',
+      stats: {
+        likes: '8.1K',
+        comments: '450',
+        shares: '200',
+        views: '35.8K',
+      },
+    },
+    { 
+      id: 5, 
+      type: 'video', 
+      url: 'https://videos.pexels.com/video-files/7578544/7578544-hd_720_1366_25fps.mp4', 
+      thumbnailUrl: 'https://images.pexels.com/videos/7578544/pexels-photo-7578544.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' 
+    },
+    { 
+      id: 6, 
+      type: 'photo', 
+      url: 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=800', 
+      thumbnailUrl: 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=300',
+      user: samiraChen,
+      caption: 'Late night coding session. #womenintech',
+      timestamp: '1w',
+      stats: {
+        likes: '1.8K',
+        comments: '300',
+        shares: '120',
+        views: '9.2K',
+      },
+    },
+    { 
+      id: 7, 
+      type: 'photo', 
+      url: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=800', 
+      thumbnailUrl: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=300',
+      user: alexDynamo,
+      caption: 'The energy was unreal last night!',
+      timestamp: '2w',
+      stats: {
+        likes: '4.2K',
+        comments: '500',
+        shares: '250',
+        views: '22.3K',
+      },
+    },
+    { 
+      id: 8, 
+      type: 'video', 
+      url: 'https://videos.pexels.com/video-files/8357591/8357591-hd_720_1366_25fps.mp4', 
+      thumbnailUrl: 'https://images.pexels.com/videos/8357591/pexels-photo-8357591.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=300' 
+    },
 ];
 
 export const conversationsData: Conversation[] = [
