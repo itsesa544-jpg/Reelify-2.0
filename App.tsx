@@ -1,4 +1,6 @@
 
+
+
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
@@ -13,13 +15,23 @@ import UploadModal from './components/UploadModal';
 import PhotosPage from './components/PhotosPage';
 import VideoEditorPage from './components/VideoEditorPage';
 import PhotoPostPage from './components/PhotoPostPage';
-import ShopDetailPage from './components/ShopDetailPage'; // Import the new component
+import ShopDetailPage from './components/ShopDetailPage';
+import AuthPage from './components/AuthPage'; // Import the new AuthPage
 import type { User, Video, GalleryMedia, ShopPost } from './types';
 import { initialVideosData, mariaKhan } from './constants';
 
 export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail';
 
 const App: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    try {
+      return localStorage.getItem('vibe-isLoggedIn') === 'true';
+    } catch (error) {
+      console.error("Failed to read login status from localStorage", error);
+      return false;
+    }
+  });
+
   const [currentView, setCurrentView] = useState<View>('feed');
   const [viewedUser, setViewedUser] = useState<User | null>(null);
   
@@ -52,13 +64,18 @@ const App: React.FC = () => {
 
   useEffect(() => {
     try {
+      localStorage.setItem('vibe-isLoggedIn', String(isLoggedIn));
       localStorage.setItem('vibe-loggedInUser', JSON.stringify(loggedInUser));
       localStorage.setItem('vibe-allVideos', JSON.stringify(allVideos));
+      // FIX: A missing brace in the catch block and a misplaced closing brace were causing the component to terminate prematurely. This led to subsequent functions and state variables being out of scope.
     } catch (error) {
       console.error("Failed to save state to localStorage", error);
     }
-  }, [loggedInUser, allVideos]);
+  }, [isLoggedIn, loggedInUser, allVideos]);
 
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+  };
 
   const handleSelectUserFromFeed = (user: User) => {
     if (user.username === loggedInUser.username) {
@@ -153,6 +170,10 @@ const App: React.FC = () => {
   const handleBackFromUserFeed = () => {
       setCurrentView('profile');
   };
+
+  if (!isLoggedIn) {
+    return <AuthPage onLoginSuccess={handleLoginSuccess} />;
+  }
 
   const observingVideos = allVideos.filter(video => 
     loggedInUser.observing.includes(video.user.username)

@@ -111,7 +111,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
         )}
         
         <div className="px-4">
-            <div className="flex items-start justify-between -mt-12">
+            <div className="flex items-end justify-between -mt-12">
                 <div className="flex-shrink-0">
                     <img 
                         src={user.avatar} 
@@ -119,7 +119,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
                         className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover" 
                     />
                 </div>
-                <div className="flex items-center gap-2 pt-14">
+                <div className="flex items-center gap-2">
                     <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
                         Observe
                     </button>

@@ -76,9 +76,9 @@ const tusharEmran: User = {
   username: 'Tushar Emran',
   name: 'Tushar Emran',
   avatar: 'https://scontent.fdac135-1.fna.fbcdn.net/v/t39.30808-1/410065022_122108394412120192_8828020922442294136_n.jpg?stp=dst-jpg_p200x200&_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeG71M-r8L2Y4sTfL7vB0L76_z5b5dJ5zZn_Plvl0nnNmd2mFk-t79v9l-L8z1g1K0g4h2iA134uU3M7_119lQYc&_nc_ohc=y-m-qFwL4k4Q7kNvgFX0uDx&_nc_ht=scontent.fdac135-1.fna&oh=00_AYDBuylbIeMLa_0yY13tWjIq4G_tT33T7mY17k39T5_pTQ&oe=66567280',
-  bio: 'Photographer',
-  coverPhoto: '',
-  stats: { observers: '', observing: '', totalViews: '', joined: ''},
+  bio: 'Photographer & Digital Creator. Capturing moments from around the world.',
+  coverPhoto: 'https://images.pexels.com/photos/1528640/pexels-photo-1528640.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  stats: { observers: '15.2K', observing: '120', totalViews: '1.1M', joined: 'Dec 2023'},
   observing: [],
 };
 
@@ -98,7 +98,8 @@ export const initialVideosData: Video[] = [
     audio: {
       title: 'Synthwave Dreams',
       artist: 'Vibe Tracks'
-    }
+    },
+    musicCoverUrl: 'https://res.cloudinary.com/dlklqihg6/image/upload/v1764031351/ehxzfirmajfwnn72tu11.jpg'
   },
   {
     id: 2,
@@ -114,7 +115,8 @@ export const initialVideosData: Video[] = [
     audio: {
       title: 'City Groove',
       artist: 'Alex Dynamo'
-    }
+    },
+    musicCoverUrl: alexDynamo.avatar
   },
   {
     id: 3,
@@ -139,6 +141,11 @@ export const initialVideosData: Video[] = [
     likes: '94',
     comments: '1.2K',
     shares: '300',
+    audio: {
+        title: 'Acoustic Mornings',
+        artist: 'Coffee Shop Vibes'
+    },
+    musicCoverUrl: jasmineFoodie.avatar
   },
   {
     id: 5,
@@ -610,5 +617,35 @@ export const EyeIcon = ({ className = "w-5 h-5" }) => (
 export const StarIcon: React.FC<{ className?: string; filled?: boolean }> = ({ className = "w-5 h-5", filled = true }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5">
         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+);
+
+export const GoogleIcon = ({ className = "w-5 h-5" }) => (
+    <svg className={className} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" />
+        <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z" />
+        <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A8 8 0 0 1 24 36c-5.222 0-9.657-3.27-11.303-7.618l-6.571 4.819C9.656 40.063 16.318 44 24 44z" />
+        <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C42.012 35.845 44 30.138 44 24c0-1.341-.138-2.65-.389-3.917z" />
+    </svg>
+);
+
+export const FacebookIcon = ({ className = "w-5 h-5" }) => (
+    <svg className={className} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#1877F2" d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.35C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.732 0 1.325-.593 1.325-1.325V1.325C24 .593 23.407 0 22.675 0z" />
+    </svg>
+);
+
+export const UserIcon = ({ className = "w-5 h-5" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+);
+
+export const QuestionIcon = ({ className = "w-5 h-5" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M9.09 9.00002C9.3251 8.33169 9.78915 7.76813 10.4 7.40914C11.0108 7.05014 11.7289 6.91896 12.4272 7.03873C13.1255 7.15849 13.7588 7.52154 14.2151 8.0685C14.6714 8.61546 14.9211 9.30881 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12 17H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
 );

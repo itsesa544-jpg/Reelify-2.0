@@ -34,6 +34,7 @@ export interface Video {
     title: string;
     artist: string;
   };
+  musicCoverUrl?: string;
 }
 
 export interface ShopPost {
