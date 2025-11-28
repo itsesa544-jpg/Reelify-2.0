@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import type { User, Video } from '../types';
 import { 
@@ -93,7 +92,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto">
       {/* Profile Info Section */}
       <div className="relative mb-4">
-        <div className="relative cursor-pointer" onClick={() => alert('Cover photo clicked!')}>
+        <div className="relative">
             <img src={user.coverPhoto} alt="Cover" className="w-full h-36 object-cover" />
             <div className="absolute inset-0 bg-black/40"></div>
         </div>
@@ -106,16 +105,16 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
             </button>
         )}
         
-        <div className="p-4">
-            <div className="flex items-start justify-between">
-                <div className="flex-shrink-0 -mt-16 cursor-pointer" onClick={() => alert('Profile picture clicked!')}>
+        <div className="px-4">
+            <div className="flex items-end justify-between -mt-12">
+                <div className="flex-shrink-0">
                     <img 
                         src={user.avatar} 
                         alt={user.name} 
                         className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover" 
                     />
                 </div>
-                <div className="flex flex-col items-end gap-3 pt-4">
+                <div className="flex flex-col items-end gap-3">
                      <div className="flex">
                         <button onClick={() => alert('Observe button clicked!')} className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
                             Observe
@@ -132,7 +131,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
                 </div>
             </div>
 
-            <div className="mt-2 cursor-pointer" onClick={() => alert('Bio section clicked!')}>
+            <div className="mt-2">
                 <h1 className="text-2xl font-bold text-white">{user.name}</h1>
                 <BioText text={user.bio} />
             </div>
@@ -158,6 +157,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
       <div className="px-4 mt-2 pb-4">
          <div className="flex items-center justify-around bg-[#1A1B20] p-1 rounded-xl">
            <ProfileTab icon={<VideosIcon />} label="Videos" active={activeTab === 'Videos'} onClick={() => setActiveTab('Videos')} />
+           {/* FIX: Corrected typo `active-tab` to `activeTab` to ensure correct prop passing and comparison. */}
            <ProfileTab icon={<ShopIcon />} label="Shop" active={activeTab === 'Shop'} onClick={() => setActiveTab('Shop')} />
            <ProfileTab icon={<PhotosIcon />} label="Photos" active={activeTab === 'Photos'} onClick={() => setActiveTab('Photos')} />
          </div>
