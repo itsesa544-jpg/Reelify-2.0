@@ -16,7 +16,7 @@ import PhotoPostPage from './components/PhotoPostPage';
 import ShopDetailPage from './components/ShopDetailPage';
 import AuthPage from './components/AuthPage'; // Import the new AuthPage
 import type { User, Video, GalleryMedia, ShopPost } from './types';
-import { initialVideosData, mariaKhan, tusharEmran } from './constants';
+import { initialVideosData, mariaKhan, tusharEmran, mdesa } from './constants';
 
 export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail';
 
@@ -60,7 +60,7 @@ const App: React.FC = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryMedia | null>(null);
   const [selectedShopPost, setSelectedShopPost] = useState<ShopPost | null>(null);
 
-  const switchableAccounts = [mariaKhan, tusharEmran];
+  const switchableAccounts = [mariaKhan, tusharEmran, mdesa];
 
   useEffect(() => {
     try {
