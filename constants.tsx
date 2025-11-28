@@ -35,6 +35,21 @@ export const tusharEmran: User = {
     observing: ['@maria_khan']
 };
 
+export const mdesa: User = {
+    username: '@mdesa',
+    name: 'mdesa',
+    avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=800',
+    bio: 'Tech enthusiast | Developer',
+    coverPhoto: 'https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    stats: {
+      observers: '10K',
+      observing: '50',
+      totalViews: '1M',
+      joined: 'Jun 2023'
+    },
+    observing: ['@maria_khan', '@tushar_emran']
+};
+
 export const initialVideosData: Video[] = [
     {
         id: 1,

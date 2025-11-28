@@ -102,6 +102,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto">
       {/* Profile Info Section */}
       <div className="relative mb-4">
+        {/* Cover Photo */}
         <div className="relative">
             <img src={user.coverPhoto} alt="Cover" className="w-full h-36 object-cover" />
             <div className="absolute inset-0 bg-black/40"></div>
@@ -109,14 +110,16 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
         {showBackButton && (
             <button 
                 onClick={onBack} 
-                className="absolute top-4 left-4 z-10 p-2 bg-black/50 rounded-full text-white hover:bg-black/75 transition-colors"
+                className="absolute top-4 left-4 z-20 p-2 bg-black/50 rounded-full text-white hover:bg-black/75 transition-colors"
             >
               <BackIcon />
             </button>
         )}
         
-        <div className="px-4">
-            <div className="relative z-10 flex items-end justify-between -mt-12">
+        {/* All content below cover photo */}
+        <div className="relative px-4 -mt-12 z-10">
+             <div className="flex items-end justify-between">
+                {/* Avatar */}
                 <div className="flex-shrink-0">
                     <img 
                         src={user.avatar} 
@@ -124,6 +127,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
                         className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover" 
                     />
                 </div>
+                {/* Top Buttons */}
                 <div className="flex items-center gap-2">
                     <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
                         Observe
