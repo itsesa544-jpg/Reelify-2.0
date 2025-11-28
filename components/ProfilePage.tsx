@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import type { User, Video } from '../types';
 import { 
@@ -23,7 +24,7 @@ const IconButton: React.FC<{children: React.ReactNode, onClick?: () => void}> = 
 );
 
 const StatItem: React.FC<{value: string; label: string}> = ({value, label}) => (
-    <div className="text-center">
+    <div className="text-center px-2">
         <p className="text-base font-bold text-white">{value}</p>
         <p className="text-[11px] text-gray-400 uppercase tracking-wider">{label}</p>
     </div>
@@ -37,14 +38,18 @@ const ProfileTab: React.FC<{icon: React.ReactNode, label: string, active?: boole
 );
 
 const VideoGridItem: React.FC<{ video: Video; index: number; onPlay: () => void; }> = ({ video, index, onPlay }) => {
-    const neonClasses = index % 4 < 2 
-        ? "border-cyan-400 shadow-[0_0_8px_theme(colors.cyan.400)] group-hover:shadow-[0_0_15px_theme(colors.cyan.400)]" 
-        : "border-fuchsia-500 shadow-[0_0_8px_theme(colors.fuchsia.500)] group-hover:shadow-[0_0_15px_theme(colors.fuchsia.500)]";
+    const neonClasses = [
+        "border-cyan-400 shadow-[0_0_8px_theme(colors.cyan.400)] group-hover:shadow-[0_0_15px_theme(colors.cyan.400)]",
+        "border-fuchsia-500 shadow-[0_0_8px_theme(colors.fuchsia.500)] group-hover:shadow-[0_0_15px_theme(colors.fuchsia.500)]",
+        "border-lime-400 shadow-[0_0_8px_theme(colors.lime.400)] group-hover:shadow-[0_0_15px_theme(colors.lime.400)]",
+    ];
+    const neonClass = neonClasses[index % neonClasses.length];
+
 
     return (
         <button onClick={onPlay} className="relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer group">
             <img src={video.posterUrl} alt={video.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-            <div className={`absolute inset-0 border-2 ${neonClasses} rounded-2xl pointer-events-none`}></div>
+            <div className={`absolute inset-0 border-2 ${neonClass} rounded-2xl pointer-events-none`}></div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none"></div>
 
             <div className="absolute top-2 right-2 text-white pointer-events-none">
@@ -68,12 +73,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
   const BioText: React.FC<{text: string}> = ({text}) => {
     const maxLength = 80;
     if (text.length <= maxLength) {
-        return <p className="text-gray-400 mt-1">{text}</p>;
+        return <p className="text-gray-400 mt-1 text-sm">{text}</p>;
     }
     
     if (isBioExpanded) {
         return (
-            <p className="text-gray-400 mt-1">
+            <p className="text-gray-400 mt-1 text-sm">
                 {text}
                 <button onClick={() => setIsBioExpanded(false)} className="text-cyan-400 font-semibold ml-2">See less</button>
             </p>
@@ -81,7 +86,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
     }
     
     return (
-        <p className="text-gray-400 mt-1">
+        <p className="text-gray-400 mt-1 text-sm">
             {`${text.substring(0, maxLength)}...`}
             <button onClick={() => setIsBioExpanded(true)} className="text-cyan-400 font-semibold ml-2">See more</button>
         </p>
@@ -106,7 +111,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
         )}
         
         <div className="px-4">
-            <div className="flex items-end justify-between -mt-12">
+            <div className="flex items-start justify-between -mt-12">
                 <div className="flex-shrink-0">
                     <img 
                         src={user.avatar} 
@@ -114,26 +119,26 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
                         className="w-24 h-24 rounded-full border-4 border-[#0D0F13] object-cover" 
                     />
                 </div>
-                <div className="flex flex-col items-end gap-3">
-                     <div className="flex">
-                        <button onClick={() => alert('Observe button clicked!')} className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
-                            Observe
-                        </button>
-                        <button onClick={() => alert('Message button clicked!')} className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
-                            Message
-                        </button>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                        {onEdit && <IconButton onClick={onEdit}><EditProfileIcon /></IconButton>}
-                        <IconButton onClick={() => alert('Settings clicked!')}><SettingsIcon /></IconButton>
-                        <IconButton onClick={() => alert('Share clicked!')}><ShareIcon /></IconButton>
-                    </div>
+                <div className="flex items-center gap-2 pt-14">
+                    <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
+                        Observe
+                    </button>
+                    <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
+                        Message
+                    </button>
                 </div>
             </div>
 
-            <div className="mt-2">
-                <h1 className="text-2xl font-bold text-white">{user.name}</h1>
-                <BioText text={user.bio} />
+            <div className="mt-2 flex items-start justify-between">
+                <div>
+                    <h1 className="text-2xl font-bold text-white">{user.name}</h1>
+                    <BioText text={user.bio} />
+                </div>
+                <div className="flex items-center space-x-3 mt-1">
+                    {onEdit && <IconButton onClick={onEdit}><EditProfileIcon /></IconButton>}
+                    <IconButton><SettingsIcon /></IconButton>
+                    <IconButton><ShareIcon /></IconButton>
+                </div>
             </div>
         </div>
       </div>
@@ -157,7 +162,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
       <div className="px-4 mt-2 pb-4">
          <div className="flex items-center justify-around bg-[#1A1B20] p-1 rounded-xl">
            <ProfileTab icon={<VideosIcon />} label="Videos" active={activeTab === 'Videos'} onClick={() => setActiveTab('Videos')} />
-           {/* FIX: Corrected typo `active-tab` to `activeTab` to ensure correct prop passing and comparison. */}
            <ProfileTab icon={<ShopIcon />} label="Shop" active={activeTab === 'Shop'} onClick={() => setActiveTab('Shop')} />
            <ProfileTab icon={<PhotosIcon />} label="Photos" active={activeTab === 'Photos'} onClick={() => setActiveTab('Photos')} />
          </div>
