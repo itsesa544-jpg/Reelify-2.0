@@ -16,7 +16,7 @@ import PhotoPostPage from './components/PhotoPostPage';
 import ShopDetailPage from './components/ShopDetailPage';
 import AuthPage from './components/AuthPage'; // Import the new AuthPage
 import type { User, Video, GalleryMedia, ShopPost } from './types';
-import { initialVideosData, mariaKhan } from './constants';
+import { initialVideosData, mariaKhan, tusharEmran } from './constants';
 
 export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail';
 
@@ -59,6 +59,8 @@ const App: React.FC = () => {
   const [videoToPost, setVideoToPost] = useState<string | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryMedia | null>(null);
   const [selectedShopPost, setSelectedShopPost] = useState<ShopPost | null>(null);
+
+  const switchableAccounts = [mariaKhan, tusharEmran];
 
   useEffect(() => {
     try {
@@ -164,6 +166,12 @@ const App: React.FC = () => {
     setCurrentView('shopDetail');
   };
 
+  const handleSwitchAccount = (account: User) => {
+    setLoggedInUser(account);
+    if (viewedUser?.username === loggedInUser.username) {
+      setViewedUser(account);
+    }
+  };
 
   const handleBackFromUserFeed = () => {
       setCurrentView('profile');
@@ -226,6 +234,9 @@ const App: React.FC = () => {
                 showBackButton={!isOwnProfile}
                 onEdit={isOwnProfile ? () => setCurrentView('editProfile') : undefined}
                 onPlayVideo={(videoId) => handlePlayFromProfile(viewedUser, videoId)}
+                loggedInUser={loggedInUser}
+                switchableAccounts={isOwnProfile ? switchableAccounts : []}
+                onSwitchAccount={handleSwitchAccount}
             />
         );
       }

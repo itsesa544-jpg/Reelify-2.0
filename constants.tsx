@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User } from './types';
 
@@ -13,15 +12,83 @@ export const mariaKhan: User = {
   bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
   coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   stats: {
-    observers: '0',
-    observing: '0',
-    totalViews: '0',
+    observers: '1.2M',
+    observing: '350',
+    totalViews: '50M',
     joined: 'Jan 2022'
   },
-  observing: []
+  observing: ['@tushar_emran']
 };
 
-export const initialVideosData: Video[] = [];
+export const tusharEmran: User = {
+    username: '@tushar_emran',
+    name: 'Tushar Emran',
+    avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=800',
+    bio: 'Photographer & Filmmaker. Capturing life\'s moments.',
+    coverPhoto: 'https://images.pexels.com/photos/1528640/pexels-photo-1528640.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    stats: {
+      observers: '500K',
+      observing: '120',
+      totalViews: '25M',
+      joined: 'Mar 2021'
+    },
+    observing: ['@maria_khan']
+};
+
+export const initialVideosData: Video[] = [
+    {
+        id: 1,
+        user: mariaKhan,
+        videoUrl: "https://videos.pexels.com/video-files/4434246/4434246-hd.mp4",
+        posterUrl: "https://images.pexels.com/videos/4434246/pexels-photo-4434246.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        title: "Hidden Gems of Italy",
+        caption: "Exploring the beautiful streets of Rome.",
+        hashtags: ["#rome", "#italy", "#travel"],
+        likes: "1.5K",
+        comments: "94",
+        shares: "280",
+        musicCoverUrl: "https://res.cloudinary.com/dlklqihg6/image/upload/v1764031351/ehxzfirmajfwnn72tu11.jpg",
+    },
+    {
+        id: 2,
+        user: tusharEmran,
+        videoUrl: "https://videos.pexels.com/video-files/853828/853828-hd.mp4",
+        posterUrl: "https://images.pexels.com/videos/853828/free-video-853828.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        title: "Morning Coffee",
+        caption: "The perfect start to any day.",
+        hashtags: ["#coffee", "#latteart", "#morning"],
+        likes: "2.1K",
+        comments: "120",
+        shares: "450",
+        musicCoverUrl: "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=800",
+    },
+    {
+        id: 3,
+        user: mariaKhan,
+        videoUrl: "https://videos.pexels.com/video-files/4690323/4690323-hd.mp4",
+        posterUrl: "https://images.pexels.com/videos/4690323/pexels-photo-4690323.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        title: "City Life",
+        caption: "The hustle and bustle of New York.",
+        hashtags: ["#newyork", "#citylife", "#urban"],
+        likes: "3.2K",
+        comments: "250",
+        shares: "600",
+        musicCoverUrl: "https://images.pexels.com/photos/2129796/pexels-photo-2129796.jpeg?auto=compress&cs=tinysrgb&w=800",
+    },
+    {
+        id: 4,
+        user: tusharEmran,
+        videoUrl: "https://videos.pexels.com/video-files/854003/854003-hd.mp4",
+        posterUrl: "https://images.pexels.com/videos/854003/free-video-854003.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        title: "Ocean Waves",
+        caption: "Peaceful moments by the sea.",
+        hashtags: ["#ocean", "#waves", "#nature"],
+        likes: "4.5K",
+        comments: "300",
+        shares: "800",
+        musicCoverUrl: "https://images.pexels.com/photos/1531660/pexels-photo-1531660.jpeg?auto=compress&cs=tinysrgb&w=800",
+    },
+];
 export const shopPostsData: ShopPost[] = [];
 export const galleryMediaData: GalleryMedia[] = [];
 export const conversationsData: Conversation[] = [];
@@ -158,7 +225,7 @@ export const CommentIcon = ({ className = "w-5 h-5 text-cyan-400" }) => (
     </svg>
 );
 
-export const CheckmarkIcon = ({ className = "w-4 h-4 text-black" }) => (
+export const CheckmarkIcon = ({ className = "w-4 h-4 text-white" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
     </svg>
@@ -339,5 +406,11 @@ export const QuestionIcon = ({ className = "w-5 h-5" }) => (
         <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M9.09 9.00002C9.3251 8.33169 9.78915 7.76813 10.4 7.40914C11.0108 7.05014 11.7289 6.91896 12.4272 7.03873C13.1255 7.15849 13.7588 7.52154 14.2151 8.0685C14.6714 8.61546 14.9211 9.30881 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M12 17H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+);
+
+export const ChevronDownIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
     </svg>
 );

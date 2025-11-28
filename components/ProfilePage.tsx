@@ -1,11 +1,10 @@
 
-
 import React, { useState } from 'react';
 import type { User, Video } from '../types';
 import { 
   BackIcon, EditProfileIcon, SettingsIcon, ShareIcon,
   VideosIcon, ShopIcon, PhotosIcon,
-  PlayIconSimple, GalleryIcon
+  PlayIconSimple, GalleryIcon, ChevronDownIcon, CheckmarkIcon
 } from '../constants';
 
 interface ProfilePageProps {
@@ -15,6 +14,9 @@ interface ProfilePageProps {
   showBackButton: boolean;
   onEdit?: () => void;
   onPlayVideo: (videoId: number) => void;
+  loggedInUser: User;
+  switchableAccounts: User[];
+  onSwitchAccount: (user: User) => void;
 }
 
 const IconButton: React.FC<{children: React.ReactNode, onClick?: () => void}> = ({children, onClick}) => (
@@ -65,11 +67,14 @@ const VideoGridItem: React.FC<{ video: Video; index: number; onPlay: () => void;
 };
 
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, showBackButton, onEdit, onPlayVideo }) => {
+const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, showBackButton, onEdit, onPlayVideo, loggedInUser, switchableAccounts, onSwitchAccount }) => {
   const userVideos = allVideos.filter(video => video.user.username === user.username);
   const [activeTab, setActiveTab] = useState('Videos');
   const [isBioExpanded, setIsBioExpanded] = useState(false);
+  const [isAccountSwitcherOpen, setIsAccountSwitcherOpen] = useState(false);
   
+  const isOwnProfile = user.username === loggedInUser.username;
+
   const BioText: React.FC<{text: string}> = ({text}) => {
     const maxLength = 80;
     if (text.length <= maxLength) {
@@ -131,7 +136,39 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
 
             <div className="mt-2 flex items-start justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold text-white">{user.name}</h1>
+                    <div className="flex items-center gap-2">
+                        <h1 className="text-2xl font-bold text-white">{user.name}</h1>
+                        {isOwnProfile && switchableAccounts.length > 1 && (
+                            <div className="relative">
+                                <button onClick={() => setIsAccountSwitcherOpen(!isAccountSwitcherOpen)}>
+                                    <ChevronDownIcon className="w-6 h-6 text-gray-400 hover:text-white" />
+                                </button>
+                                {isAccountSwitcherOpen && (
+                                    <div className="absolute top-full mt-2 w-64 bg-[#282A36] rounded-lg shadow-lg z-20 border border-gray-700">
+                                        {switchableAccounts.map(account => (
+                                            <button 
+                                                key={account.username} 
+                                                onClick={() => {
+                                                    onSwitchAccount(account);
+                                                    setIsAccountSwitcherOpen(false);
+                                                }}
+                                                className="w-full text-left flex items-center gap-3 p-3 hover:bg-[#3b3d4d] transition-colors"
+                                            >
+                                                <img src={account.avatar} alt={account.name} className="w-10 h-10 rounded-full object-cover" />
+                                                <div className="flex-grow">
+                                                    <p className="font-semibold text-white">{account.name}</p>
+                                                    <p className="text-sm text-gray-400">{account.username}</p>
+                                                </div>
+                                                {account.username === loggedInUser.username && (
+                                                    <CheckmarkIcon className="w-5 h-5 text-cyan-400" />
+                                                )}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                     <BioText text={user.bio} />
                 </div>
                 <div className="flex items-center space-x-3 mt-1">
