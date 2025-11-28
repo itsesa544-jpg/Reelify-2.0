@@ -12,11 +12,12 @@ import PostCreationPage from './components/PostCreationPage';
 import UploadModal from './components/UploadModal';
 import PhotosPage from './components/PhotosPage';
 import VideoEditorPage from './components/VideoEditorPage';
-import PhotoPostPage from './components/PhotoPostPage'; // Import the new component
-import type { User, Video, GalleryMedia } from './types';
+import PhotoPostPage from './components/PhotoPostPage';
+import ShopDetailPage from './components/ShopDetailPage'; // Import the new component
+import type { User, Video, GalleryMedia, ShopPost } from './types';
 import { initialVideosData } from './constants';
 
-export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost';
+export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('feed');
@@ -28,6 +29,7 @@ const App: React.FC = () => {
   const [userFeedStartIndex, setUserFeedStartIndex] = useState(0);
   const [videoToPost, setVideoToPost] = useState<string | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryMedia | null>(null);
+  const [selectedShopPost, setSelectedShopPost] = useState<ShopPost | null>(null);
 
 
   const handleSelectUserFromFeed = (user: User) => {
@@ -113,6 +115,11 @@ const App: React.FC = () => {
     setCurrentView('photoPost');
   };
 
+  const handleSelectShopPost = (post: ShopPost) => {
+    setSelectedShopPost(post);
+    setCurrentView('shopDetail');
+  };
+
 
   const handleBackFromUserFeed = () => {
       setCurrentView('profile');
@@ -152,7 +159,14 @@ const App: React.FC = () => {
       }
       break;
     case 'foryou':
-      pageContent = <ShopPage />;
+      pageContent = <ShopPage onSelectPost={handleSelectShopPost} />;
+      break;
+    case 'shopDetail':
+      if (selectedShopPost) {
+        pageContent = <ShopDetailPage post={selectedShopPost} onBack={() => setCurrentView('foryou')} />;
+      } else {
+        setCurrentView('foryou');
+      }
       break;
     case 'profile':
       if (viewedUser) {

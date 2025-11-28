@@ -93,8 +93,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto">
       {/* Profile Info Section */}
       <div className="relative mb-4">
-        <img src={user.coverPhoto} alt="Cover" className="w-full h-36 object-cover" />
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="relative cursor-pointer" onClick={() => alert('Cover photo clicked!')}>
+            <img src={user.coverPhoto} alt="Cover" className="w-full h-36 object-cover" />
+            <div className="absolute inset-0 bg-black/40"></div>
+        </div>
         {showBackButton && (
             <button 
                 onClick={onBack} 
@@ -106,7 +108,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
         
         <div className="p-4">
             <div className="flex items-start justify-between">
-                <div className="flex-shrink-0 -mt-16">
+                <div className="flex-shrink-0 -mt-16 cursor-pointer" onClick={() => alert('Profile picture clicked!')}>
                     <img 
                         src={user.avatar} 
                         alt={user.name} 
@@ -115,22 +117,22 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
                 </div>
                 <div className="flex flex-col items-end gap-3 pt-4">
                      <div className="flex">
-                        <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
+                        <button onClick={() => alert('Observe button clicked!')} className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors mr-2">
                             Observe
                         </button>
-                        <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
+                        <button onClick={() => alert('Message button clicked!')} className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
                             Message
                         </button>
                     </div>
                     <div className="flex items-center space-x-3">
                         {onEdit && <IconButton onClick={onEdit}><EditProfileIcon /></IconButton>}
-                        <IconButton><SettingsIcon /></IconButton>
-                        <IconButton><ShareIcon /></IconButton>
+                        <IconButton onClick={() => alert('Settings clicked!')}><SettingsIcon /></IconButton>
+                        <IconButton onClick={() => alert('Share clicked!')}><ShareIcon /></IconButton>
                     </div>
                 </div>
             </div>
 
-            <div className="mt-2">
+            <div className="mt-2 cursor-pointer" onClick={() => alert('Bio section clicked!')}>
                 <h1 className="text-2xl font-bold text-white">{user.name}</h1>
                 <BioText text={user.bio} />
             </div>

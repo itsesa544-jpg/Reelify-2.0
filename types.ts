@@ -45,6 +45,8 @@ export interface ShopPost {
     name: string;
     avatar: string;
   };
+  description: string;
+  rating: number;
 }
 
 export interface Message {

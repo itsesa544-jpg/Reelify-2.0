@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User } from './types';
 
@@ -154,10 +155,10 @@ export const initialVideosData: Video[] = [
 ];
 
 export const shopPostsData: ShopPost[] = [
-  { id: 1, imageUrl: 'https://picsum.photos/seed/product1/400/400', title: 'Aesthetic Vase', price: '$49.99', seller: { name: 'DecorFinds', avatar: 'https://picsum.photos/seed/seller1/50' } },
-  { id: 2, imageUrl: 'https://picsum.photos/seed/product2/400/400', title: 'Minimalist Lamp', price: '$89.00', seller: { name: 'LightUp', avatar: 'https://picsum.photos/seed/seller2/50' } },
-  { id: 3, imageUrl: 'https://picsum.photos/seed/product3/400/400', title: 'Cozy Knit Blanket', price: '$120.00', seller: { name: 'ComfyHome', avatar: 'https://picsum.photos/seed/seller3/50' } },
-  { id: 4, imageUrl: 'https://picsum.photos/seed/product4/400/400', title: 'Abstract Wall Art', price: '$250.00', seller: { name: 'ArtHouse', avatar: 'https://picsum.photos/seed/seller4/50' } },
+  { id: 1, imageUrl: 'https://picsum.photos/seed/product1/400/400', title: 'Aesthetic Vase', price: '$49.99', seller: { name: 'DecorFinds', avatar: 'https://picsum.photos/seed/seller1/50' }, rating: 4.8, description: 'A beautifully crafted ceramic vase to add a touch of elegance to your home. Perfect for fresh or dried flowers. Available in multiple colors.' },
+  { id: 2, imageUrl: 'https://picsum.photos/seed/product2/400/400', title: 'Minimalist Lamp', price: '$89.00', seller: { name: 'LightUp', avatar: 'https://picsum.photos/seed/seller2/50' }, rating: 4.9, description: 'Sleek and modern minimalist desk lamp with adjustable brightness. Provides a warm, diffused light ideal for reading or working.' },
+  { id: 3, imageUrl: 'https://picsum.photos/seed/product3/400/400', title: 'Cozy Knit Blanket', price: '$120.00', seller: { name: 'ComfyHome', avatar: 'https://picsum.photos/seed/seller3/50' }, rating: 4.7, description: 'Ultra-soft and chunky knit blanket, perfect for adding a cozy feel to your living room or bedroom. Made from 100% merino wool.' },
+  { id: 4, imageUrl: 'https://picsum.photos/seed/product4/400/400', title: 'Abstract Wall Art', price: '$250.00', seller: { name: 'ArtHouse', avatar: 'https://picsum.photos/seed/seller4/50' }, rating: 4.6, description: 'A unique piece of abstract canvas art to be the centerpiece of any room. Hand-painted by our resident artist, with vibrant colors and textures.' },
 ];
 
 export const galleryMediaData: GalleryMedia[] = [
@@ -580,27 +581,34 @@ export const PrivacySettingsIcon = ({ className = "w-6 h-6" }) => (
     </svg>
 );
 
-export const HeartIconFilled = ({ className = 'w-6 h-6' }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
-    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-  </svg>
+export const HeartIconFilled = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+    </svg>
 );
 
-export const CommentBubbleIconSimple = ({ className = 'w-6 h-6' }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-  </svg>
+export const CommentBubbleIconSimple = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H8.828a1 1 0 00-.707.293L4 18.586V14a2 2 0 01-2-2V5z" />
+    </svg>
 );
 
-export const ShareIconSimple = ({ className = 'w-6 h-6' }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-  </svg>
+export const ShareIconSimple = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+    </svg>
 );
 
-export const EyeIcon = ({ className = 'w-6 h-6' }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-  </svg>
+export const EyeIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+        <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.018 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+    </svg>
+);
+
+// FIX: Explicitly typed StarIcon as a React.FC to allow React-specific props like `key`, resolving errors when it's used in lists.
+export const StarIcon: React.FC<{ className?: string; filled?: boolean }> = ({ className = "w-5 h-5", filled = true }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5">
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
 );

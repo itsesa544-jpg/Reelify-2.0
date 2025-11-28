@@ -1,9 +1,15 @@
+
 import React from 'react';
 import { shopPostsData } from '../constants';
 import type { ShopPost } from '../types';
 
-const ShopPostCard: React.FC<{ post: ShopPost }> = ({ post }) => (
-  <div className="bg-[#1A1B20] rounded-xl overflow-hidden">
+interface ShopPostCardProps {
+ post: ShopPost;
+ onClick: () => void;
+}
+
+const ShopPostCard: React.FC<ShopPostCardProps> = ({ post, onClick }) => (
+  <button onClick={onClick} className="bg-[#1A1B20] rounded-xl overflow-hidden text-left w-full">
     <img src={post.imageUrl} alt={post.title} className="w-full h-48 object-cover" />
     <div className="p-3">
       <h3 className="font-semibold text-white text-md truncate">{post.title}</h3>
@@ -13,10 +19,14 @@ const ShopPostCard: React.FC<{ post: ShopPost }> = ({ post }) => (
         <span className="text-sm text-gray-400">{post.seller.name}</span>
       </div>
     </div>
-  </div>
+  </button>
 );
 
-const ShopPage: React.FC = () => {
+interface ShopPageProps {
+  onSelectPost: (post: ShopPost) => void;
+}
+
+const ShopPage: React.FC<ShopPageProps> = ({ onSelectPost }) => {
   return (
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto pb-20">
       <header className="p-4 bg-[#1A1B20]/80 backdrop-blur-sm sticky top-0 z-20 flex items-center justify-center">
@@ -24,7 +34,7 @@ const ShopPage: React.FC = () => {
       </header>
       <div className="p-4 grid grid-cols-2 gap-4">
         {shopPostsData.map(post => (
-          <ShopPostCard key={post.id} post={post} />
+          <ShopPostCard key={post.id} post={post} onClick={() => onSelectPost(post)} />
         ))}
       </div>
     </div>
