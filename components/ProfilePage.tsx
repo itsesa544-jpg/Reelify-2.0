@@ -116,7 +116,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
         )}
         
         <div className="px-4">
-            <div className="flex items-end justify-between -mt-12">
+            <div className="relative z-10 flex items-end justify-between -mt-12">
                 <div className="flex-shrink-0">
                     <img 
                         src={user.avatar} 
