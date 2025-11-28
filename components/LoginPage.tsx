@@ -3,6 +3,7 @@ import { CloseIcon, QuestionIcon, UserIcon, GoogleIcon } from '../constants';
 
 interface LoginPageProps {
   onLogin: () => void;
+  onGoogleLogin: () => void;
   onSwitchToSignup: () => void;
 }
 
@@ -13,7 +14,7 @@ const AuthButton: React.FC<{icon: React.ReactNode; label: string; onClick?: () =
     </button>
 );
 
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onSwitchToSignup }) => {
+const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onGoogleLogin, onSwitchToSignup }) => {
   return (
     <div className="w-screen h-screen bg-white text-black flex flex-col">
       <header className="p-4 flex items-center justify-between">
@@ -35,6 +36,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onSwitchToSignup }) => {
                 <AuthButton 
                     icon={<GoogleIcon />}
                     label="Continue with Google"
+                    onClick={onGoogleLogin}
                 />
             </div>
         </div>

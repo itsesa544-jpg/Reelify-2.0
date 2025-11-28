@@ -3,6 +3,7 @@ import { CloseIcon, QuestionIcon, UserIcon, GoogleIcon, FacebookIcon } from '../
 
 interface SignupPageProps {
   onSignup: () => void;
+  onGoogleLogin: () => void;
   onSwitchToLogin: () => void;
 }
 
@@ -13,7 +14,7 @@ const AuthButton: React.FC<{icon: React.ReactNode; label: string; onClick?: () =
     </button>
 );
 
-const SignupPage: React.FC<SignupPageProps> = ({ onSignup, onSwitchToLogin }) => {
+const SignupPage: React.FC<SignupPageProps> = ({ onSignup, onGoogleLogin, onSwitchToLogin }) => {
   return (
     <div className="w-screen h-screen bg-white text-black flex flex-col">
       <header className="p-4 flex items-center justify-between">
@@ -36,6 +37,7 @@ const SignupPage: React.FC<SignupPageProps> = ({ onSignup, onSwitchToLogin }) =>
                 <AuthButton 
                     icon={<GoogleIcon />}
                     label="Continue with Google"
+                    onClick={onGoogleLogin}
                 />
                 <AuthButton 
                     icon={<FacebookIcon />}

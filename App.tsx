@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
@@ -67,13 +65,13 @@ const App: React.FC = () => {
       localStorage.setItem('vibe-isLoggedIn', String(isLoggedIn));
       localStorage.setItem('vibe-loggedInUser', JSON.stringify(loggedInUser));
       localStorage.setItem('vibe-allVideos', JSON.stringify(allVideos));
-      // FIX: A missing brace in the catch block and a misplaced closing brace were causing the component to terminate prematurely. This led to subsequent functions and state variables being out of scope.
     } catch (error) {
       console.error("Failed to save state to localStorage", error);
     }
   }, [isLoggedIn, loggedInUser, allVideos]);
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (user: User) => {
+    setLoggedInUser(user);
     setIsLoggedIn(true);
   };
 

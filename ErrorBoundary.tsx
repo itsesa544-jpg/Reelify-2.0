@@ -9,8 +9,11 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  // FIX: Refactored state initialization to use a class property. This is a more modern approach and should resolve the issue with `this.props` not being recognized.
-  state: State = { hasError: false };
+  // FIX: State was not initialized, causing errors when accessing `this.state` and `this.props`. Added a constructor to properly initialize state.
+  constructor(props: Props) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
   static getDerivedStateFromError(_: Error): State {
     // Update state so the next render will show the fallback UI.
