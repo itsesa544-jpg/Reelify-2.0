@@ -1,13 +1,14 @@
 
 
 import React from 'react';
-// FIX: Replaced the incorrect import of `videosData` with `initialVideosData` to align with the exported members of the `constants` module. This resolves an error where the application was attempting to import a non-existent variable, causing a module resolution failure.
-import { initialVideosData, CloseIcon, UploadIcon, CameraIcon, TemplatesIcon } from '../constants';
+import type { User } from '../types';
+import { CloseIcon, UploadIcon, CameraIcon, TemplatesIcon } from '../constants';
 
 interface UploadModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectUpload: () => void;
+  loggedInUser: User | null;
 }
 
 interface ModalOptionButtonProps {
@@ -25,10 +26,8 @@ const ModalOptionButton: React.FC<ModalOptionButtonProps> = ({ icon, label, onCl
   </div>
 );
 
-const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSelectUpload }) => {
+const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSelectUpload, loggedInUser }) => {
   if (!isOpen) return null;
-
-  const currentUser = initialVideosData.length > 0 ? initialVideosData[0].user : null;
 
   return (
     <div 
@@ -43,16 +42,16 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onSelectUplo
           <CloseIcon />
         </button>
         
-        {currentUser ? (
+        {loggedInUser ? (
             <div className="flex flex-col items-center mb-6">
                  <div className="p-1 rounded-full bg-gradient-to-tr from-yellow-300 via-purple-500 to-pink-500">
                     <img 
-                    src={currentUser.avatar} 
-                    alt={currentUser.username} 
+                    src={loggedInUser.avatar} 
+                    alt={loggedInUser.username} 
                     className="w-20 h-20 rounded-full border-2 border-[#1f1b2d] object-cover"
                     />
                 </div>
-                <p className="font-semibold mt-3">{currentUser.username}</p>
+                <p className="font-semibold mt-3">{loggedInUser.username}</p>
                 <h2 className="text-2xl font-bold mt-2">Create new content</h2>
             </div>
         ) : (

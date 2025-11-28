@@ -12,7 +12,7 @@ export const featuredCommunities: Community[] = [
   { name: 'SkillShareHub', icon: 'https://picsum.photos/seed/skill/100' },
 ];
 
-const mariaKhan: User = {
+export const mariaKhan: User = {
   username: '@maria_khan',
   name: 'Maria_Khan',
   avatar: 'https://images.pexels.com/photos/3772510/pexels-photo-3772510.jpeg?auto=compress&cs=tinysrgb&w=800',

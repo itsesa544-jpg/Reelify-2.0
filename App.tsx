@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
 import ProfilePage from './components/ProfilePage';
@@ -15,21 +15,49 @@ import VideoEditorPage from './components/VideoEditorPage';
 import PhotoPostPage from './components/PhotoPostPage';
 import ShopDetailPage from './components/ShopDetailPage'; // Import the new component
 import type { User, Video, GalleryMedia, ShopPost } from './types';
-import { initialVideosData } from './constants';
+import { initialVideosData, mariaKhan } from './constants';
 
 export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('feed');
   const [viewedUser, setViewedUser] = useState<User | null>(null);
-  const [loggedInUser, setLoggedInUser] = useState<User>(initialVideosData[0].user);
+  
+  const [loggedInUser, setLoggedInUser] = useState<User>(() => {
+    try {
+      const savedUser = localStorage.getItem('vibe-loggedInUser');
+      return savedUser ? JSON.parse(savedUser) : mariaKhan;
+    } catch (error) {
+      console.error("Failed to parse loggedInUser from localStorage", error);
+      return mariaKhan;
+    }
+  });
+
+  const [allVideos, setAllVideos] = useState<Video[]>(() => {
+    try {
+      const savedVideos = localStorage.getItem('vibe-allVideos');
+      return savedVideos ? JSON.parse(savedVideos) : initialVideosData;
+    } catch (error) {
+      console.error("Failed to parse allVideos from localStorage", error);
+      return initialVideosData;
+    }
+  });
+
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [allVideos, setAllVideos] = useState<Video[]>(initialVideosData);
   const [userFeedVideos, setUserFeedVideos] = useState<Video[]>([]);
   const [userFeedStartIndex, setUserFeedStartIndex] = useState(0);
   const [videoToPost, setVideoToPost] = useState<string | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryMedia | null>(null);
   const [selectedShopPost, setSelectedShopPost] = useState<ShopPost | null>(null);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('vibe-loggedInUser', JSON.stringify(loggedInUser));
+      localStorage.setItem('vibe-allVideos', JSON.stringify(allVideos));
+    } catch (error) {
+      console.error("Failed to save state to localStorage", error);
+    }
+  }, [loggedInUser, allVideos]);
 
 
   const handleSelectUserFromFeed = (user: User) => {
@@ -56,13 +84,14 @@ const App: React.FC = () => {
   const handleSaveProfile = (updatedUser: User) => {
     setLoggedInUser(updatedUser);
     setViewedUser(updatedUser);
-    // Also update user details in the videos list
+    
     setAllVideos(prevVideos => prevVideos.map(video => {
         if (video.user.username === updatedUser.username) {
             return { ...video, user: updatedUser };
         }
         return video;
     }));
+
     setCurrentView('profile');
   };
 
@@ -87,7 +116,7 @@ const App: React.FC = () => {
       title: videoData.title,
       caption: videoData.description,
       videoUrl: videoData.videoUrl,
-      posterUrl: videoData.videoUrl, // Use video URL as poster for simplicity
+      posterUrl: videoData.videoUrl, 
       hashtags: videoData.hashtags,
       likes: '0',
       comments: '0',
@@ -105,7 +134,7 @@ const App: React.FC = () => {
     if (startIndex !== -1) {
         setUserFeedVideos(userVideos);
         setUserFeedStartIndex(startIndex);
-        setViewedUser(user); // Keep track of the user whose feed we are watching
+        setViewedUser(user);
         setCurrentView('userFeed');
     }
   };
@@ -123,7 +152,6 @@ const App: React.FC = () => {
 
   const handleBackFromUserFeed = () => {
       setCurrentView('profile');
-      // viewedUser is already set, so it will return to the correct profile
   };
 
   const observingVideos = allVideos.filter(video => 
@@ -224,6 +252,7 @@ const App: React.FC = () => {
             isOpen={isUploadModalOpen}
             onClose={() => setIsUploadModalOpen(false)}
             onSelectUpload={handleSelectUpload}
+            loggedInUser={loggedInUser}
         />
         <div className="container mx-auto h-full max-w-screen-xl flex lg:gap-6 lg:p-4">
             
@@ -245,7 +274,7 @@ const App: React.FC = () => {
             </div>
 
             <aside className="hidden lg:block w-[320px] shrink-0">
-                <RightSidebar allVideos={allVideos} onSelectUser={handleSelectUserFromFeed} />
+                <RightSidebar allVideos={allVideos} loggedInUser={loggedInUser} onSelectUser={handleSelectUserFromFeed} />
             </aside>
             
         </div>
