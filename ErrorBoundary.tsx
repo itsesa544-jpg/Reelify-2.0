@@ -9,7 +9,7 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  // FIX: Added a constructor to initialize state. This resolves errors from attempting to access `this.state` before it is defined.
+  // FIX: Add a constructor to initialize state, making 'this.state' and 'this.props' available in the component.
   constructor(props: Props) {
     super(props);
     this.state = { hasError: false };

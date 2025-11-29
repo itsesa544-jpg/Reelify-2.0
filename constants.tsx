@@ -1,6 +1,6 @@
 
 import React from 'react';
-import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User } from './types';
+import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost } from './types';
 
 export const formatNumber = (num: number): string => {
     if (num >= 1000000) {
@@ -34,6 +34,7 @@ export const mariaKhan: User = {
 export const tusharEmran: User = {
     username: '@tushar_emran',
     name: 'Tushar Emran',
+    isVerified: true,
     avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=800',
     bio: 'Photographer & Filmmaker. Capturing life\'s moments.',
     coverPhoto: 'https://images.pexels.com/photos/1528640/pexels-photo-1528640.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -62,6 +63,16 @@ export const mdesa: User = {
 };
 
 export const allUsers: User[] = [mariaKhan, tusharEmran, mdesa];
+
+export const photoPostsData: PhotoPost[] = [
+    {
+        id: 1,
+        user: tusharEmran,
+        timestamp: '1d',
+        caption: 'নির্বাচনের আগে full Protection 😀🤣',
+        imageUrl: 'https://i.ibb.co/68g2zP2/tushar-emran-post.jpg',
+    }
+];
 
 
 export const initialVideosData: Video[] = [
@@ -441,4 +452,28 @@ export const ChevronDownIcon = ({ className = "w-5 h-5" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
   </svg>
+);
+
+export const VerifiedBadgeIcon = ({ className = "w-4 h-4" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-3.928 17.202l-3.27-3.27a.75.75 0 011.06-1.061l2.74 2.739 5.86-5.86a.75.75 0 011.061 1.06l-6.39 6.391a.75.75 0 01-1.06 0z" />
+    </svg>
+);
+
+export const GlobeIcon = ({ className = "w-3 h-3" }) => (
+    <svg className={className} fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM4.5 5h7a6.5 6.5 0 0 1 0 6h-7a6.5 6.5 0 0 1 0-6z" />
+    </svg>
+);
+
+export const MoreHorizIcon = ({ className = "w-5 h-5" }) => (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" /><circle cx="5" cy="12" r="2" />
+    </svg>
+);
+
+export const GiftIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V6a2 2 0 00-2 2h2zm0 13l-4-4h8l-4 4zm0-13a4 4 0 014 4h-8a4 4 0 014-4z" />
+    </svg>
 );

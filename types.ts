@@ -3,6 +3,7 @@ export interface User {
   username: string;
   avatar: string;
   name: string;
+  isVerified?: boolean;
   bio: string;
   coverPhoto: string;
   stats: {
@@ -92,4 +93,12 @@ export interface GalleryMedia {
     shares: number;
     views: number;
   };
+}
+
+export interface PhotoPost {
+  id: number;
+  user: User;
+  timestamp: string;
+  caption: string;
+  imageUrl: string;
 }

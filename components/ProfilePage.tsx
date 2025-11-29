@@ -5,7 +5,7 @@ import type { User, Video } from '../types';
 import { 
   BackIcon, EditProfileIcon, SettingsIcon, ShareIcon,
   VideosIcon, ShopIcon, PhotosIcon,
-  PlayIconSimple, GalleryIcon, ChevronDownIcon, CheckmarkIcon,
+  PlayIconSimple, GalleryIcon, ChevronDownIcon, CheckmarkIcon, GiftIcon,
   formatNumber
 } from '../constants';
 
@@ -184,10 +184,24 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
                     </div>
                     <BioText text={user.bio} />
                 </div>
-                <div className="flex items-center space-x-3 mt-1">
-                    {isOwnProfile && <IconButton onClick={onEdit}><EditProfileIcon /></IconButton>}
-                    <IconButton><SettingsIcon /></IconButton>
-                    <IconButton><ShareIcon /></IconButton>
+                <div className="flex flex-col items-end gap-2">
+                    {isOwnProfile && (
+                        <div className="flex items-center gap-2">
+                            <button className="flex items-center gap-2 bg-[#282A36]/80 hover:bg-[#3b3d4d] text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                <VideosIcon className="w-5 h-5" />
+                                <span>Video Upload</span>
+                            </button>
+                            <button className="flex items-center gap-2 bg-[#282A36]/80 hover:bg-[#3b3d4d] text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                <GiftIcon className="w-5 h-5" />
+                                <span>Share Gift</span>
+                            </button>
+                        </div>
+                    )}
+                    <div className="flex items-center space-x-3">
+                        {isOwnProfile && <IconButton onClick={onEdit}><EditProfileIcon /></IconButton>}
+                        <IconButton><SettingsIcon /></IconButton>
+                        <IconButton><ShareIcon /></IconButton>
+                    </div>
                 </div>
             </div>
         </div>
