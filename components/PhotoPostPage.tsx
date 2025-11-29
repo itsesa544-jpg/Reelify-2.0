@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { GalleryMedia } from '../types';
 // FIX: Imported formatNumber to correctly handle numeric data for display.

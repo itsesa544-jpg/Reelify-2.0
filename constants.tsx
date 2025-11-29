@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost } from './types';
 

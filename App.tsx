@@ -8,16 +8,17 @@ import InboxPage from './components/InboxPage';
 import ShopPage from './components/ShopPage';
 import EditProfilePage from './components/EditProfilePage';
 import PostCreationPage from './components/PostCreationPage';
-import UploadModal from './components/UploadModal';
-import PhotosPage from './components/PhotosPage';
+import PhotoFeedPage from './components/PhotoFeedPage';
 import VideoEditorPage from './components/VideoEditorPage';
 import PhotoPostPage from './components/PhotoPostPage';
 import ShopDetailPage from './components/ShopDetailPage';
-import AuthPage from './components/AuthPage'; // Import the new AuthPage
+import AuthPage from './components/AuthPage';
+import UploadModal from './components/UploadModal';
+import UploadPage from './components/UploadPage';
 import type { User, Video, GalleryMedia, ShopPost } from './types';
 import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers } from './constants';
 
-export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail';
+export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -36,7 +37,6 @@ const App: React.FC = () => {
     try {
       const savedUser = localStorage.getItem('vibe-loggedInUser');
       return savedUser ? JSON.parse(savedUser) : mariaKhan;
-// FIX: Added curly braces to the catch block to fix a syntax error.
     } catch (error) {
       console.error("Failed to parse loggedInUser from localStorage", error);
       return mariaKhan;
@@ -63,12 +63,13 @@ const App: React.FC = () => {
     }
   });
 
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [userFeedVideos, setUserFeedVideos] = useState<Video[]>([]);
   const [userFeedStartIndex, setUserFeedStartIndex] = useState(0);
-  const [videoToPost, setVideoToPost] = useState<string | null>(null);
+  const [videoToEditUrl, setVideoToEditUrl] = useState<string | null>(null);
+  const [videoToPostUrl, setVideoToPostUrl] = useState<string | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryMedia | null>(null);
   const [selectedShopPost, setSelectedShopPost] = useState<ShopPost | null>(null);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const switchableAccounts = [mariaKhan, tusharEmran, mdesa];
 
@@ -170,14 +171,19 @@ const App: React.FC = () => {
   const handleUploadClick = () => {
     setIsUploadModalOpen(true);
   };
-
-  const handleSelectUpload = () => {
+  
+  const handleGoToUploadPage = () => {
     setIsUploadModalOpen(false);
+    setCurrentView('upload');
+  }
+
+  const handleVideoSelectedForUpload = (videoUrl: string) => {
+    setVideoToEditUrl(videoUrl);
     setCurrentView('videoEditor');
-  };
+  }
 
   const handleEditorNext = (videoUrl: string) => {
-    setVideoToPost(videoUrl);
+    setVideoToPostUrl(videoUrl);
     setCurrentView('postCreation');
   };
 
@@ -190,7 +196,6 @@ const App: React.FC = () => {
       videoUrl: videoData.videoUrl,
       posterUrl: videoData.videoUrl, 
       hashtags: videoData.hashtags,
-// FIX: Changed string values to numbers to match the Video type definition.
       likes: 0,
       comments: 0,
       shares: 0,
@@ -263,7 +268,7 @@ const App: React.FC = () => {
         />;
         break;
     case 'photos':
-      pageContent = <PhotosPage onNavigate={handleNavigate} currentView={currentView} onSelectPhoto={handleSelectPhoto} />;
+      pageContent = <PhotoFeedPage />;
       break;
     case 'photoPost':
       if (selectedPhoto) {
@@ -316,13 +321,16 @@ const App: React.FC = () => {
           />
       );
       break;
+    case 'upload':
+       pageContent = <UploadPage onVideoSelected={handleVideoSelectedForUpload} onClose={() => setCurrentView('feed')} />;
+       break;
     case 'videoEditor':
-      pageContent = <VideoEditorPage onNext={handleEditorNext} onBack={() => setCurrentView('feed')} />;
+      pageContent = <VideoEditorPage videoUrl={videoToEditUrl} onNext={handleEditorNext} onBack={() => setCurrentView('upload')} />;
       break;
     case 'postCreation':
-       if (videoToPost) {
+       if (videoToPostUrl) {
             pageContent = <PostCreationPage 
-                videoUrl={videoToPost}
+                videoUrl={videoToPostUrl}
                 onBack={() => setCurrentView('videoEditor')} 
                 onPublish={handlePublishVideo} 
             />;
@@ -338,19 +346,13 @@ const App: React.FC = () => {
 
   return (
     <div className="w-screen h-screen bg-[#0D0F13] text-white font-sans">
-        <UploadModal
-            isOpen={isUploadModalOpen}
-            onClose={() => setIsUploadModalOpen(false)}
-            onSelectUpload={handleSelectUpload}
-            loggedInUser={loggedInUser}
-        />
         <div className="container mx-auto h-full max-w-screen-xl flex lg:gap-6 lg:p-4">
             
             <nav className="hidden lg:block w-[280px] shrink-0">
                 <LeftSidebar onNavigate={handleNavigate} currentView={currentView} />
             </nav>
 
-            <div className="flex-grow flex flex-col h-full overflow-hidden">
+            <div className="flex-grow flex flex-col h-full overflow-hidden relative">
                 <main className="flex-grow h-full overflow-hidden relative bg-black lg:rounded-2xl">
                     {pageContent}
                 </main>
@@ -361,6 +363,14 @@ const App: React.FC = () => {
                         onUploadClick={handleUploadClick}
                     />
                 </div>
+                {isUploadModalOpen && (
+                    <UploadModal 
+                        isOpen={isUploadModalOpen} 
+                        onClose={() => setIsUploadModalOpen(false)}
+                        user={loggedInUser}
+                        onGoToUploadPage={handleGoToUploadPage}
+                    />
+                )}
             </div>
 
             <aside className="hidden lg:block w-[320px] shrink-0">

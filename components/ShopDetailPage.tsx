@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import type { ShopPost } from '../types';
 import { BackIcon, StarIcon } from '../constants';
