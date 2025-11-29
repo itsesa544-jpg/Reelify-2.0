@@ -6,9 +6,9 @@ export interface User {
   bio: string;
   coverPhoto: string;
   stats: {
-    observers: string;
-    observing: string;
-    totalViews: string;
+    observers: number;
+    observing: number;
+    totalViews: number;
     joined: string;
   };
   observing: string[];
@@ -27,9 +27,9 @@ export interface Video {
   title: string;
   caption: string;
   hashtags: string[];
-  likes: string;
-  comments: string;
-  shares: string;
+  likes: number;
+  comments: number;
+  shares: number;
   audio?: {
     title: string;
     artist: string;
@@ -87,9 +87,9 @@ export interface GalleryMedia {
   caption?: string;
   timestamp?: string;
   stats?: {
-    likes: string;
-    comments: string;
-    shares: string;
-    views: string;
+    likes: number;
+    comments: number;
+    shares: number;
+    views: number;
   };
 }

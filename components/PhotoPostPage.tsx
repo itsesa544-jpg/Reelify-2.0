@@ -1,7 +1,8 @@
 
 import React from 'react';
 import type { GalleryMedia } from '../types';
-import { CloseIcon, HeartIconFilled, CommentBubbleIconSimple, ShareIconSimple, EyeIcon } from '../constants';
+// FIX: Imported formatNumber to correctly handle numeric data for display.
+import { CloseIcon, HeartIconFilled, CommentBubbleIconSimple, ShareIconSimple, EyeIcon, formatNumber } from '../constants';
 
 interface PhotoPostPageProps {
   post: GalleryMedia;
@@ -64,10 +65,14 @@ const PhotoPostPage: React.FC<PhotoPostPageProps> = ({ post, onBack }) => {
       {/* Post Footer */}
       <footer className="w-full max-w-2xl mx-auto p-3 border-t bg-white shrink-0">
         <div className="flex justify-around items-center">
-          <ActionButton icon={<HeartIconFilled className="w-5 h-5 text-teal-500"/>} label={post.stats.likes} active />
-          <ActionButton icon={<CommentBubbleIconSimple className="w-5 h-5 text-gray-500"/>} label={post.stats.comments} />
-          <ActionButton icon={<ShareIconSimple className="w-5 h-5 text-gray-500"/>} label={post.stats.shares} />
-          <ActionButton icon={<EyeIcon className="w-5 h-5 text-gray-500"/>} label={post.stats.views} />
+{/* FIX: Converted number to formatted string to match prop type. */}
+          <ActionButton icon={<HeartIconFilled className="w-5 h-5 text-teal-500"/>} label={formatNumber(post.stats.likes)} active />
+{/* FIX: Converted number to formatted string to match prop type. */}
+          <ActionButton icon={<CommentBubbleIconSimple className="w-5 h-5 text-gray-500"/>} label={formatNumber(post.stats.comments)} />
+{/* FIX: Converted number to formatted string to match prop type. */}
+          <ActionButton icon={<ShareIconSimple className="w-5 h-5 text-gray-500"/>} label={formatNumber(post.stats.shares)} />
+{/* FIX: Converted number to formatted string to match prop type. */}
+          <ActionButton icon={<EyeIcon className="w-5 h-5 text-gray-500"/>} label={formatNumber(post.stats.views)} />
         </div>
          <div className="relative h-1 mt-3">
             <div className="absolute top-0 left-0 h-full w-full bg-gray-200 rounded-full"></div>

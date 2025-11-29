@@ -11,6 +11,8 @@ interface VideoItemProps {
   video: Video;
   isActive: boolean;
   onSelectUser: (user: User) => void;
+  loggedInUser: User;
+  onToggleObserve: (user: User) => void;
 }
 
 const PlayPauseIcon = ({ isPlaying }: { isPlaying: boolean }) => (
@@ -28,7 +30,7 @@ const PlayPauseIcon = ({ isPlaying }: { isPlaying: boolean }) => (
 );
 
 
-const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser }) => {
+const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, loggedInUser, onToggleObserve }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPlayPauseIcon, setShowPlayPauseIcon] = useState(false);
@@ -110,7 +112,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser }) 
           <VideoInfo video={video} onSelectUser={onSelectUser} />
         </div>
         <div className="shrink-0">
-          <VideoActions video={video} onSelectUser={onSelectUser} />
+          <VideoActions video={video} onSelectUser={onSelectUser} loggedInUser={loggedInUser} onToggleObserve={onToggleObserve} />
         </div>
       </div>
     </div>
@@ -124,6 +126,8 @@ interface VideoPlayerProps {
   currentView: View;
   startIndex?: number;
   onBack?: () => void;
+  loggedInUser: User;
+  onToggleObserve: (user: User) => void;
 }
 
 const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> = ({ label, active, onClick }) => (
@@ -139,7 +143,7 @@ const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> 
 );
 
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView, startIndex, onBack }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView, startIndex, onBack, loggedInUser, onToggleObserve }) => {
     const [currentVideo, setCurrentVideo] = useState(startIndex || 0);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -197,6 +201,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavig
                           video={video} 
                           isActive={index === currentVideo} 
                           onSelectUser={onSelectUser}
+                          loggedInUser={loggedInUser}
+                          onToggleObserve={onToggleObserve}
                         />
                     </div>
                 ))}

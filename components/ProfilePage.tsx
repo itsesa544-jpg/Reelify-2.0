@@ -1,10 +1,12 @@
 
+
 import React, { useState } from 'react';
 import type { User, Video } from '../types';
 import { 
   BackIcon, EditProfileIcon, SettingsIcon, ShareIcon,
   VideosIcon, ShopIcon, PhotosIcon,
-  PlayIconSimple, GalleryIcon, ChevronDownIcon, CheckmarkIcon
+  PlayIconSimple, GalleryIcon, ChevronDownIcon, CheckmarkIcon,
+  formatNumber
 } from '../constants';
 
 interface ProfilePageProps {
@@ -17,6 +19,7 @@ interface ProfilePageProps {
   loggedInUser: User;
   switchableAccounts: User[];
   onSwitchAccount: (user: User) => void;
+  onToggleObserve: (user: User) => void;
 }
 
 const IconButton: React.FC<{children: React.ReactNode, onClick?: () => void}> = ({children, onClick}) => (
@@ -60,20 +63,21 @@ const VideoGridItem: React.FC<{ video: Video; index: number; onPlay: () => void;
 
             <div className="absolute bottom-2 left-2 flex items-center gap-1.5 text-white text-sm font-bold [text-shadow:_1px_1px_2px_rgb(0_0_0_/_80%)] pointer-events-none">
                 <PlayIconSimple className="w-4 h-4" />
-                <span>{video.likes}</span>
+                <span>{formatNumber(video.likes)}</span>
             </div>
         </button>
     );
 };
 
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, showBackButton, onEdit, onPlayVideo, loggedInUser, switchableAccounts, onSwitchAccount }) => {
+const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, showBackButton, onEdit, onPlayVideo, loggedInUser, switchableAccounts, onSwitchAccount, onToggleObserve }) => {
   const userVideos = allVideos.filter(video => video.user.username === user.username);
   const [activeTab, setActiveTab] = useState('Videos');
   const [isBioExpanded, setIsBioExpanded] = useState(false);
   const [isAccountSwitcherOpen, setIsAccountSwitcherOpen] = useState(false);
   
   const isOwnProfile = user.username === loggedInUser.username;
+  const isObserving = loggedInUser.observing.includes(user.username);
 
   const BioText: React.FC<{text: string}> = ({text}) => {
     const maxLength = 80;
@@ -117,7 +121,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
         )}
         
         {/* All content below cover photo */}
-        <div className="relative px-4 -mt-12 z-10">
+        <div className="relative px-4 -mt-16 z-10">
              <div className="flex items-end justify-between">
                 {/* Avatar */}
                 <div className="flex-shrink-0">
@@ -128,14 +132,19 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
                     />
                 </div>
                 {/* Top Buttons */}
-                <div className="flex items-center gap-2">
-                    <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
-                        Observe
-                    </button>
-                    <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors">
-                        Message
-                    </button>
-                </div>
+                {!isOwnProfile && (
+                    <div className="flex items-center gap-2">
+                        <button 
+                            onClick={() => onToggleObserve(user)}
+                            className={`font-semibold py-2 px-5 rounded-lg transition-colors text-sm ${isObserving ? 'bg-gray-600 hover:bg-gray-500 text-white' : 'bg-cyan-500 hover:bg-cyan-400 text-black'}`}
+                        >
+                            {isObserving ? 'Observing' : 'Observe'}
+                        </button>
+                        <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors text-sm">
+                            Message
+                        </button>
+                    </div>
+                )}
             </div>
 
             <div className="mt-2 flex items-start justify-between">
@@ -176,7 +185,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
                     <BioText text={user.bio} />
                 </div>
                 <div className="flex items-center space-x-3 mt-1">
-                    {onEdit && <IconButton onClick={onEdit}><EditProfileIcon /></IconButton>}
+                    {isOwnProfile && <IconButton onClick={onEdit}><EditProfileIcon /></IconButton>}
                     <IconButton><SettingsIcon /></IconButton>
                     <IconButton><ShareIcon /></IconButton>
                 </div>
@@ -188,11 +197,11 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
       <div className="p-4 pt-0">
         <div className="bg-[#1A1B20] p-3 rounded-xl">
             <div className="flex items-center justify-around">
-                <StatItem value={user.stats.observers} label="Observers" />
+                <StatItem value={formatNumber(user.stats.observers)} label="Observers" />
                 <div className="h-10 w-px bg-white/10"></div>
-                <StatItem value={user.stats.observing} label="Observing" />
+                <StatItem value={formatNumber(user.stats.observing)} label="Observing" />
                 <div className="h-10 w-px bg-white/10"></div>
-                <StatItem value={user.stats.totalViews} label="Total Views" />
+                <StatItem value={formatNumber(user.stats.totalViews)} label="Total Views" />
                 <div className="h-10 w-px bg-white/10"></div>
                 <StatItem value={`${user.stats.joined}`} label="Joined" />
             </div>

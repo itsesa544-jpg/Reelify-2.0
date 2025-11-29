@@ -2,6 +2,17 @@
 import React from 'react';
 import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User } from './types';
 
+export const formatNumber = (num: number): string => {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    }
+    if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+    }
+    return num.toString();
+};
+
+
 export const trendingTopics: string[] = [];
 export const featuredCommunities: Community[] = [];
 
@@ -12,12 +23,12 @@ export const mariaKhan: User = {
   bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
   coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   stats: {
-    observers: '1.2M',
-    observing: '350',
-    totalViews: '50M',
+    observers: 0,
+    observing: 0,
+    totalViews: 0,
     joined: 'Jan 2022'
   },
-  observing: ['@tushar_emran']
+  observing: []
 };
 
 export const tusharEmran: User = {
@@ -27,9 +38,9 @@ export const tusharEmran: User = {
     bio: 'Photographer & Filmmaker. Capturing life\'s moments.',
     coverPhoto: 'https://images.pexels.com/photos/1528640/pexels-photo-1528640.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     stats: {
-      observers: '500K',
-      observing: '120',
-      totalViews: '25M',
+      observers: 500000,
+      observing: 120,
+      totalViews: 25000000,
       joined: 'Mar 2021'
     },
     observing: ['@maria_khan']
@@ -42,13 +53,16 @@ export const mdesa: User = {
     bio: 'Tech enthusiast | Developer',
     coverPhoto: 'https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     stats: {
-      observers: '10K',
-      observing: '50',
-      totalViews: '1M',
+      observers: 10000,
+      observing: 50,
+      totalViews: 1000000,
       joined: 'Jun 2023'
     },
     observing: ['@maria_khan', '@tushar_emran']
 };
+
+export const allUsers: User[] = [mariaKhan, tusharEmran, mdesa];
+
 
 export const initialVideosData: Video[] = [
     {
@@ -59,9 +73,9 @@ export const initialVideosData: Video[] = [
         title: "Hidden Gems of Italy",
         caption: "Exploring the beautiful streets of Rome.",
         hashtags: ["#rome", "#italy", "#travel"],
-        likes: "1.5K",
-        comments: "94",
-        shares: "280",
+        likes: 1500,
+        comments: 94,
+        shares: 280,
         musicCoverUrl: "https://res.cloudinary.com/dlklqihg6/image/upload/v1764031351/ehxzfirmajfwnn72tu11.jpg",
     },
     {
@@ -72,9 +86,9 @@ export const initialVideosData: Video[] = [
         title: "Morning Coffee",
         caption: "The perfect start to any day.",
         hashtags: ["#coffee", "#latteart", "#morning"],
-        likes: "2.1K",
-        comments: "120",
-        shares: "450",
+        likes: 2100,
+        comments: 120,
+        shares: 450,
         musicCoverUrl: "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
     {
@@ -85,9 +99,9 @@ export const initialVideosData: Video[] = [
         title: "City Life",
         caption: "The hustle and bustle of New York.",
         hashtags: ["#newyork", "#citylife", "#urban"],
-        likes: "3.2K",
-        comments: "250",
-        shares: "600",
+        likes: 3200,
+        comments: 250,
+        shares: 600,
         musicCoverUrl: "https://images.pexels.com/photos/2129796/pexels-photo-2129796.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
     {
@@ -98,9 +112,9 @@ export const initialVideosData: Video[] = [
         title: "Ocean Waves",
         caption: "Peaceful moments by the sea.",
         hashtags: ["#ocean", "#waves", "#nature"],
-        likes: "4.5K",
-        comments: "300",
-        shares: "800",
+        likes: 4500,
+        comments: 300,
+        shares: 800,
         musicCoverUrl: "https://images.pexels.com/photos/1531660/pexels-photo-1531660.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
 ];
@@ -416,16 +430,15 @@ export const UserIcon = ({ className = "w-5 h-5" }) => (
     </svg>
 );
 
-export const QuestionIcon = ({ className = "w-5 h-5" }) => (
-    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M9.09 9.00002C9.3251 8.33169 9.78915 7.76813 10.4 7.40914C11.0108 7.05014 11.7289 6.91896 12.4272 7.03873C13.1255 7.15849 13.7588 7.52154 14.2151 8.0685C14.6714 8.61546 14.9211 9.30881 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 17H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+export const QuestionIcon = ({ className = "w-6 h-6" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.79 4 4 0 2.21-1.79 4-4 4-.432 0-.84-.07-1.22-.195-1.523-.49-2.78-1.753-2.78-3.285z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
     </svg>
 );
 
 export const ChevronDownIcon = ({ className = "w-5 h-5" }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
-      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-    </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+  </svg>
 );

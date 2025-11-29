@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
@@ -16,7 +15,7 @@ import PhotoPostPage from './components/PhotoPostPage';
 import ShopDetailPage from './components/ShopDetailPage';
 import AuthPage from './components/AuthPage'; // Import the new AuthPage
 import type { User, Video, GalleryMedia, ShopPost } from './types';
-import { initialVideosData, mariaKhan, tusharEmran, mdesa } from './constants';
+import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers } from './constants';
 
 export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail';
 
@@ -37,9 +36,20 @@ const App: React.FC = () => {
     try {
       const savedUser = localStorage.getItem('vibe-loggedInUser');
       return savedUser ? JSON.parse(savedUser) : mariaKhan;
+// FIX: Added curly braces to the catch block to fix a syntax error.
     } catch (error) {
       console.error("Failed to parse loggedInUser from localStorage", error);
       return mariaKhan;
+    }
+  });
+  
+  const [allUsers, setAllUsers] = useState<User[]>(() => {
+    try {
+        const savedUsers = localStorage.getItem('vibe-allUsers');
+        return savedUsers ? JSON.parse(savedUsers) : initialAllUsers;
+    } catch (error) {
+        console.error("Failed to parse allUsers from localStorage", error);
+        return initialAllUsers;
     }
   });
 
@@ -67,21 +77,64 @@ const App: React.FC = () => {
       localStorage.setItem('vibe-isLoggedIn', String(isLoggedIn));
       localStorage.setItem('vibe-loggedInUser', JSON.stringify(loggedInUser));
       localStorage.setItem('vibe-allVideos', JSON.stringify(allVideos));
+      localStorage.setItem('vibe-allUsers', JSON.stringify(allUsers));
     } catch (error) {
       console.error("Failed to save state to localStorage", error);
     }
-  }, [isLoggedIn, loggedInUser, allVideos]);
+  }, [isLoggedIn, loggedInUser, allVideos, allUsers]);
 
   const handleLoginSuccess = (user: User) => {
     setLoggedInUser(user);
     setIsLoggedIn(true);
   };
+  
+    const handleToggleObserve = (userToToggle: User) => {
+    const isObserving = loggedInUser.observing.includes(userToToggle.username);
+
+    const updatedLoggedInUser = {
+      ...loggedInUser,
+      observing: isObserving
+        ? loggedInUser.observing.filter(username => username !== userToToggle.username)
+        : [...loggedInUser.observing, userToToggle.username],
+      stats: {
+          ...loggedInUser.stats,
+          observing: loggedInUser.stats.observing + (isObserving ? -1 : 1)
+      }
+    };
+
+    const updatedAllUsers = allUsers.map(u => {
+      if (u.username === loggedInUser.username) {
+        return updatedLoggedInUser;
+      }
+      if (u.username === userToToggle.username) {
+        return {
+          ...u,
+          stats: {
+            ...u.stats,
+            observers: u.stats.observers + (isObserving ? -1 : 1),
+          },
+        };
+      }
+      return u;
+    });
+
+    setLoggedInUser(updatedLoggedInUser);
+    setAllUsers(updatedAllUsers);
+
+    if (viewedUser?.username === userToToggle.username) {
+        setViewedUser(updatedAllUsers.find(u => u.username === userToToggle.username) || null);
+    }
+     if (viewedUser?.username === loggedInUser.username) {
+        setViewedUser(updatedLoggedInUser);
+    }
+  };
 
   const handleSelectUserFromFeed = (user: User) => {
-    if (user.username === loggedInUser.username) {
+    const freshUserData = allUsers.find(u => u.username === user.username) || user;
+    if (freshUserData.username === loggedInUser.username) {
         setViewedUser(loggedInUser);
     } else {
-        setViewedUser(user);
+        setViewedUser(freshUserData);
     }
     setCurrentView('profile');
   };
@@ -102,6 +155,8 @@ const App: React.FC = () => {
     setLoggedInUser(updatedUser);
     setViewedUser(updatedUser);
     
+    setAllUsers(prevUsers => prevUsers.map(u => u.username === updatedUser.username ? updatedUser : u));
+
     setAllVideos(prevVideos => prevVideos.map(video => {
         if (video.user.username === updatedUser.username) {
             return { ...video, user: updatedUser };
@@ -135,9 +190,10 @@ const App: React.FC = () => {
       videoUrl: videoData.videoUrl,
       posterUrl: videoData.videoUrl, 
       hashtags: videoData.hashtags,
-      likes: '0',
-      comments: '0',
-      shares: '0',
+// FIX: Changed string values to numbers to match the Video type definition.
+      likes: 0,
+      comments: 0,
+      shares: 0,
     };
 
     setAllVideos(prevVideos => [newVideo, ...prevVideos]);
@@ -167,9 +223,10 @@ const App: React.FC = () => {
   };
 
   const handleSwitchAccount = (account: User) => {
-    setLoggedInUser(account);
+    const freshAccountData = allUsers.find(u => u.username === account.username) || account;
+    setLoggedInUser(freshAccountData);
     if (viewedUser?.username === loggedInUser.username) {
-      setViewedUser(account);
+      setViewedUser(freshAccountData);
     }
   };
 
@@ -188,10 +245,10 @@ const App: React.FC = () => {
   let pageContent;
   switch (currentView) {
     case 'feed':
-      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} />;
+      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} />;
       break;
     case 'observing':
-      pageContent = <VideoPlayer videos={observingVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} />;
+      pageContent = <VideoPlayer videos={observingVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} />;
       break;
     case 'userFeed':
         pageContent = <VideoPlayer 
@@ -201,6 +258,8 @@ const App: React.FC = () => {
             currentView={currentView}
             startIndex={userFeedStartIndex}
             onBack={handleBackFromUserFeed}
+            loggedInUser={loggedInUser} 
+            onToggleObserve={handleToggleObserve}
         />;
         break;
     case 'photos':
@@ -237,6 +296,7 @@ const App: React.FC = () => {
                 loggedInUser={loggedInUser}
                 switchableAccounts={isOwnProfile ? switchableAccounts : []}
                 onSwitchAccount={handleSwitchAccount}
+                onToggleObserve={handleToggleObserve}
             />
         );
       }
@@ -272,7 +332,7 @@ const App: React.FC = () => {
        }
       break;
     default:
-      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView='feed' />;
+      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView='feed' loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} />;
   }
 
 
@@ -304,7 +364,7 @@ const App: React.FC = () => {
             </div>
 
             <aside className="hidden lg:block w-[320px] shrink-0">
-                <RightSidebar allVideos={allVideos} loggedInUser={loggedInUser} onSelectUser={handleSelectUserFromFeed} />
+                <RightSidebar allUsers={allUsers} loggedInUser={loggedInUser} onSelectUser={handleSelectUserFromFeed} onToggleObserve={handleToggleObserve} />
             </aside>
             
         </div>
