@@ -15,10 +15,12 @@ import ShopDetailPage from './components/ShopDetailPage';
 import AuthPage from './components/AuthPage';
 import UploadModal from './components/UploadModal';
 import UploadPage from './components/UploadPage';
-import type { User, Video, GalleryMedia, ShopPost } from './types';
-import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers } from './constants';
+import PhotoPostCreationPage from './components/PhotoPostCreationPage';
+import ShopPostCreationPage from './components/ShopPostCreationPage';
+import type { User, Video, GalleryMedia, ShopPost, PhotoPost } from './types';
+import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers, photoPostsData as initialPhotoPosts, shopPostsData as initialShopPosts } from './constants';
 
-export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload';
+export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload' | 'photoPostCreation' | 'shopPostCreation';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -62,11 +64,34 @@ const App: React.FC = () => {
       return initialVideosData;
     }
   });
+  
+  const [allPhotoPosts, setAllPhotoPosts] = useState<PhotoPost[]>(() => {
+    try {
+      const savedPhotos = localStorage.getItem('vibe-allPhotoPosts');
+      return savedPhotos ? JSON.parse(savedPhotos) : initialPhotoPosts;
+    } catch (error) {
+      console.error("Failed to parse allPhotoPosts from localStorage", error);
+      return initialPhotoPosts;
+    }
+  });
+  
+  const [allShopPosts, setAllShopPosts] = useState<ShopPost[]>(() => {
+    try {
+      const savedShopPosts = localStorage.getItem('vibe-allShopPosts');
+      return savedShopPosts ? JSON.parse(savedShopPosts) : initialShopPosts;
+    } catch (error) {
+      console.error("Failed to parse allShopPosts from localStorage", error);
+      return initialShopPosts;
+    }
+  });
 
   const [userFeedVideos, setUserFeedVideos] = useState<Video[]>([]);
   const [userFeedStartIndex, setUserFeedStartIndex] = useState(0);
   const [videoToEditUrl, setVideoToEditUrl] = useState<string | null>(null);
   const [videoToPostUrl, setVideoToPostUrl] = useState<string | null>(null);
+  const [photoToPostUrl, setPhotoToPostUrl] = useState<string | null>(null);
+  const [shopImageToPostUrl, setShopImageToPostUrl] = useState<string | null>(null);
+
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryMedia | null>(null);
   const [selectedShopPost, setSelectedShopPost] = useState<ShopPost | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -79,10 +104,12 @@ const App: React.FC = () => {
       localStorage.setItem('vibe-loggedInUser', JSON.stringify(loggedInUser));
       localStorage.setItem('vibe-allVideos', JSON.stringify(allVideos));
       localStorage.setItem('vibe-allUsers', JSON.stringify(allUsers));
+      localStorage.setItem('vibe-allPhotoPosts', JSON.stringify(allPhotoPosts));
+      localStorage.setItem('vibe-allShopPosts', JSON.stringify(allShopPosts));
     } catch (error) {
       console.error("Failed to save state to localStorage", error);
     }
-  }, [isLoggedIn, loggedInUser, allVideos, allUsers]);
+  }, [isLoggedIn, loggedInUser, allVideos, allUsers, allPhotoPosts, allShopPosts]);
 
   const handleLoginSuccess = (user: User) => {
     setLoggedInUser(user);
@@ -181,6 +208,16 @@ const App: React.FC = () => {
     setVideoToEditUrl(videoUrl);
     setCurrentView('videoEditor');
   }
+  
+  const handlePhotoSelectedForUpload = (photoUrl: string) => {
+    setPhotoToPostUrl(photoUrl);
+    setCurrentView('photoPostCreation');
+  }
+  
+  const handleShopImageSelectedForUpload = (imageUrl: string) => {
+    setShopImageToPostUrl(imageUrl);
+    setCurrentView('shopPostCreation');
+  }
 
   const handleEditorNext = (videoUrl: string) => {
     setVideoToPostUrl(videoUrl);
@@ -203,6 +240,36 @@ const App: React.FC = () => {
 
     setAllVideos(prevVideos => [newVideo, ...prevVideos]);
     setCurrentView('feed');
+  };
+
+  const handlePublishPhoto = (caption: string) => {
+    if (!photoToPostUrl) return;
+    const newPhotoPost: PhotoPost = {
+      id: Date.now(),
+      user: loggedInUser,
+      timestamp: 'Just now',
+      caption: caption,
+      imageUrl: photoToPostUrl,
+    };
+    setAllPhotoPosts(prev => [newPhotoPost, ...prev]);
+    setPhotoToPostUrl(null);
+    setCurrentView('photos');
+  };
+  
+  const handlePublishShopPost = (postData: Omit<ShopPost, 'id' | 'seller' | 'rating'>) => {
+    if (!shopImageToPostUrl) return;
+    const newShopPost: ShopPost = {
+      id: Date.now(),
+      ...postData,
+      imageUrl: shopImageToPostUrl,
+      seller: {
+        name: loggedInUser.name,
+        avatar: loggedInUser.avatar,
+      },
+    };
+    setAllShopPosts(prev => [newShopPost, ...prev]);
+    setShopImageToPostUrl(null);
+    setCurrentView('foryou');
   };
 
   const handlePlayFromProfile = (user: User, videoId: number) => {
@@ -268,7 +335,7 @@ const App: React.FC = () => {
         />;
         break;
     case 'photos':
-      pageContent = <PhotoFeedPage />;
+      pageContent = <PhotoFeedPage posts={allPhotoPosts} />;
       break;
     case 'photoPost':
       if (selectedPhoto) {
@@ -278,7 +345,7 @@ const App: React.FC = () => {
       }
       break;
     case 'foryou':
-      pageContent = <ShopPage onSelectPost={handleSelectShopPost} />;
+      pageContent = <ShopPage posts={allShopPosts} onSelectPost={handleSelectShopPost} />;
       break;
     case 'shopDetail':
       if (selectedShopPost) {
@@ -322,7 +389,12 @@ const App: React.FC = () => {
       );
       break;
     case 'upload':
-       pageContent = <UploadPage onVideoSelected={handleVideoSelectedForUpload} onClose={() => setCurrentView('feed')} />;
+       pageContent = <UploadPage 
+         onVideoSelected={handleVideoSelectedForUpload}
+         onPhotoSelected={handlePhotoSelectedForUpload}
+         onShopImageSelected={handleShopImageSelectedForUpload} 
+         onClose={() => setCurrentView('feed')} 
+        />;
        break;
     case 'videoEditor':
       pageContent = <VideoEditorPage videoUrl={videoToEditUrl} onNext={handleEditorNext} onBack={() => setCurrentView('upload')} />;
@@ -339,6 +411,30 @@ const App: React.FC = () => {
            pageContent = null;
        }
       break;
+    case 'photoPostCreation':
+        if(photoToPostUrl) {
+            pageContent = <PhotoPostCreationPage
+                imageUrl={photoToPostUrl}
+                onBack={() => setCurrentView('upload')}
+                onPublish={handlePublishPhoto}
+            />;
+        } else {
+            setCurrentView('upload');
+            pageContent = null;
+        }
+        break;
+    case 'shopPostCreation':
+        if (shopImageToPostUrl) {
+            pageContent = <ShopPostCreationPage
+                imageUrl={shopImageToPostUrl}
+                onBack={() => setCurrentView('upload')}
+                onPublish={handlePublishShopPost}
+            />;
+        } else {
+            setCurrentView('upload');
+            pageContent = null;
+        }
+        break;
     default:
       pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView='feed' loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} />;
   }
