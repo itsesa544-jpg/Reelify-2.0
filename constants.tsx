@@ -70,6 +70,12 @@ export const photoPostsData: PhotoPost[] = [
         timestamp: '1d',
         caption: 'নির্বাচনের আগে full Protection 😀🤣',
         imageUrl: 'https://i.ibb.co/68g2zP2/tushar-emran-post.jpg',
+        stats: {
+            likes: 1200,
+            comments: 150,
+            shares: 50,
+            views: 5500,
+        }
     }
 ];
 

@@ -1,7 +1,7 @@
 
 
 import React, { useState } from 'react';
-import type { User, Video } from '../types';
+import type { User, Video, PhotoPost } from '../types';
 import { 
   BackIcon, EditProfileIcon, SettingsIcon, ShareIcon,
   VideosIcon, ShopIcon, PhotosIcon,
@@ -12,6 +12,7 @@ import {
 interface ProfilePageProps {
   user: User;
   allVideos: Video[];
+  allPhotoPosts: PhotoPost[];
   onBack: () => void;
   showBackButton: boolean;
   onEdit?: () => void;
@@ -69,9 +70,27 @@ const VideoGridItem: React.FC<{ video: Video; index: number; onPlay: () => void;
     );
 };
 
+const PhotoGridItem: React.FC<{ post: PhotoPost; index: number; }> = ({ post, index }) => {
+    const neonClasses = [
+        "border-cyan-400 shadow-[0_0_8px_theme(colors.cyan.400)] group-hover:shadow-[0_0_15px_theme(colors.cyan.400)]",
+        "border-fuchsia-500 shadow-[0_0_8px_theme(colors.fuchsia.500)] group-hover:shadow-[0_0_15px_theme(colors.fuchsia.500)]",
+        "border-lime-400 shadow-[0_0_8px_theme(colors.lime.400)] group-hover:shadow-[0_0_15px_theme(colors.lime.400)]",
+    ];
+    const neonClass = neonClasses[index % neonClasses.length];
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, showBackButton, onEdit, onPlayVideo, loggedInUser, switchableAccounts, onSwitchAccount, onToggleObserve }) => {
+    return (
+        <div className="relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer group">
+            <img src={post.imageUrl} alt={post.caption} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <div className={`absolute inset-0 border-2 ${neonClass} rounded-2xl pointer-events-none`}></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none"></div>
+        </div>
+    );
+};
+
+
+const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, allPhotoPosts, onBack, showBackButton, onEdit, onPlayVideo, loggedInUser, switchableAccounts, onSwitchAccount, onToggleObserve }) => {
   const userVideos = allVideos.filter(video => video.user.username === user.username);
+  const userPhotos = allPhotoPosts.filter(post => post.user.username === user.username);
   const [activeTab, setActiveTab] = useState('Videos');
   const [isBioExpanded, setIsBioExpanded] = useState(false);
   const [isAccountSwitcherOpen, setIsAccountSwitcherOpen] = useState(false);
@@ -246,11 +265,19 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, onBack, show
               </div>
             )}
             {activeTab === 'Photos' && (
-                <div className="text-center py-10 text-gray-500">
-                    <PhotosIcon className="w-12 h-12 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold">No photos yet.</h3>
-                    <p>This user hasn't posted any photos.</p>
-                </div>
+                userPhotos.length > 0 ? (
+                    <div className="grid grid-cols-3 gap-1">
+                        {userPhotos.map((post, index) => (
+                            <PhotoGridItem key={post.id} post={post} index={index} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-10 text-gray-500">
+                        <PhotosIcon className="w-12 h-12 mx-auto mb-4" />
+                        <h3 className="text-lg font-semibold">No photos yet.</h3>
+                        <p>This user hasn't posted any photos.</p>
+                    </div>
+                )
             )}
          </div>
       </div>

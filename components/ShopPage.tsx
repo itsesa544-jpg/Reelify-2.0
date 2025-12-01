@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { shopPostsData } from '../constants';
+// FIX: Removed unused import 'shopPostsData' as posts are now passed via props.
 import type { ShopPost } from '../types';
 
 interface ShopPostCardProps {
@@ -23,17 +22,19 @@ const ShopPostCard: React.FC<ShopPostCardProps> = ({ post, onClick }) => (
 );
 
 interface ShopPageProps {
+  // FIX: Added 'posts' prop to allow passing shop posts from the parent component.
+  posts: ShopPost[];
   onSelectPost: (post: ShopPost) => void;
 }
 
-const ShopPage: React.FC<ShopPageProps> = ({ onSelectPost }) => {
+const ShopPage: React.FC<ShopPageProps> = ({ posts, onSelectPost }) => {
   return (
     <div className="w-full h-full bg-[#0D0F13] overflow-y-auto pb-20">
       <header className="p-4 bg-[#1A1B20]/80 backdrop-blur-sm sticky top-0 z-20 flex items-center justify-center">
         <h1 className="text-xl font-bold text-white">Shop</h1>
       </header>
       <div className="p-4 grid grid-cols-2 gap-4">
-        {shopPostsData.map(post => (
+        {posts.map(post => (
           <ShopPostCard key={post.id} post={post} onClick={() => onSelectPost(post)} />
         ))}
       </div>

@@ -1,10 +1,17 @@
 import React from 'react';
 import type { PhotoPost } from '../types';
-import { VerifiedBadgeIcon, GlobeIcon, MoreHorizIcon, CloseIcon } from '../constants';
+import { VerifiedBadgeIcon, GlobeIcon, MoreHorizIcon, CloseIcon, HeartIconFilled, CommentBubbleIconSimple, ShareIconSimple, EyeIcon, formatNumber } from '../constants';
 
 interface PhotoPostCardProps {
   post: PhotoPost;
 }
+
+const ActionItem: React.FC<{ icon: React.ReactNode; label: string }> = ({ icon, label }) => (
+    <div className="flex items-center gap-2 text-teal-500 hover:text-teal-400 cursor-pointer transition-colors">
+        {icon}
+        <span className="font-semibold text-sm">{label}</span>
+    </div>
+);
 
 const PhotoPostCard: React.FC<PhotoPostCardProps> = ({ post }) => {
   return (
@@ -40,10 +47,18 @@ const PhotoPostCard: React.FC<PhotoPostCardProps> = ({ post }) => {
       <div className="w-full bg-black flex justify-center">
         <img src={post.imageUrl} alt="Post content" className="max-h-[70vh] w-auto" />
       </div>
-       {/* Actions placeholder - can be added later */}
-       <div className="p-3 border-t border-white/10">
-          <p className="text-xs text-gray-500">Likes, comments, and shares will be here.</p>
-       </div>
+      
+       {/* Actions */}
+       {post.stats && (
+           <div className="p-3 border-t border-white/10">
+              <div className="flex items-center justify-around">
+                  <ActionItem icon={<HeartIconFilled className="w-5 h-5" />} label={formatNumber(post.stats.likes)} />
+                  <ActionItem icon={<CommentBubbleIconSimple className="w-5 h-5" />} label={formatNumber(post.stats.comments)} />
+                  <ActionItem icon={<ShareIconSimple className="w-5 h-5" />} label={formatNumber(post.stats.shares)} />
+                  <ActionItem icon={<EyeIcon className="w-5 h-5" />} label={formatNumber(post.stats.views)} />
+              </div>
+           </div>
+       )}
     </div>
   );
 };

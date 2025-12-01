@@ -101,4 +101,10 @@ export interface PhotoPost {
   timestamp: string;
   caption: string;
   imageUrl: string;
+  stats?: {
+    likes: number;
+    comments: number;
+    shares: number;
+    views: number;
+  };
 }

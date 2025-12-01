@@ -250,6 +250,12 @@ const App: React.FC = () => {
       timestamp: 'Just now',
       caption: caption,
       imageUrl: photoToPostUrl,
+      stats: {
+        likes: 0,
+        comments: 0,
+        shares: 0,
+        views: 0,
+      }
     };
     setAllPhotoPosts(prev => [newPhotoPost, ...prev]);
     setPhotoToPostUrl(null);
@@ -361,6 +367,7 @@ const App: React.FC = () => {
             <ProfilePage 
                 user={viewedUser} 
                 allVideos={allVideos}
+                allPhotoPosts={allPhotoPosts}
                 onBack={handleBackFromProfile} 
                 showBackButton={!isOwnProfile}
                 onEdit={isOwnProfile ? () => setCurrentView('editProfile') : undefined}
