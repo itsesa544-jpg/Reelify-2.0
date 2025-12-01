@@ -15,12 +15,12 @@ import ShopDetailPage from './components/ShopDetailPage';
 import AuthPage from './components/AuthPage';
 import UploadModal from './components/UploadModal';
 import UploadPage from './components/UploadPage';
-import PhotoPostCreationPage from './components/PhotoPostCreationPage';
+import CreatePhotoPostPage from './components/CreatePhotoPostPage';
 import ShopPostCreationPage from './components/ShopPostCreationPage';
 import type { User, Video, GalleryMedia, ShopPost, PhotoPost } from './types';
 import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers, photoPostsData as initialPhotoPosts, shopPostsData as initialShopPosts } from './constants';
 
-export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload' | 'photoPostCreation' | 'shopPostCreation';
+export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload' | 'createPhotoPost' | 'shopPostCreation';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -211,7 +211,7 @@ const App: React.FC = () => {
   
   const handlePhotoSelectedForUpload = (photoUrl: string) => {
     setPhotoToPostUrl(photoUrl);
-    setCurrentView('photoPostCreation');
+    setCurrentView('createPhotoPost');
   }
   
   const handleShopImageSelectedForUpload = (imageUrl: string) => {
@@ -411,10 +411,11 @@ const App: React.FC = () => {
            pageContent = null;
        }
       break;
-    case 'photoPostCreation':
+    case 'createPhotoPost':
         if(photoToPostUrl) {
-            pageContent = <PhotoPostCreationPage
+            pageContent = <CreatePhotoPostPage
                 imageUrl={photoToPostUrl}
+                user={loggedInUser}
                 onBack={() => setCurrentView('upload')}
                 onPublish={handlePublishPhoto}
             />;
