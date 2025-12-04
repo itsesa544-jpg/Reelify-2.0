@@ -20,7 +20,6 @@ const RatingStars: React.FC<{ rating: number }> = ({ rating }) => {
       ))}
       {hasHalfStar && (
         <div className="relative">
-          {/* FIX: Removed the unnecessary 'key' prop. The 'key' prop is only required for elements in a list. */}
           <StarIcon className="w-5 h-5 text-gray-300" />
           <div className="absolute top-0 left-0 overflow-hidden w-1/2">
             <StarIcon className="w-5 h-5 text-yellow-400" />
@@ -56,10 +55,12 @@ const ShopDetailPage: React.FC<ShopDetailPageProps> = ({ post, onBack }) => {
             
             <div className="flex items-center justify-between">
                 <p className="text-3xl font-bold text-cyan-400">{post.price}</p>
-                <div className="flex items-center gap-2">
-                    <RatingStars rating={post.rating} />
-                    <span className="text-gray-400 text-sm font-semibold">{post.rating.toFixed(1)}</span>
-                </div>
+                {post.rating !== undefined && (
+                    <div className="flex items-center gap-2">
+                        <RatingStars rating={post.rating} />
+                        <span className="text-gray-400 text-sm font-semibold">{post.rating.toFixed(1)}</span>
+                    </div>
+                )}
             </div>
 
             <div className="border-t border-gray-700/50 pt-4 flex items-center gap-3">

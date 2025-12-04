@@ -139,7 +139,31 @@ export const initialVideosData: Video[] = [
         musicCoverUrl: "https://images.pexels.com/photos/1531660/pexels-photo-1531660.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
 ];
-export const shopPostsData: ShopPost[] = [];
+export const shopPostsData: ShopPost[] = [
+    {
+        id: 1,
+        imageUrl: 'https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg?auto=compress&cs=tinysrgb&w=800',
+        title: 'Minimalist Wall Art',
+        price: '$49.99',
+        seller: {
+            name: mariaKhan.name,
+            avatar: mariaKhan.avatar,
+        },
+        description: 'A beautiful set of minimalist art prints to elevate your home decor. Perfect for living rooms, bedrooms, or offices. High-quality prints on premium paper.',
+        rating: 4.5
+    },
+    {
+        id: 2,
+        imageUrl: 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=800',
+        title: 'Gourmet Burger Kit',
+        price: '$29.99',
+        seller: {
+            name: tusharEmran.name,
+            avatar: tusharEmran.avatar,
+        },
+        description: 'Everything you need to make delicious gourmet burgers at home. Includes premium beef patties, brioche buns, and special sauce.',
+    }
+];
 export const galleryMediaData: GalleryMedia[] = [];
 export const conversationsData: Conversation[] = [];
 export const notificationsData: Notification[] = [];

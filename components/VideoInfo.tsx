@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Video, User } from '../types';
 
@@ -14,6 +13,7 @@ const VideoInfo: React.FC<VideoInfoProps> = ({ video, onSelectUser }) => {
         {video.user.username}
       </button>
       <p className="text-sm">
+        <span className="font-semibold block">{video.title}</span>
         {video.caption} {' '}
         {video.hashtags.map((tag, i) => (
           <span key={i} className="font-bold text-cyan-300 cursor-pointer">

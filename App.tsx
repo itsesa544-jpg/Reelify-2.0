@@ -180,16 +180,35 @@ const App: React.FC = () => {
   };
 
   const handleSaveProfile = (updatedUser: User) => {
-    setLoggedInUser(updatedUser);
-    setViewedUser(updatedUser);
+    const oldUsername = loggedInUser.username;
     
-    setAllUsers(prevUsers => prevUsers.map(u => u.username === updatedUser.username ? updatedUser : u));
+    setLoggedInUser(updatedUser);
+    
+    if (viewedUser?.username === oldUsername) {
+      setViewedUser(updatedUser);
+    }
+    
+    setAllUsers(prevUsers => prevUsers.map(u => u.username === oldUsername ? updatedUser : u));
 
     setAllVideos(prevVideos => prevVideos.map(video => {
-        if (video.user.username === updatedUser.username) {
+        if (video.user.username === oldUsername) {
             return { ...video, user: updatedUser };
         }
         return video;
+    }));
+
+    setAllPhotoPosts(prevPosts => prevPosts.map(post => {
+      if (post.user.username === oldUsername) {
+        return { ...post, user: updatedUser };
+      }
+      return post;
+    }));
+
+    setAllShopPosts(prevPosts => prevPosts.map(post => {
+      if (post.seller.name === loggedInUser.name) { // This assumes name is unique which is a simplification
+        return { ...post, seller: { name: updatedUser.name, avatar: updatedUser.avatar } };
+      }
+      return post;
     }));
 
     setCurrentView('profile');
@@ -257,6 +276,7 @@ const App: React.FC = () => {
         views: 0,
       },
       myReaction: undefined,
+      reactions: {},
     };
     setAllPhotoPosts(prev => [newPhotoPost, ...prev]);
     setPhotoToPostUrl(null);
@@ -283,20 +303,40 @@ const App: React.FC = () => {
     setAllPhotoPosts(prevPosts =>
       prevPosts.map(post => {
         if (post.id === postId) {
-          const currentReaction = post.myReaction;
-          const stats = post.stats ? { ...post.stats } : { likes: 0, comments: 0, shares: 0, views: 0 };
+          const updatedPost = { ...post };
+          const stats = updatedPost.stats ? { ...updatedPost.stats } : { likes: 0, comments: 0, shares: 0, views: 0 };
+          const reactions = updatedPost.reactions ? { ...updatedPost.reactions } : {};
+          const currentReaction = updatedPost.myReaction;
 
-          // If clicking the same reaction, un-react
+          // Case 1: Un-reacting
           if (currentReaction === reaction) {
+            updatedPost.myReaction = undefined;
             if (stats.likes > 0) stats.likes--;
-            return { ...post, myReaction: undefined, stats };
+            if (reactions[currentReaction] > 1) {
+              reactions[currentReaction]--;
+            } else {
+              delete reactions[currentReaction];
+            }
+          } else {
+            // Case 2: Changing reaction
+            if (currentReaction) {
+              if (reactions[currentReaction] > 1) {
+                reactions[currentReaction]--;
+              } else {
+                delete reactions[currentReaction];
+              }
+            } else {
+              // Case 3: New reaction
+              stats.likes++;
+            }
+            
+            updatedPost.myReaction = reaction;
+            reactions[reaction] = (reactions[reaction] || 0) + 1;
           }
-          
-          // If changing reaction or reacting for the first time
-          if (!currentReaction) {
-            stats.likes++;
-          }
-          return { ...post, myReaction: reaction, stats };
+
+          updatedPost.stats = stats;
+          updatedPost.reactions = reactions;
+          return updatedPost;
         }
         return post;
       })
@@ -328,7 +368,7 @@ const App: React.FC = () => {
   const handleSwitchAccount = (account: User) => {
     const freshAccountData = allUsers.find(u => u.username === account.username) || account;
     setLoggedInUser(freshAccountData);
-    if (viewedUser?.username === loggedInUser.username) {
+    if (viewedUser?.username === loggedInUser.username || (viewedUser && switchableAccounts.some(acc => acc.username === viewedUser.username))) {
       setViewedUser(freshAccountData);
     }
   };
