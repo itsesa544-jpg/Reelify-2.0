@@ -75,6 +75,11 @@ export const photoPostsData: PhotoPost[] = [
             comments: 150,
             shares: 50,
             views: 5500,
+        },
+        reactions: {
+            '❤️': 1150,
+            '🤣': 45,
+            '🥰': 5,
         }
     }
 ];
@@ -499,4 +504,58 @@ export const GetMessagesIcon = ({ className = "w-5 h-5" }: { className?: string 
  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor">
   <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9.45 13.43l1.24-2.28 2.28-1.24-1.24 2.28-2.28 1.24zM15.5 10.5l-1.09 2-2 1.09 1.09-2 2-1.09z"/>
  </svg>
-);
+);--- START OF FILE components/ReactionSummaryModal.tsx ---
+
+import React from 'react';
+import { CloseIcon, formatNumber } from '../constants';
+
+interface ReactionSummaryModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  reactions: { [key: string]: number };
+}
+
+const ReactionSummaryModal: React.FC<ReactionSummaryModalProps> = ({ isOpen, onClose, reactions }) => {
+  if (!isOpen) return null;
+
+  const sortedReactions = Object.entries(reactions)
+    .filter(([, count]) => count > 0)
+    .sort(([, countA], [, countB]) => countB - countA);
+    
+  const totalReactions = sortedReactions.reduce((sum, [, count]) => sum + count, 0);
+
+  return (
+    <div 
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-[#1A1B20] w-full max-w-xs rounded-xl p-4 text-white border border-gray-700/50"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-bold text-lg">Reactions ({formatNumber(totalReactions)})</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <CloseIcon />
+          </button>
+        </div>
+        <div className="max-h-64 overflow-y-auto space-y-3 pr-2">
+          {sortedReactions.length > 0 ? (
+            sortedReactions.map(([reaction, count]) => (
+              <div key={reaction} className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">{reaction}</span>
+                  <span className="font-semibold">{formatNumber(count)}</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-400 text-center py-4">No reactions yet.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ReactionSummaryModal;

@@ -1,4 +1,5 @@
 
+
 export interface User {
   username: string;
   avatar: string;
@@ -107,4 +108,6 @@ export interface PhotoPost {
     shares: number;
     views: number;
   };
+  myReaction?: string;
+  reactions?: { [key: string]: number };
 }

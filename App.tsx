@@ -255,7 +255,8 @@ const App: React.FC = () => {
         comments: 0,
         shares: 0,
         views: 0,
-      }
+      },
+      myReaction: undefined,
     };
     setAllPhotoPosts(prev => [newPhotoPost, ...prev]);
     setPhotoToPostUrl(null);
@@ -276,6 +277,30 @@ const App: React.FC = () => {
     setAllShopPosts(prev => [newShopPost, ...prev]);
     setShopImageToPostUrl(null);
     setCurrentView('foryou');
+  };
+  
+  const handlePhotoReaction = (postId: number, reaction: string) => {
+    setAllPhotoPosts(prevPosts =>
+      prevPosts.map(post => {
+        if (post.id === postId) {
+          const currentReaction = post.myReaction;
+          const stats = post.stats ? { ...post.stats } : { likes: 0, comments: 0, shares: 0, views: 0 };
+
+          // If clicking the same reaction, un-react
+          if (currentReaction === reaction) {
+            if (stats.likes > 0) stats.likes--;
+            return { ...post, myReaction: undefined, stats };
+          }
+          
+          // If changing reaction or reacting for the first time
+          if (!currentReaction) {
+            stats.likes++;
+          }
+          return { ...post, myReaction: reaction, stats };
+        }
+        return post;
+      })
+    );
   };
 
   const handlePlayFromProfile = (user: User, videoId: number) => {
@@ -341,7 +366,7 @@ const App: React.FC = () => {
         />;
         break;
     case 'photos':
-      pageContent = <PhotoFeedPage posts={allPhotoPosts} />;
+      pageContent = <PhotoFeedPage posts={allPhotoPosts} onReactionSelect={handlePhotoReaction} />;
       break;
     case 'photoPost':
       if (selectedPhoto) {
