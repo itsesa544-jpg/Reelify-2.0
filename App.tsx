@@ -181,6 +181,7 @@ const App: React.FC = () => {
 
   const handleSaveProfile = (updatedUser: User) => {
     const oldUsername = loggedInUser.username;
+    const oldName = loggedInUser.name;
     
     setLoggedInUser(updatedUser);
     
@@ -205,7 +206,7 @@ const App: React.FC = () => {
     }));
 
     setAllShopPosts(prevPosts => prevPosts.map(post => {
-      if (post.seller.name === loggedInUser.name) { // This assumes name is unique which is a simplification
+      if (post.seller.name === oldName) { 
         return { ...post, seller: { name: updatedUser.name, avatar: updatedUser.avatar } };
       }
       return post;
