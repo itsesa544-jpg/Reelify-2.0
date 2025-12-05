@@ -17,8 +17,8 @@ export const featuredCommunities: Community[] = [];
 
 export const mariaKhan: User = {
   username: '@maria_khan',
-  name: 'Maria_Khan',
-  avatar: 'https://images.pexels.com/photos/3772510/pexels-photo-3772510.jpeg?auto=compress&cs=tinysrgb&w=800',
+  name: 'Esa',
+  avatar: 'https://res.cloudinary.com/dlklqihg6/image/upload/v1764868875/zaepeny0hb26vvpxkvzb.png',
   bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
   coverPhoto: 'https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   stats: {
@@ -32,9 +32,9 @@ export const mariaKhan: User = {
 
 export const tusharEmran: User = {
     username: '@tushar_emran',
-    name: 'Tushar Emran',
+    name: 'Esaalli',
     isVerified: true,
-    avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=800',
+    avatar: 'https://res.cloudinary.com/dlklqihg6/image/upload/v1764868875/zaepeny0hb26vvpxkvzb.png',
     bio: 'Photographer & Filmmaker. Capturing life\'s moments.',
     coverPhoto: 'https://images.pexels.com/photos/1528640/pexels-photo-1528640.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     stats: {
@@ -48,8 +48,8 @@ export const tusharEmran: User = {
 
 export const mdesa: User = {
     username: '@mdesa',
-    name: 'mdesa',
-    avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=800',
+    name: 'Esakhan',
+    avatar: 'https://res.cloudinary.com/dlklqihg6/image/upload/v1764868875/zaepeny0hb26vvpxkvzb.png',
     bio: 'Tech enthusiast | Developer',
     coverPhoto: 'https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     stats: {
@@ -169,6 +169,7 @@ export const conversationsData: Conversation[] = [];
 export const notificationsData: Notification[] = [];
 
 
+// FIX: Renamed ReelifyLogo to VibeLogo to match its usage throughout the app.
 export const VibeLogo = () => (
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
         <defs>
@@ -177,7 +178,8 @@ export const VibeLogo = () => (
                 <stop offset="100%" stopColor="#c026d3" />
             </linearGradient>
         </defs>
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="url(#logoGradient)" strokeWidth="2" fill="none" />
+        <rect width="24" height="24" rx="6" fill="url(#logoGradient)"/>
+        <path d="M10 16.5V7.5L16 12L10 16.5Z" fill="white"/>
     </svg>
 );
 
@@ -417,7 +419,7 @@ export const CropIcon = ({ className = "w-6 h-6" }) => (
 
 export const PrivacySettingsIcon = ({ className = "w-6 h-6" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zm0 2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zm0 2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
     </svg>
 );
 

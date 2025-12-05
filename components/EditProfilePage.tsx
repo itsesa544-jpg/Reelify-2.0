@@ -1,5 +1,4 @@
-
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import type { User } from '../types';
 import { BackIcon } from '../constants';
 
@@ -18,19 +17,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({ user, onSave, onCance
   const coverPhotoInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    // Cleanup blob URLs to prevent memory leaks when component unmounts
-    return () => {
-      if (coverPhotoPreview && coverPhotoPreview.startsWith('blob:')) {
-        URL.revokeObjectURL(coverPhotoPreview);
-      }
-      if (avatarPreview && avatarPreview.startsWith('blob:')) {
-        URL.revokeObjectURL(avatarPreview);
-      }
-    };
-  }, []);
-
-
   const handleSave = () => {
     const updatedUser = {
       ...user,
@@ -48,8 +34,11 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({ user, onSave, onCance
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      const newPreviewUrl = URL.createObjectURL(file);
-      setter(newPreviewUrl);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setter(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
