@@ -16,7 +16,7 @@ export const trendingTopics: string[] = [];
 export const featuredCommunities: Community[] = [];
 
 export const mariaKhan: User = {
-  username: '@maria_khan',
+  username: '@esa',
   name: 'Esa',
   avatar: 'https://res.cloudinary.com/dlklqihg6/image/upload/v1764868875/zaepeny0hb26vvpxkvzb.png',
   bio: 'Content Creator | Storyteller | Traveler. ✨ Exploring the world one frame at a time and sharing stories that inspire, captivate, and move you. Join me on this incredible journey!',
@@ -31,7 +31,7 @@ export const mariaKhan: User = {
 };
 
 export const tusharEmran: User = {
-    username: '@tushar_emran',
+    username: '@esaalli',
     name: 'Esaalli',
     isVerified: true,
     avatar: 'https://res.cloudinary.com/dlklqihg6/image/upload/v1764868875/zaepeny0hb26vvpxkvzb.png',
@@ -43,11 +43,11 @@ export const tusharEmran: User = {
       totalViews: 25000000,
       joined: 'Mar 2021'
     },
-    observing: ['@maria_khan']
+    observing: ['@esa']
 };
 
 export const mdesa: User = {
-    username: '@mdesa',
+    username: '@esakhan',
     name: 'Esakhan',
     avatar: 'https://res.cloudinary.com/dlklqihg6/image/upload/v1764868875/zaepeny0hb26vvpxkvzb.png',
     bio: 'Tech enthusiast | Developer',
@@ -58,7 +58,7 @@ export const mdesa: User = {
       totalViews: 1000000,
       joined: 'Jun 2023'
     },
-    observing: ['@maria_khan', '@tushar_emran']
+    observing: ['@esa', '@esaalli']
 };
 
 export const allUsers: User[] = [mariaKhan, tusharEmran, mdesa];

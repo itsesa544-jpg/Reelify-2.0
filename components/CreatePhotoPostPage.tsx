@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { User } from '../types';
-import { BackIcon, GlobeIcon, PhotosIcon, TagPeopleIcon, FeelingActivityIcon, GetMessagesIcon } from '../constants';
+// FIX: Added VerifiedBadgeIcon to imports to show verification status.
+import { BackIcon, GlobeIcon, PhotosIcon, TagPeopleIcon, FeelingActivityIcon, GetMessagesIcon, VerifiedBadgeIcon } from '../constants';
 
 interface CreatePhotoPostPageProps {
     imageUrl: string;
@@ -47,7 +48,11 @@ const CreatePhotoPostPage: React.FC<CreatePhotoPostPageProps> = ({ imageUrl, use
                     <div className="flex items-center gap-3">
                         <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
                         <div>
-                            <p className="font-bold">{user.name}</p>
+                            {/* FIX: Added a verified icon next to the username if the user is verified. */}
+                            <div className="flex items-center gap-1">
+                                <p className="font-bold">{user.name}</p>
+                                {user.isVerified && <VerifiedBadgeIcon className="w-4 h-4 text-blue-500" />}
+                            </div>
                             <button className="flex items-center gap-1 bg-gray-200 px-2 py-0.5 rounded-md text-xs font-semibold text-gray-700">
                                 <GlobeIcon className="w-3 h-3 text-gray-600" />
                                 <span>Public</span>
