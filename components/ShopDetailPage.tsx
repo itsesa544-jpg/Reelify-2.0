@@ -48,7 +48,8 @@ const ShopDetailPage: React.FC<ShopDetailPageProps> = ({ post, onBack }) => {
       {/* Main Content */}
       <main className="flex-grow overflow-y-auto">
         <div className="max-w-4xl mx-auto">
-          <img src={post.imageUrl} alt={post.title} className="w-full h-64 object-cover" />
+          {/* FIX: Use `imageUrls[0]` to display the first image from the array. */}
+          <img src={post.imageUrls[0]} alt={post.title} className="w-full h-64 object-cover" />
           
           <div className="p-4 space-y-4">
             <h1 className="text-3xl font-bold">{post.title}</h1>

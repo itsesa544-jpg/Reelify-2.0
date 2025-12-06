@@ -1,3 +1,4 @@
+
 import React from 'react';
 import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost } from './types';
 
@@ -142,26 +143,36 @@ export const initialVideosData: Video[] = [
 export const shopPostsData: ShopPost[] = [
     {
         id: 1,
-        imageUrl: 'https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg?auto=compress&cs=tinysrgb&w=800',
+        imageUrls: ['https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg?auto=compress&cs=tinysrgb&w=800'],
         title: 'Minimalist Wall Art',
-        price: '$49.99',
+        price: '4999',
         seller: {
             name: mariaKhan.name,
             avatar: mariaKhan.avatar,
         },
         description: 'A beautiful set of minimalist art prints to elevate your home decor. Perfect for living rooms, bedrooms, or offices. High-quality prints on premium paper.',
-        rating: 4.5
+        rating: 4.5,
+        category: 'Home Goods',
+        condition: 'New',
+        location: 'New York, NY',
+        deliveryOption: 'Courier',
+        deliveryCharge: 'Separate'
     },
     {
         id: 2,
-        imageUrl: 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=800',
+        imageUrls: ['https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=800'],
         title: 'Gourmet Burger Kit',
-        price: '$29.99',
+        price: '2999',
         seller: {
             name: tusharEmran.name,
             avatar: tusharEmran.avatar,
         },
         description: 'Everything you need to make delicious gourmet burgers at home. Includes premium beef patties, brioche buns, and special sauce.',
+        category: 'Food',
+        condition: 'New',
+        location: 'Los Angeles, CA',
+        deliveryOption: 'Courier',
+        deliveryCharge: 'Included'
     }
 ];
 export const galleryMediaData: GalleryMedia[] = [];
@@ -530,4 +541,16 @@ export const GetMessagesIcon = ({ className = "w-5 h-5" }: { className?: string 
  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor">
   <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9.45 13.43l1.24-2.28 2.28-1.24-1.24 2.28-2.28 1.24zM15.5 10.5l-1.09 2-2 1.09 1.09-2 2-1.09z"/>
  </svg>
+);
+
+export const LocationPinIcon = ({ className = "w-5 h-5 text-gray-400" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+    </svg>
+);
+
+export const AddImagePlaceholderIcon = ({ className = "w-8 h-8" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+    </svg>
 );

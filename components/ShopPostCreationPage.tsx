@@ -5,7 +5,8 @@ import type { ShopPost } from '../types';
 interface ShopPostCreationPageProps {
     imageUrl: string;
     onBack: () => void;
-    onPublish: (postData: Omit<ShopPost, 'id' | 'seller' | 'rating' | 'imageUrl'>) => void;
+    // FIX: Corrected the onPublish prop type to align with the handler in App.tsx.
+    onPublish: (postData: Omit<ShopPost, 'id' | 'seller' | 'rating' | 'imageUrls'>) => void;
 }
 
 const ShopPostCreationPage: React.FC<ShopPostCreationPageProps> = ({ imageUrl, onBack, onPublish }) => {
@@ -18,7 +19,17 @@ const ShopPostCreationPage: React.FC<ShopPostCreationPageProps> = ({ imageUrl, o
             alert('Please fill out the title and price.');
             return;
         }
-        onPublish({ title, price, description });
+        // FIX: Pass all required fields to satisfy the `ShopPost` type, using defaults for fields not in the form.
+        onPublish({ 
+            title, 
+            price, 
+            description,
+            category: 'Default Category',
+            condition: 'New',
+            location: 'Not specified',
+            deliveryOption: 'Courier',
+            deliveryCharge: 'Separate',
+        });
     };
 
     return (

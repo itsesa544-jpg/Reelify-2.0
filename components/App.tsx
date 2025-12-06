@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
@@ -285,8 +284,7 @@ const App: React.FC = () => {
     setCurrentView('photos');
   };
   
-  // FIX: Updated function signature to expect postData without imageUrls, as imageUrls are now handled within this function.
-  const handlePublishShopPost = (postData: Omit<ShopPost, 'id' | 'seller' | 'rating' | 'imageUrls'>) => {
+  const handlePublishShopPost = (postData: Omit<ShopPost, 'id' | 'seller' | 'rating'>) => {
     if (!shopImageToPostUrl) return;
     const newShopPost: ShopPost = {
       id: Date.now(),

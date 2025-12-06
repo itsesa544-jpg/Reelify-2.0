@@ -41,16 +41,24 @@ export interface Video {
 
 export interface ShopPost {
   id: number;
-  imageUrl: string;
+  imageUrls: string[];
   title: string;
   price: string;
+  description: string;
+  category: string;
+  size?: string;
+  color?: string;
+  condition: 'New' | 'Used';
+  location: string;
+  deliveryOption: string;
+  deliveryCharge: 'Included' | 'Separate';
   seller: {
     name: string;
     avatar: string;
   };
-  description: string;
   rating?: number;
 }
+
 
 export interface Message {
   id: number;

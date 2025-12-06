@@ -9,7 +9,8 @@ interface ShopPostCardProps {
 
 const ShopPostCard: React.FC<ShopPostCardProps> = ({ post, onClick }) => (
   <button onClick={onClick} className="bg-[#1A1B20] rounded-xl overflow-hidden text-left w-full">
-    <img src={post.imageUrl} alt={post.title} className="w-full h-48 object-cover" />
+    {/* FIX: Use `imageUrls[0]` to display the first image from the array. */}
+    <img src={post.imageUrls[0]} alt={post.title} className="w-full h-48 object-cover" />
     <div className="p-3">
       <h3 className="font-semibold text-white text-md truncate">{post.title}</h3>
       <p className="text-lg font-bold text-cyan-400 mt-1">{post.price}</p>
