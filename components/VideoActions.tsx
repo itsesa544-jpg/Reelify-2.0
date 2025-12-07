@@ -7,6 +7,7 @@ interface VideoActionsProps {
   onSelectUser: (user: User) => void;
   loggedInUser: User;
   onToggleObserve: (user: User) => void;
+  onVideoReaction: (videoId: number, reaction: string | undefined) => void;
 }
 
 const ActionButton = ({ icon, label }: { icon: React.ReactNode, label: string }) => (
@@ -14,15 +15,19 @@ const ActionButton = ({ icon, label }: { icon: React.ReactNode, label: string })
         <div className="w-12 h-12 flex items-center justify-center bg-black/40 rounded-full group-hover:bg-purple-600 transition-colors">
             {icon}
         </div>
-        <span className="text-xs font-bold drop-shadow-md">{label}</span>
+        <span className="text-xs font-bold">{label}</span>
     </button>
 );
 
-
-const VideoActions: React.FC<VideoActionsProps> = ({ video, onSelectUser, loggedInUser, onToggleObserve }) => {
+const VideoActions: React.FC<VideoActionsProps> = ({ video, onSelectUser, loggedInUser, onToggleObserve, onVideoReaction }) => {
     const iconClasses = "w-7 h-7";
     const isObserving = loggedInUser.observing.includes(video.user.username);
     const isOwnProfile = loggedInUser.username === video.user.username;
+
+    const handleLikeClick = () => {
+        // Toggles '❤️' reaction. The handler in App.tsx manages the logic.
+        onVideoReaction(video.id, '❤️');
+    };
 
   return (
     <div className="flex flex-col items-center gap-5">
@@ -44,10 +49,18 @@ const VideoActions: React.FC<VideoActionsProps> = ({ video, onSelectUser, logged
             )}
         </div>
       
-        <ActionButton 
-            label={formatNumber(video.likes)}
-            icon={<svg xmlns="http://www.w3.org/2000/svg" className={iconClasses} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>}
-        />
+         <button 
+            className="flex flex-col items-center gap-1 text-white group"
+            onClick={handleLikeClick}
+        >
+            <div className="w-12 h-12 flex items-center justify-center bg-black/40 rounded-full group-hover:bg-purple-600 transition-colors">
+                 <svg xmlns="http://www.w3.org/2000/svg" className={`${iconClasses} transition-colors`} fill={video.myReaction === '❤️' ? 'rgb(239 68 68)' : 'none'} viewBox="0 0 24 24" stroke={video.myReaction === '❤️' ? 'rgb(239 68 68)' : 'currentColor'}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                 </svg>
+            </div>
+            <span className="text-xs font-bold text-white">{formatNumber(video.likes)}</span>
+        </button>
+
         <ActionButton 
             label={formatNumber(video.comments)}
             icon={<svg xmlns="http://www.w3.org/2000/svg" className={iconClasses} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>}

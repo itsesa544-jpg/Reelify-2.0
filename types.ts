@@ -37,6 +37,8 @@ export interface Video {
     artist: string;
   };
   musicCoverUrl?: string;
+  myReaction?: string;
+  reactions?: { [key: string]: number };
 }
 
 export interface Review {

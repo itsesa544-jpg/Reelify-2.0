@@ -1,7 +1,7 @@
 
 
 import React, { useRef, useEffect, useState } from 'react';
-import { SearchIcon, BackIcon } from '../constants';
+import { SearchIcon, BackIcon, HeartIconFilled } from '../constants';
 import VideoInfo from './VideoInfo';
 import VideoActions from './VideoActions';
 import type { Video, User } from '../types';
@@ -13,6 +13,7 @@ interface VideoItemProps {
   onSelectUser: (user: User) => void;
   loggedInUser: User;
   onToggleObserve: (user: User) => void;
+  onVideoReaction: (videoId: number, reaction: string) => void;
 }
 
 const PlayPauseIcon = ({ isPlaying }: { isPlaying: boolean }) => (
@@ -30,10 +31,11 @@ const PlayPauseIcon = ({ isPlaying }: { isPlaying: boolean }) => (
 );
 
 
-const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, loggedInUser, onToggleObserve }) => {
+const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, loggedInUser, onToggleObserve, onVideoReaction }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPlayPauseIcon, setShowPlayPauseIcon] = useState(false);
+  const [showLikeAnimation, setShowLikeAnimation] = useState(false);
   const iconTimer = useRef<number | null>(null);
 
   useEffect(() => {
@@ -87,6 +89,16 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, lo
     }, 1000);
   };
 
+  const handleDoubleClick = () => {
+    if (video.myReaction !== '❤️') {
+      onVideoReaction(video.id, '❤️');
+    }
+    setShowLikeAnimation(true);
+    setTimeout(() => {
+        setShowLikeAnimation(false);
+    }, 800);
+  };
+
   return (
     <div className="relative w-full h-full">
       <video
@@ -99,20 +111,26 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, lo
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
       
-       <div className="absolute inset-0 z-0" onClick={togglePlayPause}></div>
+       <div className="absolute inset-0 z-10" onClick={togglePlayPause} onDoubleClick={handleDoubleClick}></div>
       
       {showPlayPauseIcon && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-100">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-100 z-20">
            <PlayPauseIcon isPlaying={!videoRef.current?.paused} />
         </div>
       )}
+      
+      {showLikeAnimation && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+            <HeartIconFilled className="w-24 h-24 text-red-500/90 animate-like" />
+        </div>
+      )}
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end">
+      <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end z-20">
         <div className="flex-grow">
           <VideoInfo video={video} onSelectUser={onSelectUser} />
         </div>
         <div className="shrink-0">
-          <VideoActions video={video} onSelectUser={onSelectUser} loggedInUser={loggedInUser} onToggleObserve={onToggleObserve} />
+          <VideoActions video={video} onSelectUser={onSelectUser} loggedInUser={loggedInUser} onToggleObserve={onToggleObserve} onVideoReaction={onVideoReaction} />
         </div>
       </div>
     </div>
@@ -128,6 +146,7 @@ interface VideoPlayerProps {
   onBack?: () => void;
   loggedInUser: User;
   onToggleObserve: (user: User) => void;
+  onVideoReaction: (videoId: number, reaction: string | undefined) => void;
 }
 
 const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> = ({ label, active, onClick }) => (
@@ -143,7 +162,7 @@ const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> 
 );
 
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView, startIndex, onBack, loggedInUser, onToggleObserve }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView, startIndex, onBack, loggedInUser, onToggleObserve, onVideoReaction }) => {
     const [currentVideo, setCurrentVideo] = useState(startIndex || 0);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -203,12 +222,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavig
                           onSelectUser={onSelectUser}
                           loggedInUser={loggedInUser}
                           onToggleObserve={onToggleObserve}
+                          onVideoReaction={onVideoReaction}
                         />
                     </div>
                 ))}
             </div>
 
-            <header className="absolute top-0 left-0 right-0 z-10 p-4 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent">
+            <header className="absolute top-0 left-0 right-0 z-30 p-4 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent">
                 {onBack ? (
                     <button onClick={onBack} className="p-2">
                         <BackIcon className="w-6 h-6 text-white" />

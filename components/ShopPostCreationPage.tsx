@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { AddImagePlaceholderIcon, LocationPinIcon, BackIcon } from '../constants';
+import { AddImagePlaceholderIcon, LocationPinIcon } from '../constants';
 import type { ShopPost } from '../types';
 
 interface ShopPostCreationPageProps {
-  onBack: () => void;
   onPublish: (postData: Omit<ShopPost, 'id' | 'seller' | 'rating' | 'reviews' | 'views'>) => void;
 }
 
@@ -73,7 +72,7 @@ const RadioGroup: React.FC<{ label: string, name: string, options: string[], sel
 );
 
 
-const ShopPostCreationPage: React.FC<ShopPostCreationPageProps> = ({ onBack, onPublish }) => {
+const ShopPostCreationPage: React.FC<ShopPostCreationPageProps> = ({ onPublish }) => {
     const [imageUrls, setImageUrls] = useState<string[]>([]);
     const [productName, setProductName] = useState('');
     const [price, setPrice] = useState('');
@@ -128,92 +127,82 @@ const ShopPostCreationPage: React.FC<ShopPostCreationPageProps> = ({ onBack, onP
     };
 
     return (
-        <div className="w-full h-full bg-[#0D0F13] text-white flex flex-col">
-            <header className="p-4 flex items-center shrink-0 border-b border-gray-800 bg-[#1A1B20]/80 backdrop-blur-sm sticky top-0 z-10">
-                <button onClick={onBack} className="p-2 rounded-full hover:bg-white/10">
-                    <BackIcon className="text-white" />
-                </button>
-                <h1 className="text-lg font-bold ml-4">List a New Product</h1>
-            </header>
-            <div className="flex-grow overflow-y-auto">
-                <form onSubmit={handlePublish} className="w-full max-w-2xl mx-auto p-4 space-y-6">
-                    <div className="bg-[#1A1B20] p-6 rounded-lg border border-gray-800">
-                        <h2 className="text-lg font-bold mb-4 text-white">1. Product Images</h2>
-                        <div className="grid grid-cols-4 gap-4">
-                           {imageUrls.map((url, index) => (
-                                <div key={index} className="relative aspect-square">
-                                    <img src={url} alt={`product preview ${index + 1}`} className="w-full h-full object-cover rounded-lg" />
-                                    <button 
-                                        type="button" 
-                                        onClick={() => removeImage(index)} 
-                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-lg leading-none border-2 border-[#1A1B20]"
-                                        aria-label="Remove image"
-                                    >
-                                        &times;
-                                    </button>
-                                </div>
-                            ))}
-                            {imageUrls.length < 4 && (
-                                <button type="button" onClick={triggerFileInput} className="aspect-square border-2 border-dashed border-gray-700 rounded-lg flex items-center justify-center hover:border-cyan-400 transition-colors">
-                                    <AddImagePlaceholderIcon className="w-8 h-8 text-gray-500" />
-                                </button>
-                            )}
+        <form onSubmit={handlePublish} className="w-full max-w-2xl mx-auto p-4 space-y-6">
+            <div className="bg-[#1A1B20] p-6 rounded-lg border border-gray-800">
+                <h2 className="text-lg font-bold mb-4 text-white">1. Product Images</h2>
+                <div className="grid grid-cols-4 gap-4">
+                   {imageUrls.map((url, index) => (
+                        <div key={index} className="relative aspect-square">
+                            <img src={url} alt={`product preview ${index + 1}`} className="w-full h-full object-cover rounded-lg" />
+                            <button 
+                                type="button" 
+                                onClick={() => removeImage(index)} 
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-lg leading-none border-2 border-[#1A1B20]"
+                                aria-label="Remove image"
+                            >
+                                &times;
+                            </button>
                         </div>
-                         <input 
-                            type="file" 
-                            ref={fileInputRef} 
-                            onChange={handleImageChange} 
-                            className="hidden" 
-                            accept="image/*" 
-                            multiple 
-                        />
-                    </div>
-
-                    <div className="bg-[#1A1B20] p-6 rounded-lg border border-gray-800">
-                        <h2 className="text-lg font-bold mb-4 text-white">2. Product Details</h2>
-                        <div className="space-y-4">
-                            <InputField label="Product Name" placeholder="e.g., Stylish Wireless Headphones" value={productName} onChange={setProductName} required />
-                            <InputField label="Price (in BDT)" placeholder="12500" value={price} onChange={setPrice} type="number" required icon={<span className="text-gray-400 font-semibold">৳</span>} />
-                            <TextareaField label="Description" placeholder="Describe your product in detail..." value={description} onChange={setDescription} />
-                        </div>
-                    </div>
-
-                    <div className="bg-[#1A1B20] p-6 rounded-lg border border-gray-800">
-                        <h2 className="text-lg font-bold mb-4 text-white">3. Specifications</h2>
-                        <div className="space-y-4">
-                            <SelectField label="Category" value={category} onChange={setCategory}>
-                                <option value="">Select a category</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Fashion">Fashion</option>
-                                <option value="Home Goods">Home Goods</option>
-                                <option value="Other">Other</option>
-                            </SelectField>
-                            <InputField label="Size (optional)" placeholder="e.g., M, L, XL or 42, 43" value={size} onChange={setSize} />
-                            <InputField label="Color (optional)" placeholder="e.g., Red, Blue, Black" value={color} onChange={setColor} />
-                            <RadioGroup label="Condition" name="condition" options={['New', 'Used']} selected={condition} onChange={(val) => setCondition(val as 'New' | 'Used')} />
-                        </div>
-                    </div>
-
-                    <div className="bg-[#1A1B20] p-6 rounded-lg border border-gray-800">
-                        <h2 className="text-lg font-bold mb-4 text-white">4. Delivery Details</h2>
-                        <div className="space-y-4">
-                            <InputField label="Location" placeholder="e.g., Dhaka" value={location} onChange={setLocation} icon={<LocationPinIcon/>} />
-                            <SelectField label="Delivery Option" value={deliveryOption} onChange={setDeliveryOption}>
-                                <option value="Courier">Courier</option>
-                                <option value="Hand To-Hand">Hand To-Hand</option>
-                            </SelectField>
-                            <RadioGroup label="Delivery Charge" name="deliveryCharge" options={['Included in price', 'Separate charge']} selected={deliveryCharge === 'Included' ? 'Included in price' : 'Separate charge'} onChange={(val) => setDeliveryCharge(val === 'Included in price' ? 'Included' : 'Separate')} />
-                        </div>
-                    </div>
-                    
-                     <div className="p-2 sticky bottom-0 bg-[#0D0F13]/80 backdrop-blur-sm">
-                         <button type="submit" className="w-full bg-gradient-to-tr from-cyan-400 to-purple-600 text-white font-bold py-3 rounded-lg hover:opacity-90 transition-opacity">
-                            Publish Product
+                    ))}
+                    {imageUrls.length < 4 && (
+                        <button type="button" onClick={triggerFileInput} className="aspect-square border-2 border-dashed border-gray-700 rounded-lg flex items-center justify-center hover:border-cyan-400 transition-colors">
+                            <AddImagePlaceholderIcon className="w-8 h-8 text-gray-500" />
                         </button>
-                    </div>
-                </form>
+                    )}
+                </div>
+                 <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    onChange={handleImageChange} 
+                    className="hidden" 
+                    accept="image/*" 
+                    multiple 
+                />
             </div>
-        </div>
+
+            <div className="bg-[#1A1B20] p-6 rounded-lg border border-gray-800">
+                <h2 className="text-lg font-bold mb-4 text-white">2. Product Details</h2>
+                <div className="space-y-4">
+                    <InputField label="Product Name" placeholder="e.g., Stylish Wireless Headphones" value={productName} onChange={setProductName} required />
+                    <InputField label="Price (in BDT)" placeholder="12500" value={price} onChange={setPrice} type="number" required icon={<span className="text-gray-400 font-semibold">৳</span>} />
+                    <TextareaField label="Description" placeholder="Describe your product in detail..." value={description} onChange={setDescription} />
+                </div>
+            </div>
+
+            <div className="bg-[#1A1B20] p-6 rounded-lg border border-gray-800">
+                <h2 className="text-lg font-bold mb-4 text-white">3. Specifications</h2>
+                <div className="space-y-4">
+                    <SelectField label="Category" value={category} onChange={setCategory}>
+                        <option value="">Select a category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Home Goods">Home Goods</option>
+                        <option value="Other">Other</option>
+                    </SelectField>
+                    <InputField label="Size (optional)" placeholder="e.g., M, L, XL or 42, 43" value={size} onChange={setSize} />
+                    <InputField label="Color (optional)" placeholder="e.g., Red, Blue, Black" value={color} onChange={setColor} />
+                    <RadioGroup label="Condition" name="condition" options={['New', 'Used']} selected={condition} onChange={(val) => setCondition(val as 'New' | 'Used')} />
+                </div>
+            </div>
+
+            <div className="bg-[#1A1B20] p-6 rounded-lg border border-gray-800">
+                <h2 className="text-lg font-bold mb-4 text-white">4. Delivery Details</h2>
+                <div className="space-y-4">
+                    <InputField label="Location" placeholder="e.g., Dhaka" value={location} onChange={setLocation} icon={<LocationPinIcon/>} />
+                    <SelectField label="Delivery Option" value={deliveryOption} onChange={setDeliveryOption}>
+                        <option value="Courier">Courier</option>
+                        <option value="Hand To-Hand">Hand To-Hand</option>
+                    </SelectField>
+                    <RadioGroup label="Delivery Charge" name="deliveryCharge" options={['Included in price', 'Separate charge']} selected={deliveryCharge === 'Included' ? 'Included in price' : 'Separate charge'} onChange={(val) => setDeliveryCharge(val === 'Included in price' ? 'Included' : 'Separate')} />
+                </div>
+            </div>
+            
+             <div className="p-2 sticky bottom-0 bg-[#0D0F13]/80 backdrop-blur-sm">
+                 <button type="submit" className="w-full bg-gradient-to-tr from-cyan-400 to-purple-600 text-white font-bold py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    Publish Product
+                </button>
+            </div>
+        </form>
     );
 };
 

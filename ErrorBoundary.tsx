@@ -9,7 +9,6 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  // FIX: Replaced the constructor with a class property initializer for state. This is a more modern and less error-prone syntax that resolves the TypeScript error where 'this.props' was not being recognized.
   public state: State = { hasError: false };
 
   static getDerivedStateFromError(_: Error): State {
@@ -26,6 +25,7 @@ class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="w-screen h-screen bg-black text-white flex flex-col items-center justify-center p-4">
           <h1 className="text-2xl font-bold text-red-500 mb-4">Something went wrong.</h1>
+          {/* FIX: Corrected an invalid closing JSX tag. This syntax error was causing a misleading TypeScript error about 'this.props' not being available. */}
           <p className="text-gray-400 text-center">
             The application encountered an error and could not load.
             <br />

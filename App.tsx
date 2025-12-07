@@ -345,6 +345,56 @@ const App: React.FC = () => {
     );
   };
 
+  // FIX: Added handleVideoReaction to manage user interactions with videos, such as liking or changing reactions. This function updates the video's state to reflect the new reaction, ensuring the UI is in sync with user actions.
+  const handleVideoReaction = (videoId: number, reaction: string | undefined) => {
+    setAllVideos(prevVideos =>
+      prevVideos.map(video => {
+        if (video.id === videoId) {
+          const updatedVideo = { ...video };
+          const reactions = updatedVideo.reactions ? { ...updatedVideo.reactions } : {};
+          const currentReaction = updatedVideo.myReaction;
+
+          // If a reaction is passed and it's the same as the current one, un-react
+          if (reaction && currentReaction === reaction) {
+            updatedVideo.myReaction = undefined;
+            if (updatedVideo.likes > 0) updatedVideo.likes--;
+            if (reactions[currentReaction] > 1) {
+              reactions[currentReaction]--;
+            } else {
+              delete reactions[currentReaction];
+            }
+          } else { // New reaction or changing reaction
+            // If there was a previous reaction, undo its count
+            if (currentReaction) {
+              if (reactions[currentReaction] > 1) {
+                reactions[currentReaction]--;
+              } else {
+                delete reactions[currentReaction];
+              }
+            } else { // If no previous reaction, it's a new like
+              if (reaction) updatedVideo.likes++;
+            }
+            
+            // If there's a new reaction, apply it
+            if (reaction) {
+              updatedVideo.myReaction = reaction;
+              reactions[reaction] = (reactions[reaction] || 0) + 1;
+            } else { // This case handles unliking from a different reaction
+              if (currentReaction) {
+                  if (updatedVideo.likes > 0) updatedVideo.likes--;
+              }
+              updatedVideo.myReaction = undefined;
+            }
+          }
+          
+          updatedVideo.reactions = reactions;
+          return updatedVideo;
+        }
+        return video;
+      })
+    );
+  };
+
   const handlePlayFromProfile = (user: User, videoId: number) => {
     const userVideos = allVideos.filter(v => v.user.username === user.username);
     const startIndex = userVideos.findIndex(v => v.id === videoId);
@@ -390,10 +440,10 @@ const App: React.FC = () => {
   let pageContent;
   switch (currentView) {
     case 'feed':
-      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} />;
+      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} />;
       break;
     case 'observing':
-      pageContent = <VideoPlayer videos={observingVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} />;
+      pageContent = <VideoPlayer videos={observingVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} />;
       break;
     case 'userFeed':
         pageContent = <VideoPlayer 
@@ -405,6 +455,7 @@ const App: React.FC = () => {
             onBack={handleBackFromUserFeed}
             loggedInUser={loggedInUser} 
             onToggleObserve={handleToggleObserve}
+            onVideoReaction={handleVideoReaction}
         />;
         break;
     case 'photos':
@@ -500,7 +551,7 @@ const App: React.FC = () => {
         }
         break;
     default:
-      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView='feed' loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} />;
+      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView='feed' loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} />;
   }
 
 

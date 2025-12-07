@@ -67,34 +67,38 @@ const UploadPage: React.FC<UploadPageProps> = ({ onVideoSelected, onPhotoSelecte
   const [activeTab, setActiveTab] = useState<'video' | 'photo' | 'shop'>(initialTab);
 
   const headerTitle = activeTab === 'shop' ? 'List a New Product' : 'Create new post';
-  const mainClass = activeTab === 'shop'
-    ? 'flex-grow'
-    : 'flex-grow flex items-center justify-center p-4';
 
+  const renderContent = () => {
+    switch(activeTab) {
+      case 'video':
+        return <div className="flex-grow flex items-center justify-center p-4"><UploadArea onFileSelected={onVideoSelected} fileType="video" /></div>;
+      case 'photo':
+        return <div className="flex-grow flex items-center justify-center p-4"><UploadArea onFileSelected={onPhotoSelected} fileType="photo" /></div>;
+      case 'shop':
+        return <ShopPostCreationPage onPublish={onPublishShopPost} />;
+      default:
+        return null;
+    }
+  }
 
   return (
-    <div className={`w-full h-full bg-[#0D0F13] text-white flex flex-col`}>
-        {activeTab !== 'shop' && (
-            <>
-                <header className={`p-4 flex items-center shrink-0 border-b border-white/10 sticky top-0 bg-inherit z-10`}>
-                    <button onClick={onClose} className={`p-2 rounded-full hover:bg-white/10`}>
-                    <BackIcon className={'text-white'} />
-                    </button>
-                    <h1 className="text-lg font-bold ml-4">{headerTitle}</h1>
-                </header>
-                <div className={`p-4 flex items-center justify-center gap-2 border-b border-white/10`}>
-                    <TabButton label="Video" active={activeTab === 'video'} onClick={() => setActiveTab('video')} />
-                    <TabButton label="Photo" active={activeTab === 'photo'} onClick={() => setActiveTab('photo')} />
-                    <TabButton label="Shop" active={activeTab === 'shop'} onClick={() => setActiveTab('shop')} />
-                </div>
-            </>
-        )}
+    <div className="w-full h-full bg-[#0D0F13] text-white flex flex-col">
+        <header className="p-4 flex items-center shrink-0 border-b border-white/10 sticky top-0 bg-[#0D0F13] z-10">
+            <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10">
+                <BackIcon className="text-white" />
+            </button>
+            <h1 className="text-lg font-bold ml-4">{headerTitle}</h1>
+        </header>
+
+        <div className="p-4 flex items-center justify-center gap-2 border-b border-white/10 shrink-0">
+            <TabButton label="Video" active={activeTab === 'video'} onClick={() => setActiveTab('video')} />
+            <TabButton label="Photo" active={activeTab === 'photo'} onClick={() => setActiveTab('photo')} />
+            <TabButton label="Shop" active={activeTab === 'shop'} onClick={() => setActiveTab('shop')} />
+        </div>
       
-      <main className={mainClass}>
-        {activeTab === 'video' && <UploadArea onFileSelected={onVideoSelected} fileType="video" />}
-        {activeTab === 'photo' && <UploadArea onFileSelected={onPhotoSelected} fileType="photo" />}
-        {activeTab === 'shop' && <ShopPostCreationPage onBack={onClose} onPublish={onPublishShopPost} />}
-      </main>
+        <main className="flex-grow overflow-y-auto flex flex-col">
+            {renderContent()}
+        </main>
     </div>
   );
 };
