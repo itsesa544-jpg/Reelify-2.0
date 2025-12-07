@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
@@ -287,15 +288,16 @@ const App: React.FC = () => {
   };
   
   // FIX: Updated function signature to expect postData without imageUrls, as imageUrls are now handled within this function.
-  const handlePublishShopPost = (postData: Omit<ShopPost, 'id' | 'seller' | 'rating' | 'imageUrls'>) => {
+  const handlePublishShopPost = (postData: Omit<ShopPost, 'id' | 'seller' | 'rating' | 'reviews' | 'views' | 'imageUrls'>) => {
     if (!shopImageToPostUrl) return;
     const newShopPost: ShopPost = {
       id: Date.now(),
       ...postData,
-// FIX: The 'ShopPost' type expects 'imageUrls' (an array of strings), not 'imageUrl'. Changed the property name and wrapped the URL in an array.
       imageUrls: [shopImageToPostUrl],
-// FIX: Assign the full loggedInUser object to the seller property to match the 'User' type and fix the type error.
       seller: loggedInUser,
+      rating: undefined,
+      reviews: [],
+      views: 0,
     };
     setAllShopPosts(prev => [newShopPost, ...prev]);
     setShopImageToPostUrl(null);
@@ -423,7 +425,8 @@ const App: React.FC = () => {
       break;
     case 'shopDetail':
       if (selectedShopPost) {
-        pageContent = <ShopDetailPage post={selectedShopPost} onBack={() => setCurrentView('foryou')} />;
+        // FIX: Added missing loggedInUser and onToggleObserve props to ShopDetailPage to resolve type error.
+        pageContent = <ShopDetailPage post={selectedShopPost} onBack={() => setCurrentView('foryou')} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} />;
       } else {
         setCurrentView('foryou');
       }

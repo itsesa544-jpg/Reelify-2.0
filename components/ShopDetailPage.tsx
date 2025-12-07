@@ -1,91 +1,181 @@
-import React from 'react';
-import type { ShopPost } from '../types';
-import { BackIcon, StarIcon } from '../constants';
+import React, { useState } from 'react';
+import type { ShopPost, User, Review } from '../types';
+import { 
+    BackIcon, StarIcon, formatNumber, TagIcon, RulerIcon, PaletteIcon, 
+    LocationPinIcon, HandshakeIcon, IncludedIcon, MessageSellerIcon 
+} from '../constants';
 
 interface ShopDetailPageProps {
   post: ShopPost;
   onBack: () => void;
+  loggedInUser: User;
+  onToggleObserve: (user: User) => void;
 }
 
-const RatingStars: React.FC<{ rating: number }> = ({ rating }) => {
-  const totalStars = 5;
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 !== 0;
-  const emptyStars = totalStars - fullStars - (hasHalfStar ? 1 : 0);
-
-  return (
-    <div className="flex items-center">
-      {[...Array(fullStars)].map((_, i) => (
-        <StarIcon key={`full-${i}`} className="w-5 h-5 text-yellow-400" />
-      ))}
-      {hasHalfStar && (
-        <div className="relative">
-          <StarIcon className="w-5 h-5 text-gray-300" />
-          <div className="absolute top-0 left-0 overflow-hidden w-1/2">
-            <StarIcon className="w-5 h-5 text-yellow-400" />
-          </div>
-        </div>
-      )}
-      {[...Array(emptyStars)].map((_, i) => (
-        <StarIcon key={`empty-${i}`} className="w-5 h-5 text-gray-300" filled={false} />
+const RatingStars: React.FC<{ rating: number, className?: string }> = ({ rating, className }) => (
+    <div className={`flex items-center ${className}`}>
+      {[...Array(5)].map((_, i) => (
+        <StarIcon key={i} className="w-4 h-4" filled={i < rating} />
       ))}
     </div>
-  );
-};
+);
 
 
-const ShopDetailPage: React.FC<ShopDetailPageProps> = ({ post, onBack }) => {
+const ShopDetailPage: React.FC<ShopDetailPageProps> = ({ post, onBack, loggedInUser, onToggleObserve }) => {
+    const [selectedImage, setSelectedImage] = useState(post.imageUrls[0]);
+    
+    const isObservingSeller = loggedInUser.observing.includes(post.seller.username);
+
+    const averageRating = post.reviews && post.reviews.length > 0 
+        ? post.reviews.reduce((acc, review) => acc + review.rating, 0) / post.reviews.length 
+        : 0;
+
   return (
-    <div className="w-full h-full bg-[#0D0F13] text-white flex flex-col">
+    <div className="w-full h-full bg-gray-100 text-black flex flex-col">
       {/* Header */}
-      <header className="p-4 flex items-center shrink-0 border-b border-gray-700/50">
-        <button onClick={onBack} className="mr-4 p-2 rounded-full hover:bg-white/10">
-          <BackIcon className="w-6 h-6 text-white" />
+      <header className="p-4 flex items-center shrink-0 border-b bg-white sticky top-0 z-20">
+        <button onClick={onBack} className="mr-4 p-2 rounded-full hover:bg-gray-200">
+          <BackIcon className="w-6 h-6 text-black" />
         </button>
-        <h1 className="text-xl font-bold">Product Details</h1>
+        <h1 className="text-lg font-bold truncate">{post.title}</h1>
       </header>
       
       {/* Main Content */}
-      <main className="flex-grow overflow-y-auto">
-        <div className="max-w-4xl mx-auto">
-          {/* FIX: Use `imageUrls[0]` to display the first image from the array. */}
-          <img src={post.imageUrls[0]} alt={post.title} className="w-full h-64 object-cover" />
-          
-          <div className="p-4 space-y-4">
-            <h1 className="text-3xl font-bold">{post.title}</h1>
+      <main className="flex-grow overflow-y-auto pb-4">
+        {/* Image Gallery */}
+        <div className="bg-white">
+            <div className="aspect-square">
+                <img src={selectedImage} alt={post.title} className="w-full h-full object-cover" />
+            </div>
+            <div className="p-2 flex gap-2 overflow-x-auto">
+                {post.imageUrls.map((url, index) => (
+                    <button key={index} onClick={() => setSelectedImage(url)} className={`w-16 h-16 rounded-md overflow-hidden shrink-0 border-2 ${selectedImage === url ? 'border-green-500' : 'border-transparent'}`}>
+                        <img src={url} alt={`thumbnail ${index+1}`} className="w-full h-full object-cover" />
+                    </button>
+                ))}
+            </div>
+        </div>
+
+        {/* Product Info */}
+        <div className="p-4 bg-white mt-2">
+            <div className="flex justify-between items-start">
+                <p className="text-2xl font-bold">৳{formatNumber(parseInt(post.price))}</p>
+                <span className="text-sm font-semibold bg-gray-200 text-gray-600 px-2 py-1 rounded">{post.condition}</span>
+            </div>
+            <h1 className="text-xl font-semibold mt-1">{post.title}</h1>
+            <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
+                <div className="flex items-center gap-1">
+                    <StarIcon className="w-4 h-4 text-yellow-500" filled={averageRating > 0} />
+                    <span className="font-bold text-black">{averageRating.toFixed(1)}</span>
+                </div>
+                <span>({post.reviews?.length || 0} reviews)</span>
+                <span>•</span>
+                <span>{post.views || 0} views</span>
+            </div>
+        </div>
+
+        {/* Specifications */}
+        <div className="p-4 bg-white mt-2">
+            <h2 className="font-bold mb-3">Specifications</h2>
+            <div className="grid grid-cols-2 gap-y-3 text-sm">
+                <div className="flex items-center gap-2 text-gray-600">
+                    <TagIcon className="w-5 h-5" />
+                    <span>Category:</span>
+                    <span className="font-semibold text-black">{post.category}</span>
+                </div>
+                 <div className="flex items-center gap-2 text-gray-600">
+                    <PaletteIcon className="w-5 h-5" />
+                    <span>Color:</span>
+                    <span className="font-semibold text-black">{post.color}</span>
+                </div>
+                 <div className="flex items-center gap-2 text-gray-600">
+                    <RulerIcon className="w-5 h-5" />
+                    <span>Size:</span>
+                    <span className="font-semibold text-black">{post.size}</span>
+                </div>
+            </div>
+        </div>
+        
+        {/* Description */}
+        <div className="p-4 bg-white mt-2">
+            <h2 className="font-bold mb-2">Description</h2>
+            <p className="text-sm text-gray-700 whitespace-pre-wrap">{post.description}</p>
+        </div>
+
+        {/* Delivery Details */}
+        <div className="p-4 bg-white mt-2">
+            <h2 className="font-bold mb-3">Delivery Details</h2>
+            <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-2 text-gray-600">
+                    <LocationPinIcon className="w-5 h-5" />
+                    <span>{post.location}</span>
+                </div>
+                 <div className="flex items-center gap-2 text-gray-600">
+                    <HandshakeIcon className="w-5 h-5" />
+                    <span>{post.deliveryOption}</span>
+                </div>
+                 <div className="flex items-center gap-2 text-gray-600">
+                    <IncludedIcon className="w-5 h-5" />
+                    <span>Delivery: {post.deliveryCharge === 'Included' ? 'Included In Price' : 'Separate Charge'}</span>
+                </div>
+            </div>
+        </div>
+        
+        {/* Seller Info */}
+        <div className="p-4 bg-white mt-2 flex justify-between items-center">
+            <div className="flex items-center gap-3">
+                <img src={post.seller.avatar} alt={post.seller.name} className="w-12 h-12 rounded-full" />
+                <div>
+                    <p className="font-bold">{post.seller.name}</p>
+                    <p className="text-sm text-gray-500">{post.seller.username}</p>
+                </div>
+            </div>
+            {loggedInUser.username !== post.seller.username && (
+                <button 
+                    onClick={() => onToggleObserve(post.seller)}
+                    className={`font-semibold py-2 px-5 rounded-lg transition-colors text-sm ${isObservingSeller ? 'bg-gray-200 text-black' : 'border border-black text-black'}`}
+                >
+                    {isObservingSeller ? 'Observing' : 'Observe'}
+                </button>
+            )}
+        </div>
+         <div className="p-4 bg-white border-t">
+             <button className="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-lg font-semibold hover:bg-gray-100">
+                <MessageSellerIcon className="w-5 h-5" />
+                Message Seller
+            </button>
+        </div>
+        
+        {/* Ratings & Reviews */}
+        <div className="p-4 bg-white mt-2">
+            <h2 className="font-bold mb-3">Ratings & Reviews</h2>
+            <div className="flex flex-col items-center gap-2">
+                <p className="font-semibold">Rate this product</p>
+                <RatingStars rating={0} className="text-gray-300 text-3xl" />
+            </div>
             
-            <div className="flex items-center justify-between">
-                <p className="text-3xl font-bold text-cyan-400">{post.price}</p>
-                {post.rating !== undefined && (
-                    <div className="flex items-center gap-2">
-                        <RatingStars rating={post.rating} />
-                        <span className="text-gray-400 text-sm font-semibold">{post.rating.toFixed(1)}</span>
+            <div className="mt-6 space-y-4">
+                {post.reviews?.map(review => (
+                    <div key={review.id} className="flex items-start gap-3 border-t pt-4">
+                        <img src={review.user.avatar} alt={review.user.name} className="w-10 h-10 rounded-full" />
+                        <div className="flex-grow">
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <p className="font-semibold">{review.user.name}</p>
+                                    <RatingStars rating={review.rating} className="text-yellow-500" />
+                                </div>
+                                <p className="text-xs text-gray-500">{review.timestamp}</p>
+                            </div>
+                            <p className="text-sm mt-1">{review.comment}</p>
+                        </div>
                     </div>
+                ))}
+                {(!post.reviews || post.reviews.length === 0) && (
+                    <p className="text-sm text-gray-500 text-center pt-4">No reviews yet.</p>
                 )}
             </div>
-
-            <div className="border-t border-gray-700/50 pt-4 flex items-center gap-3">
-              <img src={post.seller.avatar} alt={post.seller.name} className="w-10 h-10 rounded-full" />
-              <div>
-                <p className="font-semibold">Sold by</p>
-                <p className="text-sm text-gray-300">{post.seller.name}</p>
-              </div>
-            </div>
-            
-            <div className="border-t border-gray-700/50 pt-4">
-              <h2 className="font-bold text-lg mb-2">Description</h2>
-              <p className="text-gray-400">{post.description}</p>
-            </div>
-          </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="w-full max-w-4xl mx-auto p-4 shrink-0 border-t border-gray-700/50">
-        <button className="w-full bg-cyan-500 text-black font-bold py-3 rounded-lg hover:bg-cyan-400 transition-colors">
-          Add to Cart
-        </button>
-      </footer>
     </div>
   );
 };
