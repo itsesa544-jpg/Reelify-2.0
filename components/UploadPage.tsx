@@ -1,13 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { BackIcon, UploadIcon } from '../constants';
 import type { ShopPost } from '../types';
+import ShopPostCreationPage from './ShopPostCreationPage';
 
 interface UploadPageProps {
   onVideoSelected: (videoUrl: string) => void;
   onPhotoSelected: (photoUrl: string) => void;
-  // FIX: Added onShopImageSelected to handle image selection for shop posts, aligning with the parent component's logic.
-  onShopImageSelected: (imageUrl: string) => void;
+  onPublishShopPost: (postData: Omit<ShopPost, 'id' | 'seller' | 'rating' | 'reviews' | 'views'>) => void;
   onClose: () => void;
+  initialTab?: 'video' | 'photo' | 'shop';
 }
 
 const TabButton: React.FC<{label: string, active: boolean, onClick: () => void}> = ({ label, active, onClick }) => (
@@ -20,7 +21,7 @@ const TabButton: React.FC<{label: string, active: boolean, onClick: () => void}>
 );
 
 const UploadArea: React.FC<{onFileSelected: (url: string) => void, fileType: 'video' | 'photo'}> = ({ onFileSelected, fileType }) => {
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
     const acceptType = fileType === 'video' ? 'video/*' : 'image/*';
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,32 +63,33 @@ const UploadArea: React.FC<{onFileSelected: (url: string) => void, fileType: 'vi
 };
 
 
-const UploadPage: React.FC<UploadPageProps> = ({ onVideoSelected, onPhotoSelected, onShopImageSelected, onClose }) => {
-  const [activeTab, setActiveTab] = useState<'video' | 'photo' | 'shop'>('video');
+const UploadPage: React.FC<UploadPageProps> = ({ onVideoSelected, onPhotoSelected, onPublishShopPost, onClose, initialTab = 'video' }) => {
+  const [activeTab, setActiveTab] = useState<'video' | 'photo' | 'shop'>(initialTab);
 
-  const headerTitle = activeTab === 'shop' ? 'Select an Image for Your Product' : 'Create new post';
+  const headerTitle = activeTab === 'shop' ? 'List a New Product' : 'Create new post';
 
   return (
-    // FIX: Unified background and text colors for a consistent UI across all tabs.
     <div className={`w-full h-full bg-[#0D0F13] text-white flex flex-col`}>
-      <header className={`p-4 flex items-center shrink-0 border-b border-white/10 sticky top-0 bg-inherit z-10`}>
-        <button onClick={onClose} className={`p-2 rounded-full hover:bg-white/10`}>
-          <BackIcon className={'text-white'} />
-        </button>
-        <h1 className="text-lg font-bold ml-4">{headerTitle}</h1>
-      </header>
+        {activeTab !== 'shop' && (
+            <>
+                <header className={`p-4 flex items-center shrink-0 border-b border-white/10 sticky top-0 bg-inherit z-10`}>
+                    <button onClick={onClose} className={`p-2 rounded-full hover:bg-white/10`}>
+                    <BackIcon className={'text-white'} />
+                    </button>
+                    <h1 className="text-lg font-bold ml-4">{headerTitle}</h1>
+                </header>
+                <div className={`p-4 flex items-center justify-center gap-2 border-b border-white/10`}>
+                    <TabButton label="Video" active={activeTab === 'video'} onClick={() => setActiveTab('video')} />
+                    <TabButton label="Photo" active={activeTab === 'photo'} onClick={() => setActiveTab('photo')} />
+                    <TabButton label="Shop" active={activeTab === 'shop'} onClick={() => setActiveTab('shop')} />
+                </div>
+            </>
+        )}
       
-      <div className={`p-4 flex items-center justify-center gap-2 border-b border-white/10`}>
-          <TabButton label="Video" active={activeTab === 'video'} onClick={() => setActiveTab('video')} />
-          <TabButton label="Photo" active={activeTab === 'photo'} onClick={() => setActiveTab('photo')} />
-          <TabButton label="Shop" active={activeTab === 'shop'} onClick={() => setActiveTab('shop')} />
-      </div>
-
-      <main className={`flex-grow flex items-center justify-center p-4`}>
+      <main className={`flex-grow flex items-center justify-center ${activeTab !== 'shop' ? 'p-4' : ''}`}>
         {activeTab === 'video' && <UploadArea onFileSelected={onVideoSelected} fileType="video" />}
         {activeTab === 'photo' && <UploadArea onFileSelected={onPhotoSelected} fileType="photo" />}
-        {/* FIX: Replaced ShopPostCreationPage with UploadArea to handle image selection, which then triggers navigation to the creation page. */}
-        {activeTab === 'shop' && <UploadArea onFileSelected={onShopImageSelected} fileType="photo" />}
+        {activeTab === 'shop' && <ShopPostCreationPage onBack={onClose} onPublish={onPublishShopPost} />}
       </main>
     </div>
   );

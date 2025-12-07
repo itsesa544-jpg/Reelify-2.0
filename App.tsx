@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
@@ -19,11 +16,10 @@ import AuthPage from './components/AuthPage';
 import UploadModal from './components/UploadModal';
 import UploadPage from './components/UploadPage';
 import CreatePhotoPostPage from './components/CreatePhotoPostPage';
-import ShopPostCreationPage from './components/ShopPostCreationPage';
 import type { User, Video, GalleryMedia, ShopPost, PhotoPost } from './types';
 import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers, photoPostsData as initialPhotoPosts, shopPostsData as initialShopPosts } from './constants';
 
-export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload' | 'createPhotoPost' | 'shopPostCreation';
+export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload' | 'createPhotoPost';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -93,7 +89,7 @@ const App: React.FC = () => {
   const [videoToEditUrl, setVideoToEditUrl] = useState<string | null>(null);
   const [videoToPostUrl, setVideoToPostUrl] = useState<string | null>(null);
   const [photoToPostUrl, setPhotoToPostUrl] = useState<string | null>(null);
-  const [shopImageToPostUrl, setShopImageToPostUrl] = useState<string | null>(null);
+  const [initialUploadTab, setInitialUploadTab] = useState<'video' | 'photo' | 'shop'>('video');
 
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryMedia | null>(null);
   const [selectedShopPost, setSelectedShopPost] = useState<ShopPost | null>(null);
@@ -207,7 +203,6 @@ const App: React.FC = () => {
       return post;
     }));
 
-// FIX: Use the user's unique username to find their shop posts and assign the full updatedUser object to the seller property to resolve type errors and improve logic.
     setAllShopPosts(prevPosts => prevPosts.map(post => {
       if (post.seller.username === oldUsername) { 
         return { ...post, seller: updatedUser };
@@ -226,6 +221,17 @@ const App: React.FC = () => {
     setIsUploadModalOpen(false);
     setCurrentView('upload');
   }
+  
+  const handleGoToCreateShopPost = () => {
+    setInitialUploadTab('shop');
+    setCurrentView('upload');
+  };
+  
+  const handleUploadClose = () => {
+    setInitialUploadTab('video');
+    setCurrentView('feed');
+  };
+
 
   const handleVideoSelectedForUpload = (videoUrl: string) => {
     setVideoToEditUrl(videoUrl);
@@ -235,11 +241,6 @@ const App: React.FC = () => {
   const handlePhotoSelectedForUpload = (photoUrl: string) => {
     setPhotoToPostUrl(photoUrl);
     setCurrentView('createPhotoPost');
-  }
-  
-  const handleShopImageSelectedForUpload = (imageUrl: string) => {
-    setShopImageToPostUrl(imageUrl);
-    setCurrentView('shopPostCreation');
   }
 
   const handleEditorNext = (videoUrl: string) => {
@@ -287,20 +288,16 @@ const App: React.FC = () => {
     setCurrentView('photos');
   };
   
-  // FIX: Updated function signature to expect postData without imageUrls, as imageUrls are now handled within this function.
-  const handlePublishShopPost = (postData: Omit<ShopPost, 'id' | 'seller' | 'rating' | 'reviews' | 'views' | 'imageUrls'>) => {
-    if (!shopImageToPostUrl) return;
+  const handlePublishShopPost = (postData: Omit<ShopPost, 'id' | 'seller' | 'rating' | 'reviews' | 'views'>) => {
     const newShopPost: ShopPost = {
       id: Date.now(),
       ...postData,
-      imageUrls: [shopImageToPostUrl],
       seller: loggedInUser,
       rating: undefined,
       reviews: [],
       views: 0,
     };
     setAllShopPosts(prev => [newShopPost, ...prev]);
-    setShopImageToPostUrl(null);
     setCurrentView('foryou');
   };
   
@@ -421,11 +418,10 @@ const App: React.FC = () => {
       }
       break;
     case 'foryou':
-      pageContent = <ShopPage posts={allShopPosts} onSelectPost={handleSelectShopPost} />;
+      pageContent = <ShopPage posts={allShopPosts} onSelectPost={handleSelectShopPost} onGoToCreatePost={handleGoToCreateShopPost} />;
       break;
     case 'shopDetail':
       if (selectedShopPost) {
-        // FIX: Added missing loggedInUser and onToggleObserve props to ShopDetailPage to resolve type error.
         pageContent = <ShopDetailPage post={selectedShopPost} onBack={() => setCurrentView('foryou')} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} />;
       } else {
         setCurrentView('foryou');
@@ -468,10 +464,11 @@ const App: React.FC = () => {
       break;
     case 'upload':
        pageContent = <UploadPage 
+         initialTab={initialUploadTab}
          onVideoSelected={handleVideoSelectedForUpload}
          onPhotoSelected={handlePhotoSelectedForUpload}
-         onShopImageSelected={handleShopImageSelectedForUpload} 
-         onClose={() => setCurrentView('feed')} 
+         onPublishShopPost={handlePublishShopPost}
+         onClose={handleUploadClose} 
         />;
        break;
     case 'videoEditor':
@@ -496,18 +493,6 @@ const App: React.FC = () => {
                 user={loggedInUser}
                 onBack={() => setCurrentView('upload')}
                 onPublish={handlePublishPhoto}
-            />;
-        } else {
-            setCurrentView('upload');
-            pageContent = null;
-        }
-        break;
-    case 'shopPostCreation':
-        if (shopImageToPostUrl) {
-            pageContent = <ShopPostCreationPage
-                imageUrl={shopImageToPostUrl}
-                onBack={() => setCurrentView('upload')}
-                onPublish={handlePublishShopPost}
             />;
         } else {
             setCurrentView('upload');
