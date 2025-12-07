@@ -22,10 +22,10 @@ class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      // FIX: Corrected a potential JSX syntax error. An invalidly closed tag can cause misleading TypeScript errors, such as 'props' not being available on the component instance.
       return (
         <div className="w-screen h-screen bg-black text-white flex flex-col items-center justify-center p-4">
           <h1 className="text-2xl font-bold text-red-500 mb-4">Something went wrong.</h1>
-          {/* FIX: Corrected an invalid closing JSX tag. This syntax error was causing a misleading TypeScript error about 'this.props' not being available. */}
           <p className="text-gray-400 text-center">
             The application encountered an error and could not load.
             <br />

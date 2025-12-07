@@ -6,6 +6,7 @@ import VideoInfo from './VideoInfo';
 import VideoActions from './VideoActions';
 import type { Video, User } from '../types';
 import type { View } from '../App';
+import ShareMenu from './ShareMenu';
 
 interface VideoItemProps {
   video: Video;
@@ -13,7 +14,7 @@ interface VideoItemProps {
   onSelectUser: (user: User) => void;
   loggedInUser: User;
   onToggleObserve: (user: User) => void;
-  onVideoReaction: (videoId: number, reaction: string) => void;
+  onVideoReaction: (videoId: number, reaction: string | undefined) => void;
 }
 
 const PlayPauseIcon = ({ isPlaying }: { isPlaying: boolean }) => (
@@ -36,6 +37,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, lo
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPlayPauseIcon, setShowPlayPauseIcon] = useState(false);
   const [showLikeAnimation, setShowLikeAnimation] = useState(false);
+  const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const iconTimer = useRef<number | null>(null);
 
   useEffect(() => {
@@ -130,9 +132,17 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, lo
           <VideoInfo video={video} onSelectUser={onSelectUser} />
         </div>
         <div className="shrink-0">
-          <VideoActions video={video} onSelectUser={onSelectUser} loggedInUser={loggedInUser} onToggleObserve={onToggleObserve} onVideoReaction={onVideoReaction} />
+          <VideoActions 
+            video={video} 
+            onSelectUser={onSelectUser} 
+            loggedInUser={loggedInUser} 
+            onToggleObserve={onToggleObserve} 
+            onVideoReaction={onVideoReaction}
+            onOpenShareMenu={() => setIsShareMenuOpen(true)}
+          />
         </div>
       </div>
+      <ShareMenu isOpen={isShareMenuOpen} onClose={() => setIsShareMenuOpen(false)} />
     </div>
   );
 };
