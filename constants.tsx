@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost } from './types';
+import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost, Review } from './types';
 
 export const formatNumber = (num: number): string => {
     if (num >= 1000000) {
@@ -141,39 +141,51 @@ export const initialVideosData: Video[] = [
         musicCoverUrl: "https://images.pexels.com/photos/1531660/pexels-photo-1531660.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
 ];
+
+const sampleReviews: Review[] = [
+    { id: 1, user: tusharEmran, rating: 5, comment: 'Great product, highly recommend!', timestamp: 'about 1 month ago' },
+    { id: 2, user: mdesa, rating: 4, comment: 'Good quality, but delivery was a bit slow.', timestamp: 'about 2 months ago' },
+];
+
 export const shopPostsData: ShopPost[] = [
     {
         id: 1,
-        imageUrls: ['https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg?auto=compress&cs=tinysrgb&w=800'],
+        imageUrls: [
+            'https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg?auto=compress&cs=tinysrgb&w=800',
+            'https://images.pexels.com/photos/1037993/pexels-photo-1037993.jpeg?auto=compress&cs=tinysrgb&w=800',
+            'https://images.pexels.com/photos/1037994/pexels-photo-1037994.jpeg?auto=compress&cs=tinysrgb&w=800',
+            'https://images.pexels.com/photos/1037995/pexels-photo-1037995.jpeg?auto=compress&cs=tinysrgb&w=800',
+        ],
         title: 'Minimalist Wall Art',
         price: '4999',
-        seller: {
-            name: mariaKhan.name,
-            avatar: mariaKhan.avatar,
-        },
+        seller: mariaKhan,
         description: 'A beautiful set of minimalist art prints to elevate your home decor. Perfect for living rooms, bedrooms, or offices. High-quality prints on premium paper.',
         rating: 4.5,
+        views: 40,
+        reviews: sampleReviews,
         category: 'Home Goods',
         condition: 'New',
         location: 'New York, NY',
         deliveryOption: 'Courier',
-        deliveryCharge: 'Separate'
+        deliveryCharge: 'Separate',
+        size: '12x16 inch',
+        color: 'Monochrome',
     },
     {
         id: 2,
         imageUrls: ['https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=800'],
         title: 'Gourmet Burger Kit',
         price: '2999',
-        seller: {
-            name: tusharEmran.name,
-            avatar: tusharEmran.avatar,
-        },
+        seller: tusharEmran,
         description: 'Everything you need to make delicious gourmet burgers at home. Includes premium beef patties, brioche buns, and special sauce.',
         category: 'Food',
         condition: 'New',
         location: 'Los Angeles, CA',
-        deliveryOption: 'Courier',
-        deliveryCharge: 'Included'
+        deliveryOption: 'Hand To-Hand',
+        deliveryCharge: 'Included',
+        rating: 4.0,
+        views: 120,
+        reviews: [],
     }
 ];
 export const galleryMediaData: GalleryMedia[] = [];
@@ -551,5 +563,48 @@ export const LocationPinIcon = ({ className = "w-5 h-5 text-gray-400" }) => (
 export const AddImagePlaceholderIcon = ({ className = "w-8 h-8" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+    </svg>
+);
+
+export const DeliveryTruckIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8 17l-4 4m0 0l4-4m-4 4h18" />
+        <path d="M16 13l4 4m0 0l-4 4m4-4H2" />
+    </svg>
+);
+
+export const HandshakeIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+);
+
+export const IncludedIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+);
+
+export const TagIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5a2 2 0 012 2v5a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+    </svg>
+);
+
+export const PaletteIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4H7z" />
+    </svg>
+);
+
+export const RulerIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 8h16M4 16h16" />
+    </svg>
+);
+
+export const MessageSellerIcon = ({ className = "w-5 h-5" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
     </svg>
 );

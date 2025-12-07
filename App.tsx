@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
@@ -182,7 +183,6 @@ const App: React.FC = () => {
 
   const handleSaveProfile = (updatedUser: User) => {
     const oldUsername = loggedInUser.username;
-    const oldName = loggedInUser.name;
     
     setLoggedInUser(updatedUser);
     
@@ -206,9 +206,10 @@ const App: React.FC = () => {
       return post;
     }));
 
+// FIX: Use the user's unique username to find their shop posts and assign the full updatedUser object to the seller property to resolve type errors and improve logic.
     setAllShopPosts(prevPosts => prevPosts.map(post => {
-      if (post.seller.name === oldName) { 
-        return { ...post, seller: { name: updatedUser.name, avatar: updatedUser.avatar } };
+      if (post.seller.username === oldUsername) { 
+        return { ...post, seller: updatedUser };
       }
       return post;
     }));
@@ -293,10 +294,8 @@ const App: React.FC = () => {
       ...postData,
 // FIX: The 'ShopPost' type expects 'imageUrls' (an array of strings), not 'imageUrl'. Changed the property name and wrapped the URL in an array.
       imageUrls: [shopImageToPostUrl],
-      seller: {
-        name: loggedInUser.name,
-        avatar: loggedInUser.avatar,
-      },
+// FIX: Assign the full loggedInUser object to the seller property to match the 'User' type and fix the type error.
+      seller: loggedInUser,
     };
     setAllShopPosts(prev => [newShopPost, ...prev]);
     setShopImageToPostUrl(null);

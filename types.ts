@@ -39,24 +39,31 @@ export interface Video {
   musicCoverUrl?: string;
 }
 
+export interface Review {
+  id: number;
+  user: User;
+  rating: number;
+  comment: string;
+  timestamp: string;
+}
+
 export interface ShopPost {
   id: number;
   imageUrls: string[];
   title: string;
   price: string;
-  description: string;
+  condition: 'New' | 'Used';
+  rating?: number;
+  reviews?: Review[];
+  views?: number;
   category: string;
   size?: string;
   color?: string;
-  condition: 'New' | 'Used';
+  description: string;
   location: string;
   deliveryOption: string;
   deliveryCharge: 'Included' | 'Separate';
-  seller: {
-    name: string;
-    avatar: string;
-  };
-  rating?: number;
+  seller: User;
 }
 
 
