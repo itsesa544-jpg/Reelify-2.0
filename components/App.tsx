@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import BottomNav from './components/BottomNav';
@@ -284,12 +285,11 @@ const App: React.FC = () => {
     setCurrentView('photos');
   };
   
-  const handlePublishShopPost = (postData: Omit<ShopPost, 'id' | 'seller' | 'rating'>) => {
+  const handlePublishShopPost = (postData: Omit<ShopPost, 'id' | 'seller' | 'rating' | 'imageUrls'>) => {
     if (!shopImageToPostUrl) return;
     const newShopPost: ShopPost = {
       id: Date.now(),
       ...postData,
-// FIX: The 'ShopPost' type expects 'imageUrls' (an array of strings), not 'imageUrl'. Changed the property name and wrapped the URL in an array.
       imageUrls: [shopImageToPostUrl],
       seller: {
         name: loggedInUser.name,
