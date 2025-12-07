@@ -67,6 +67,10 @@ const UploadPage: React.FC<UploadPageProps> = ({ onVideoSelected, onPhotoSelecte
   const [activeTab, setActiveTab] = useState<'video' | 'photo' | 'shop'>(initialTab);
 
   const headerTitle = activeTab === 'shop' ? 'List a New Product' : 'Create new post';
+  const mainClass = activeTab === 'shop'
+    ? 'flex-grow'
+    : 'flex-grow flex items-center justify-center p-4';
+
 
   return (
     <div className={`w-full h-full bg-[#0D0F13] text-white flex flex-col`}>
@@ -86,7 +90,7 @@ const UploadPage: React.FC<UploadPageProps> = ({ onVideoSelected, onPhotoSelecte
             </>
         )}
       
-      <main className={`flex-grow flex items-center justify-center ${activeTab !== 'shop' ? 'p-4' : ''}`}>
+      <main className={mainClass}>
         {activeTab === 'video' && <UploadArea onFileSelected={onVideoSelected} fileType="video" />}
         {activeTab === 'photo' && <UploadArea onFileSelected={onPhotoSelected} fileType="photo" />}
         {activeTab === 'shop' && <ShopPostCreationPage onBack={onClose} onPublish={onPublishShopPost} />}
