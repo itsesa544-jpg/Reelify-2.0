@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { View } from '../App';
-import { HomeIcon, ShopIcon, ProfileIcon } from '../constants';
+import { HomeIcon, ShopIcon, ProfileIcon, InboxIcon } from '../constants';
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -48,6 +48,13 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, onUpload
           className="w-14 h-10 flex items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-400 to-purple-600 shadow-lg shadow-purple-600/50"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+        </button>
+        <button onClick={() => onNavigate('inbox')} className="flex-1">
+            <NavItem
+                label="Inbox"
+                icon={<InboxIcon className={iconClasses} active={currentView === 'inbox' || currentView === 'chat'} />}
+                active={currentView === 'inbox' || currentView === 'chat'}
+            />
         </button>
         <button onClick={() => onNavigate('profile')} className="flex-1">
           <NavItem
