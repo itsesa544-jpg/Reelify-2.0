@@ -85,14 +85,16 @@ export interface Message {
   sender: 'me' | 'other';
   text: string;
   timestamp: string;
+  type?: 'text' | 'audio' | 'emoji';
+  audioData?: {
+    duration: string;
+  };
+  emoji?: string;
 }
 
 export interface Conversation {
   id: number;
   user: User;
-  lastMessage: string;
-  timestamp: string;
-  unread: number;
   messages: Message[];
 }
 

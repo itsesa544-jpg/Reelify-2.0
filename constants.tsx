@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost, Review, Comment } from './types';
+import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost, Review, Comment, Message } from './types';
 
 export const formatNumber = (num: number): string => {
     if (num >= 1000000) {
@@ -63,7 +63,28 @@ export const mdesa: User = {
     observing: ['@esa', '@esaalli']
 };
 
-export const allUsers: User[] = [mariaKhan, tusharEmran, mdesa];
+const soponIslam: User = {
+  username: '@sopon',
+  name: 'Sopon Islam',
+  avatar: 'https://i.pravatar.cc/150?img=60',
+  bio: 'Just another user',
+  coverPhoto: '',
+  stats: { observers: 10, observing: 10, totalViews: 100, joined: 'Jan 2024' },
+  observing: [],
+};
+
+const rakibHasan: User = {
+  username: '@rakib',
+  name: 'Rakib Hasan',
+  avatar: 'https://i.pravatar.cc/150?img=12',
+  bio: 'Here for the vibes',
+  coverPhoto: '',
+  stats: { observers: 20, observing: 20, totalViews: 200, joined: 'Feb 2024' },
+  observing: [],
+};
+
+
+export const allUsers: User[] = [mariaKhan, tusharEmran, mdesa, soponIslam, rakibHasan];
 
 export const photoPostsData: PhotoPost[] = [
     {
@@ -211,7 +232,42 @@ export const shopPostsData: ShopPost[] = [
     }
 ];
 export const galleryMediaData: GalleryMedia[] = [];
-export const conversationsData: Conversation[] = [];
+
+export const conversationsData: Conversation[] = [
+    {
+        id: 1,
+        user: soponIslam,
+        messages: [
+            { id: 1, sender: 'other', type: 'audio', text: 'Audio message', audioData: { duration: '0:09' }, timestamp: '12:31 PM' },
+            { id: 2, sender: 'other', type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:31 PM' },
+            { id: 3, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:32 PM' },
+            { id: 4, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:32 PM' },
+            { id: 5, sender: 'me', type: 'audio', text: 'Audio message', audioData: { duration: '0:05' }, timestamp: '12:33 PM' },
+            { id: 6, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:34 PM' },
+            { id: 7, sender: 'other', type: 'text', text: 'বাই', timestamp: '12:35 PM' },
+            { id: 8, sender: 'me', type: 'audio', text: 'Audio message', audioData: { duration: '0:07' }, timestamp: '12:36 PM' },
+            { id: 9, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '1:41 PM' },
+            { id: 10, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '1:41 PM' },
+            { id: 11, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '1:41 PM' },
+        ],
+    },
+    {
+        id: 2,
+        user: rakibHasan,
+        messages: [
+            { id: 1, sender: 'other', type: 'text', text: 'kire koi tui?', timestamp: '2:00 PM' },
+        ],
+    },
+     {
+        id: 3,
+        user: tusharEmran,
+        messages: [
+            { id: 1, sender: 'other', type: 'text', text: 'Hey, saw your new video. It\'s awesome!', timestamp: 'Yesterday' },
+            { id: 2, sender: 'me', type: 'text', text: 'Thanks! Glad you liked it.', timestamp: 'Yesterday' },
+        ],
+    },
+];
+
 export const notificationsData: Notification[] = [];
 
 

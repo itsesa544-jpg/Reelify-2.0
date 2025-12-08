@@ -21,6 +21,7 @@ interface ProfilePageProps {
   switchableAccounts: User[];
   onSwitchAccount: (user: User) => void;
   onToggleObserve: (user: User) => void;
+  onStartConversation: (user: User) => void;
 }
 
 const IconButton: React.FC<{children: React.ReactNode, onClick?: () => void}> = ({children, onClick}) => (
@@ -88,7 +89,7 @@ const PhotoGridItem: React.FC<{ post: PhotoPost; index: number; }> = ({ post, in
 };
 
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, allPhotoPosts, onBack, showBackButton, onEdit, onPlayVideo, loggedInUser, switchableAccounts, onSwitchAccount, onToggleObserve }) => {
+const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, allPhotoPosts, onBack, showBackButton, onEdit, onPlayVideo, loggedInUser, switchableAccounts, onSwitchAccount, onToggleObserve, onStartConversation }) => {
   const userVideos = allVideos.filter(video => video.user.username === user.username);
   const userPhotos = allPhotoPosts.filter(post => post.user.username === user.username);
   const [activeTab, setActiveTab] = useState('Videos');
@@ -159,7 +160,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, allVideos, allPhotoPost
                         >
                             {isObserving ? 'Observing' : 'Observe'}
                         </button>
-                        <button className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors text-sm">
+                        <button onClick={() => onStartConversation(user)} className="bg-[#282A36] hover:bg-[#3b3d4d] text-white font-semibold py-2 px-5 rounded-lg transition-colors text-sm">
                             Message
                         </button>
                     </div>

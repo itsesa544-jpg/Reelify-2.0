@@ -10,6 +10,7 @@ interface ShopDetailPageProps {
   onBack: () => void;
   loggedInUser: User;
   onToggleObserve: (user: User) => void;
+  onStartConversation: (user: User) => void;
 }
 
 const RatingStars: React.FC<{ rating: number, className?: string }> = ({ rating, className }) => (
@@ -21,7 +22,7 @@ const RatingStars: React.FC<{ rating: number, className?: string }> = ({ rating,
 );
 
 
-const ShopDetailPage: React.FC<ShopDetailPageProps> = ({ post, onBack, loggedInUser, onToggleObserve }) => {
+const ShopDetailPage: React.FC<ShopDetailPageProps> = ({ post, onBack, loggedInUser, onToggleObserve, onStartConversation }) => {
     const [selectedImage, setSelectedImage] = useState(post.imageUrls[0]);
     
     const isObservingSeller = loggedInUser.observing.includes(post.seller.username);
@@ -140,7 +141,7 @@ const ShopDetailPage: React.FC<ShopDetailPageProps> = ({ post, onBack, loggedInU
             )}
         </div>
          <div className="p-4 bg-white border-t">
-             <button className="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-lg font-semibold hover:bg-gray-100">
+             <button onClick={() => onStartConversation(post.seller)} className="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-lg font-semibold hover:bg-gray-100">
                 <MessageSellerIcon className="w-5 h-5" />
                 Message Seller
             </button>
