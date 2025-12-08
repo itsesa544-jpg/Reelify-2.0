@@ -17,8 +17,18 @@ export interface User {
 }
 
 export interface Community {
-  name: string;
+  name:string;
   icon: string;
+}
+
+export interface Comment {
+  id: number;
+  user: User;
+  text: string;
+  timestamp: string;
+  likes: number;
+  isLikedByMe?: boolean;
+  replies?: Comment[];
 }
 
 export interface Video {
@@ -32,6 +42,7 @@ export interface Video {
   likes: number;
   comments: number;
   shares: number;
+  commentData?: Comment[];
   audio?: {
     title: string;
     artist: string;

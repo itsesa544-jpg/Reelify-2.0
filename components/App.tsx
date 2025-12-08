@@ -1,25 +1,25 @@
 
 
 import React, { useState, useEffect } from 'react';
-import VideoPlayer from './components/VideoPlayer';
-import BottomNav from './components/BottomNav';
-import ProfilePage from './components/ProfilePage';
-import LeftSidebar from './components/LeftSidebar';
-import RightSidebar from './components/RightSidebar';
-import InboxPage from './components/InboxPage';
-import ShopPage from './components/ShopPage';
-import EditProfilePage from './components/EditProfilePage';
-import PostCreationPage from './components/PostCreationPage';
-import PhotoFeedPage from './components/PhotoFeedPage';
-import VideoEditorPage from './components/VideoEditorPage';
-import PhotoPostPage from './components/PhotoPostPage';
-import ShopDetailPage from './components/ShopDetailPage';
-import AuthPage from './components/AuthPage';
-import UploadModal from './components/UploadModal';
-import UploadPage from './components/UploadPage';
-import CreatePhotoPostPage from './components/CreatePhotoPostPage';
-import type { User, Video, GalleryMedia, ShopPost, PhotoPost } from './types';
-import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers, photoPostsData as initialPhotoPosts, shopPostsData as initialShopPosts } from './constants';
+import VideoPlayer from './VideoPlayer';
+import BottomNav from './BottomNav';
+import ProfilePage from './ProfilePage';
+import LeftSidebar from './LeftSidebar';
+import RightSidebar from './RightSidebar';
+import InboxPage from './InboxPage';
+import ShopPage from './ShopPage';
+import EditProfilePage from './EditProfilePage';
+import PostCreationPage from './PostCreationPage';
+import PhotoFeedPage from './PhotoFeedPage';
+import VideoEditorPage from './VideoEditorPage';
+import PhotoPostPage from './PhotoPostPage';
+import ShopDetailPage from './ShopDetailPage';
+import AuthPage from './AuthPage';
+import UploadModal from './UploadModal';
+import UploadPage from './UploadPage';
+import CreatePhotoPostPage from './CreatePhotoPostPage';
+import type { User, Video, GalleryMedia, ShopPost, PhotoPost, Comment } from '../types';
+import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers, photoPostsData as initialPhotoPosts, shopPostsData as initialShopPosts } from '../constants';
 
 export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload' | 'createPhotoPost';
 
@@ -347,7 +347,7 @@ const App: React.FC = () => {
     );
   };
   
-    // FIX: Added handleVideoReaction to manage user interactions with videos, such as liking or changing reactions. This function updates the video's state to reflect the new reaction, ensuring the UI is in sync with user actions.
+// FIX: Added handleVideoReaction to manage user interactions with videos, such as liking or changing reactions. This function updates the video's state to reflect the new reaction, ensuring the UI is in sync with user actions.
   const handleVideoReaction = (videoId: number, reaction: string | undefined) => {
     setAllVideos(prevVideos =>
       prevVideos.map(video => {
@@ -356,7 +356,6 @@ const App: React.FC = () => {
           const reactions = updatedVideo.reactions ? { ...updatedVideo.reactions } : {};
           const currentReaction = updatedVideo.myReaction;
 
-          // If a reaction is passed and it's the same as the current one, un-react
           if (reaction && currentReaction === reaction) {
             updatedVideo.myReaction = undefined;
             if (updatedVideo.likes > 0) updatedVideo.likes--;
@@ -365,23 +364,21 @@ const App: React.FC = () => {
             } else {
               delete reactions[currentReaction];
             }
-          } else { // New reaction or changing reaction
-            // If there was a previous reaction, undo its count
+          } else { 
             if (currentReaction) {
               if (reactions[currentReaction] > 1) {
                 reactions[currentReaction]--;
               } else {
                 delete reactions[currentReaction];
               }
-            } else { // If no previous reaction, it's a new like
+            } else { 
               if (reaction) updatedVideo.likes++;
             }
             
-            // If there's a new reaction, apply it
             if (reaction) {
               updatedVideo.myReaction = reaction;
               reactions[reaction] = (reactions[reaction] || 0) + 1;
-            } else { // This case handles unliking from a different reaction
+            } else { 
               if (currentReaction) {
                   if (updatedVideo.likes > 0) updatedVideo.likes--;
               }
@@ -395,6 +392,53 @@ const App: React.FC = () => {
         return video;
       })
     );
+  };
+
+  const handleAddComment = (videoId: number, text: string) => {
+    setAllVideos(prevVideos => 
+        prevVideos.map(video => {
+            if (video.id === videoId) {
+                const newComment: Comment = {
+                    id: Date.now(),
+                    user: loggedInUser,
+                    text,
+                    timestamp: 'Just now',
+                    likes: 0,
+                    isLikedByMe: false,
+                    replies: []
+                };
+                const updatedComments = [...(video.commentData || []), newComment];
+                return {
+                    ...video,
+                    commentData: updatedComments,
+                    comments: video.comments + 1,
+                };
+            }
+            return video;
+        })
+    );
+  };
+
+  const handleLikeComment = (videoId: number, commentId: number) => {
+      setAllVideos(prevVideos => 
+        prevVideos.map(video => {
+            if (video.id === videoId) {
+                const updatedCommentData = (video.commentData || []).map(comment => {
+                    if (comment.id === commentId) {
+                        const isLiked = !comment.isLikedByMe;
+                        return {
+                            ...comment,
+                            isLikedByMe: isLiked,
+                            likes: isLiked ? comment.likes + 1 : comment.likes - 1,
+                        };
+                    }
+                    return comment;
+                });
+                return { ...video, commentData: updatedCommentData };
+            }
+            return video;
+        })
+      );
   };
 
   const handlePlayFromProfile = (user: User, videoId: number) => {
@@ -442,10 +486,10 @@ const App: React.FC = () => {
   let pageContent;
   switch (currentView) {
     case 'feed':
-      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} />;
+      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} />;
       break;
     case 'observing':
-      pageContent = <VideoPlayer videos={observingVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} />;
+      pageContent = <VideoPlayer videos={observingVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} />;
       break;
     case 'userFeed':
         pageContent = <VideoPlayer 
@@ -458,6 +502,8 @@ const App: React.FC = () => {
             loggedInUser={loggedInUser} 
             onToggleObserve={handleToggleObserve}
             onVideoReaction={handleVideoReaction}
+            onAddComment={handleAddComment} 
+            onLikeComment={handleLikeComment}
         />;
         break;
     case 'photos':
@@ -553,7 +599,7 @@ const App: React.FC = () => {
         }
         break;
     default:
-      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView='feed' loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} />;
+      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUserFromFeed} onNavigate={handleNavigate} currentView='feed' loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} />;
   }
 
 

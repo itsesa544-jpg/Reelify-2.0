@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost, Review } from './types';
+import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost, Review, Comment } from './types';
 
 export const formatNumber = (num: number): string => {
     if (num >= 1000000) {
@@ -86,6 +86,24 @@ export const photoPostsData: PhotoPost[] = [
     }
 ];
 
+const sampleComments: Comment[] = [
+  {
+    id: 101,
+    user: tusharEmran,
+    text: "Wow, this looks amazing! Where is this place?",
+    timestamp: "2h",
+    likes: 15,
+    isLikedByMe: true,
+  },
+  {
+    id: 102,
+    user: mdesa,
+    text: "Great video! The editing is on point. 🔥",
+    timestamp: "5h",
+    likes: 8,
+  },
+];
+
 
 export const initialVideosData: Video[] = [
     {
@@ -97,9 +115,10 @@ export const initialVideosData: Video[] = [
         caption: "Exploring the beautiful streets of Rome.",
         hashtags: ["#rome", "#italy", "#travel"],
         likes: 1500,
-        comments: 94,
+        comments: 2,
         shares: 280,
         musicCoverUrl: "https://res.cloudinary.com/dlklqihg6/image/upload/v1764031351/ehxzfirmajfwnn72tu11.jpg",
+        commentData: sampleComments,
     },
     {
         id: 2,
@@ -110,9 +129,10 @@ export const initialVideosData: Video[] = [
         caption: "The perfect start to any day.",
         hashtags: ["#coffee", "#latteart", "#morning"],
         likes: 2100,
-        comments: 120,
+        comments: 0,
         shares: 450,
         musicCoverUrl: "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=800",
+        commentData: [],
     },
     {
         id: 3,
@@ -123,9 +143,10 @@ export const initialVideosData: Video[] = [
         caption: "The hustle and bustle of New York.",
         hashtags: ["#newyork", "#citylife", "#urban"],
         likes: 3200,
-        comments: 250,
+        comments: 0,
         shares: 600,
         musicCoverUrl: "https://images.pexels.com/photos/2129796/pexels-photo-2129796.jpeg?auto=compress&cs=tinysrgb&w=800",
+        commentData: [],
     },
     {
         id: 4,
@@ -136,9 +157,10 @@ export const initialVideosData: Video[] = [
         caption: "Peaceful moments by the sea.",
         hashtags: ["#ocean", "#waves", "#nature"],
         likes: 4500,
-        comments: 300,
+        comments: 0,
         shares: 800,
         musicCoverUrl: "https://images.pexels.com/photos/1531660/pexels-photo-1531660.jpeg?auto=compress&cs=tinysrgb&w=800",
+        commentData: [],
     },
 ];
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import type { GalleryMedia } from '../types';
-// FIX: Imported formatNumber to correctly handle numeric data for display.
 import { CloseIcon, HeartIconFilled, CommentBubbleIconSimple, ShareIconSimple, EyeIcon, formatNumber } from '../constants';
 
 interface PhotoPostPageProps {

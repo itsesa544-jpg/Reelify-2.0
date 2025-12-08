@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import type { User } from '../types';
-// FIX: Added VerifiedBadgeIcon to imports to show verification status.
 import { BackIcon, GlobeIcon, PhotosIcon, TagPeopleIcon, FeelingActivityIcon, GetMessagesIcon, VerifiedBadgeIcon } from '../constants';
 
 interface CreatePhotoPostPageProps {

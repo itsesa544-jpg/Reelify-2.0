@@ -9,7 +9,11 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  public state: State = { hasError: false };
+  // FIX: Refactored to use a constructor for state initialization to resolve the 'props' not existing error, which could be due to an environment incompatibility with class field syntax.
+  constructor(props: Props) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
   static getDerivedStateFromError(_: Error): State {
     // Update state so the next render will show the fallback UI.
@@ -22,7 +26,6 @@ class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      // FIX: Corrected a potential JSX syntax error. An invalidly closed tag can cause misleading TypeScript errors, such as 'props' not being available on the component instance.
       return (
         <div className="w-screen h-screen bg-black text-white flex flex-col items-center justify-center p-4">
           <h1 className="text-2xl font-bold text-red-500 mb-4">Something went wrong.</h1>

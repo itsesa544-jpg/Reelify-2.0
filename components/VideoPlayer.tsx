@@ -4,9 +4,11 @@ import React, { useRef, useEffect, useState } from 'react';
 import { SearchIcon, BackIcon, HeartIconFilled } from '../constants';
 import VideoInfo from './VideoInfo';
 import VideoActions from './VideoActions';
-import type { Video, User } from '../types';
+import type { Video, User, Comment as CommentType } from '../types';
 import type { View } from '../App';
 import ShareMenu from './ShareMenu';
+// FIX: Updated import to use named export for CommentsSheet.
+import { CommentsSheet } from './CommentsSheet';
 
 interface VideoItemProps {
   video: Video;
@@ -15,6 +17,8 @@ interface VideoItemProps {
   loggedInUser: User;
   onToggleObserve: (user: User) => void;
   onVideoReaction: (videoId: number, reaction: string | undefined) => void;
+  onAddComment: (videoId: number, text: string) => void;
+  onLikeComment: (videoId: number, commentId: number) => void;
 }
 
 const PlayPauseIcon = ({ isPlaying }: { isPlaying: boolean }) => (
@@ -32,12 +36,13 @@ const PlayPauseIcon = ({ isPlaying }: { isPlaying: boolean }) => (
 );
 
 
-const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, loggedInUser, onToggleObserve, onVideoReaction }) => {
+const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, loggedInUser, onToggleObserve, onVideoReaction, onAddComment, onLikeComment }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPlayPauseIcon, setShowPlayPauseIcon] = useState(false);
   const [showLikeAnimation, setShowLikeAnimation] = useState(false);
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
+  const [isCommentsSheetOpen, setIsCommentsSheetOpen] = useState(false);
   const iconTimer = useRef<number | null>(null);
 
   useEffect(() => {
@@ -100,6 +105,15 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, lo
         setShowLikeAnimation(false);
     }, 800);
   };
+  
+  const handleAddCommentForVideo = (text: string) => {
+    onAddComment(video.id, text);
+  };
+
+  const handleLikeCommentForVideo = (commentId: number) => {
+    onLikeComment(video.id, commentId);
+  };
+
 
   return (
     <div className="relative w-full h-full">
@@ -139,10 +153,20 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, lo
             onToggleObserve={onToggleObserve} 
             onVideoReaction={onVideoReaction}
             onOpenShareMenu={() => setIsShareMenuOpen(true)}
+            onOpenCommentsMenu={() => setIsCommentsSheetOpen(true)}
           />
         </div>
       </div>
       <ShareMenu isOpen={isShareMenuOpen} onClose={() => setIsShareMenuOpen(false)} />
+      <CommentsSheet 
+        isOpen={isCommentsSheetOpen} 
+        onClose={() => setIsCommentsSheetOpen(false)}
+        comments={video.commentData || []}
+        totalComments={video.comments}
+        onAddComment={handleAddCommentForVideo}
+        onLikeComment={handleLikeCommentForVideo}
+        loggedInUser={loggedInUser}
+      />
     </div>
   );
 };
@@ -157,6 +181,8 @@ interface VideoPlayerProps {
   loggedInUser: User;
   onToggleObserve: (user: User) => void;
   onVideoReaction: (videoId: number, reaction: string | undefined) => void;
+  onAddComment: (videoId: number, text: string) => void;
+  onLikeComment: (videoId: number, commentId: number) => void;
 }
 
 const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> = ({ label, active, onClick }) => (
@@ -172,7 +198,7 @@ const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> 
 );
 
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView, startIndex, onBack, loggedInUser, onToggleObserve, onVideoReaction }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView, startIndex, onBack, loggedInUser, onToggleObserve, onVideoReaction, onAddComment, onLikeComment }) => {
     const [currentVideo, setCurrentVideo] = useState(startIndex || 0);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -233,6 +259,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavig
                           loggedInUser={loggedInUser}
                           onToggleObserve={onToggleObserve}
                           onVideoReaction={onVideoReaction}
+                          onAddComment={onAddComment}
+                          onLikeComment={onLikeComment}
                         />
                     </div>
                 ))}
