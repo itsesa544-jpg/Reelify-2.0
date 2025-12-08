@@ -391,7 +391,7 @@ const App: React.FC = () => {
       pageContent = viewedUser ? <ProfilePage user={viewedUser} allVideos={allVideos} allPhotoPosts={allPhotoPosts} onBack={handleBackFromProfile} showBackButton={viewedUser.username !== loggedInUser.username} onEdit={() => setCurrentView('editProfile')} onPlayVideo={(videoId) => handlePlayFromProfile(viewedUser, videoId)} loggedInUser={loggedInUser} switchableAccounts={viewedUser.username === loggedInUser.username ? switchableAccounts : []} onSwitchAccount={handleSwitchAccount} onToggleObserve={handleToggleObserve} onStartConversation={handleStartConversation} /> : null;
       break;
     case 'inbox':
-      pageContent = <InboxPage conversations={allConversations} onSelectConversation={handleSelectConversation} onSelectUser={handleSelectUser}/>;
+      pageContent = <InboxPage />;
       break;
     case 'chat':
       pageContent = selectedConversation ? <ChatScreen conversation={selectedConversation} loggedInUser={loggedInUser} onSendMessage={handleSendMessage} onBack={() => setCurrentView('inbox')} onSelectUser={handleSelectUser} /> : null;
