@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from './VideoPlayer';
 import BottomNav from './BottomNav';
@@ -18,10 +19,11 @@ import AuthPage from './AuthPage';
 import UploadModal from './UploadModal';
 import UploadPage from './UploadPage';
 import CreatePhotoPostPage from './CreatePhotoPostPage';
-import type { User, Video, GalleryMedia, ShopPost, PhotoPost, Comment } from '../types';
-import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers, photoPostsData as initialPhotoPosts, shopPostsData as initialShopPosts } from '../constants';
+import ChatScreen from './ChatScreen';
+import type { User, Video, GalleryMedia, ShopPost, PhotoPost, Comment, Conversation, Message } from '../types';
+import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers, photoPostsData as initialPhotoPosts, shopPostsData as initialShopPosts, conversationsData as initialConversations } from '../constants';
 
-export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload' | 'createPhotoPost';
+export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload' | 'createPhotoPost' | 'chat';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -86,6 +88,17 @@ const App: React.FC = () => {
     }
   });
 
+  const [allConversations, setAllConversations] = useState<Conversation[]>(() => {
+    try {
+        const saved = localStorage.getItem('vibe-allConversations');
+        return saved ? JSON.parse(saved) : initialConversations;
+    } catch (error) {
+        console.error("Failed to parse allConversations from localStorage", error);
+        return initialConversations;
+    }
+  });
+
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [userFeedVideos, setUserFeedVideos] = useState<Video[]>([]);
   const [userFeedStartIndex, setUserFeedStartIndex] = useState(0);
   const [videoToEditUrl, setVideoToEditUrl] = useState<string | null>(null);
@@ -107,10 +120,11 @@ const App: React.FC = () => {
       localStorage.setItem('vibe-allUsers', JSON.stringify(allUsers));
       localStorage.setItem('vibe-allPhotoPosts', JSON.stringify(allPhotoPosts));
       localStorage.setItem('vibe-allShopPosts', JSON.stringify(allShopPosts));
+      localStorage.setItem('vibe-allConversations', JSON.stringify(allConversations));
     } catch (error) {
       console.error("Failed to save state to localStorage", error);
     }
-  }, [isLoggedIn, loggedInUser, allVideos, allUsers, allPhotoPosts, allShopPosts]);
+  }, [isLoggedIn, loggedInUser, allVideos, allUsers, allPhotoPosts, allShopPosts, allConversations]);
 
   const handleLoginSuccess = (user: User) => {
     setLoggedInUser(user);
@@ -171,6 +185,9 @@ const App: React.FC = () => {
   const handleNavigate = (view: View) => {
     if (view === 'profile') {
       setViewedUser(loggedInUser);
+    }
+    if (view === 'inbox') {
+      setSelectedConversation(null);
     }
     setCurrentView(view);
   };
@@ -475,6 +492,36 @@ const App: React.FC = () => {
       setCurrentView('profile');
   };
 
+  const handleSelectConversation = (conversation: Conversation) => {
+    setSelectedConversation(conversation);
+    setCurrentView('chat');
+  };
+
+  const handleStartConversation = (user: User) => {
+    if (user.username === loggedInUser.username) return;
+    const existingConversation = allConversations.find(c => c.user.username === user.username);
+    if (existingConversation) {
+        setSelectedConversation(existingConversation);
+    } else {
+        const newConversation: Conversation = {
+            id: Date.now(),
+            user: user,
+            messages: [],
+        };
+        setAllConversations(prev => [newConversation, ...prev]);
+        setSelectedConversation(newConversation);
+    }
+    setCurrentView('chat');
+  };
+
+  const handleSendMessage = (conversationId: number, message: Omit<Message, 'id'>) => {
+    setAllConversations(prev => prev.map(convo => {
+        if (convo.id !== conversationId) return convo;
+        const newMessage: Message = { ...message, id: Date.now() };
+        return { ...convo, messages: [...convo.messages, newMessage] };
+    }));
+  };
+
   if (!isLoggedIn) {
     return <AuthPage onLoginSuccess={handleLoginSuccess} />;
   }
@@ -521,7 +568,8 @@ const App: React.FC = () => {
       break;
     case 'shopDetail':
       if (selectedShopPost) {
-        pageContent = <ShopDetailPage post={selectedShopPost} onBack={() => setCurrentView('foryou')} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} />;
+// FIX: Pass the `onStartConversation` prop to the `ShopDetailPage` component to handle starting a new conversation with the seller.
+        pageContent = <ShopDetailPage post={selectedShopPost} onBack={() => setCurrentView('foryou')} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onStartConversation={handleStartConversation} />;
       } else {
         setCurrentView('foryou');
       }
@@ -542,12 +590,22 @@ const App: React.FC = () => {
                 switchableAccounts={isOwnProfile ? switchableAccounts : []}
                 onSwitchAccount={handleSwitchAccount}
                 onToggleObserve={handleToggleObserve}
+// FIX: Pass the `onStartConversation` prop to the `ProfilePage` component to enable messaging functionality from a user's profile.
+                onStartConversation={handleStartConversation}
             />
         );
       }
       break;
     case 'inbox':
-      pageContent = <InboxPage onSelectUser={handleSelectUserFromFeed} />;
+// FIX: Pass the `conversations` and `onSelectConversation` props to the `InboxPage` component to display the list of conversations and handle user selections.
+      pageContent = <InboxPage conversations={allConversations} onSelectConversation={handleSelectConversation} onSelectUser={handleSelectUserFromFeed} />;
+      break;
+    case 'chat':
+      if (selectedConversation) {
+        pageContent = <ChatScreen conversation={selectedConversation} loggedInUser={loggedInUser} onSendMessage={handleSendMessage} onBack={() => setCurrentView('inbox')} onSelectUser={handleSelectUserFromFeed} />;
+      } else {
+        setCurrentView('inbox');
+      }
       break;
     case 'editProfile':
       pageContent = (
