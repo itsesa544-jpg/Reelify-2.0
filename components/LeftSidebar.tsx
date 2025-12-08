@@ -1,6 +1,7 @@
 
+
 import React from 'react';
-import { trendingTopics, featuredCommunities, VibeLogo, HomeIcon, ShopIcon, ProfileIcon, InboxIcon } from '../constants';
+import { trendingTopics, featuredCommunities, VibeLogo, HomeIcon, ShopIcon, ProfileIcon } from '../constants';
 import type { Community } from '../types';
 import type { View } from '../App';
 
@@ -28,7 +29,6 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ onNavigate, currentView }) =>
       <nav className="space-y-2">
         <NavItem icon={<HomeIcon active={currentView === 'feed'} />} label="Home" active={currentView === 'feed'} onClick={() => onNavigate('feed')} />
         <NavItem icon={<ShopIcon className="w-6 h-6" active={currentView === 'foryou'} />} label="Shop" active={currentView === 'foryou'} onClick={() => onNavigate('foryou')} />
-        <NavItem icon={<InboxIcon active={currentView === 'inbox'} />} label="Inbox" active={currentView === 'inbox'} onClick={() => onNavigate('inbox')} />
         <NavItem icon={<ProfileIcon active={currentView === 'profile'} />} label="Profile" active={currentView === 'profile'} onClick={() => onNavigate('profile')} />
       </nav>
 
