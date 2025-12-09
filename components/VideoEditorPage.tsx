@@ -66,7 +66,6 @@ const VideoEditorPage: React.FC<VideoEditorPageProps> = ({ videoUrl, onNext, onB
                         className="max-w-full max-h-full"
                         autoPlay
                         loop
-                        muted
                         key={videoUrl} // Add key to force re-render when video changes
                     />
                 ) : (

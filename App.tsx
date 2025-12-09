@@ -335,13 +335,19 @@ const App: React.FC = () => {
 
   const handleStartConversation = (user: User) => {
     if (user.username === loggedInUser.username) return;
-    const existingConversation = allConversations.find(c => c.user.username === user.username);
+    
+    const participantIds = [loggedInUser.username, user.username].sort();
+    const existingConversation = allConversations.find(c => 
+        c.participantIds.length === 2 && 
+        c.participantIds.slice().sort().join(',') === participantIds.join(',')
+    );
+
     if (existingConversation) {
         setSelectedConversation(existingConversation);
     } else {
         const newConversation: Conversation = {
             id: Date.now(),
-            user: user,
+            participantIds: [loggedInUser.username, user.username],
             messages: [],
         };
         setAllConversations(prev => [newConversation, ...prev]);
@@ -350,10 +356,14 @@ const App: React.FC = () => {
     setCurrentView('chat');
   };
 
-  const handleSendMessage = (conversationId: number, message: Omit<Message, 'id'>) => {
+  const handleSendMessage = (conversationId: number, message: Omit<Message, 'id' | 'senderId'>) => {
     setAllConversations(prev => prev.map(convo => {
         if (convo.id !== conversationId) return convo;
-        const newMessage: Message = { ...message, id: Date.now() };
+        const newMessage: Message = { 
+            ...message, 
+            id: Date.now(),
+            senderId: loggedInUser.username
+        };
         return { ...convo, messages: [...convo.messages, newMessage] };
     }));
   };
@@ -391,10 +401,10 @@ const App: React.FC = () => {
       pageContent = viewedUser ? <ProfilePage user={viewedUser} allVideos={allVideos} allPhotoPosts={allPhotoPosts} onBack={handleBackFromProfile} showBackButton={viewedUser.username !== loggedInUser.username} onEdit={() => setCurrentView('editProfile')} onPlayVideo={(videoId) => handlePlayFromProfile(viewedUser, videoId)} loggedInUser={loggedInUser} switchableAccounts={viewedUser.username === loggedInUser.username ? switchableAccounts : []} onSwitchAccount={handleSwitchAccount} onToggleObserve={handleToggleObserve} onStartConversation={handleStartConversation} /> : null;
       break;
     case 'inbox':
-      pageContent = <InboxPage conversations={allConversations} onSelectConversation={handleSelectConversation} loggedInUser={loggedInUser} />;
+      pageContent = <InboxPage conversations={allConversations} onSelectConversation={handleSelectConversation} loggedInUser={loggedInUser} allUsers={allUsers} />;
       break;
     case 'chat':
-      pageContent = selectedConversation ? <ChatScreen conversation={selectedConversation} loggedInUser={loggedInUser} onSendMessage={handleSendMessage} onBack={() => setCurrentView('inbox')} onSelectUser={handleSelectUser} /> : null;
+      pageContent = selectedConversation ? <ChatScreen conversation={selectedConversation} loggedInUser={loggedInUser} onSendMessage={handleSendMessage} onBack={() => setCurrentView('inbox')} onSelectUser={handleSelectUser} allUsers={allUsers} /> : null;
       if (!selectedConversation) setCurrentView('inbox');
       break;
     case 'editProfile':

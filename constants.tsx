@@ -140,6 +140,10 @@ export const initialVideosData: Video[] = [
         shares: 280,
         musicCoverUrl: "https://res.cloudinary.com/dlklqihg6/image/upload/v1764031351/ehxzfirmajfwnn72tu11.jpg",
         commentData: sampleComments,
+        audio: {
+            title: "Summer Vibes - Upbeat Chill",
+            artist: "Soundwave Collective",
+        },
     },
     {
         id: 2,
@@ -154,6 +158,10 @@ export const initialVideosData: Video[] = [
         shares: 450,
         musicCoverUrl: "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=800",
         commentData: [],
+        audio: {
+            title: "Morning Brew",
+            artist: "Jazzy Cafe",
+        },
     },
     {
         id: 3,
@@ -168,6 +176,10 @@ export const initialVideosData: Video[] = [
         shares: 600,
         musicCoverUrl: "https://images.pexels.com/photos/2129796/pexels-photo-2129796.jpeg?auto=compress&cs=tinysrgb&w=800",
         commentData: [],
+        audio: {
+            title: "City Lights - Lo-fi",
+            artist: "Urban Groove",
+        },
     },
     {
         id: 4,
@@ -182,6 +194,10 @@ export const initialVideosData: Video[] = [
         shares: 800,
         musicCoverUrl: "https://images.pexels.com/photos/1531660/pexels-photo-1531660.jpeg?auto=compress&cs=tinysrgb&w=800",
         commentData: [],
+        audio: {
+            title: "Ocean's Breath",
+            artist: "Nature Sounds",
+        },
     },
 ];
 
@@ -236,34 +252,34 @@ export const galleryMediaData: GalleryMedia[] = [];
 export const conversationsData: Conversation[] = [
     {
         id: 1,
-        user: soponIslam,
+        participantIds: [mariaKhan.username, soponIslam.username],
         messages: [
-            { id: 1, sender: 'other', type: 'audio', text: 'Audio message', audioData: { duration: '0:09' }, timestamp: '12:31 PM' },
-            { id: 2, sender: 'other', type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:31 PM' },
-            { id: 3, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:32 PM' },
-            { id: 4, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:32 PM' },
-            { id: 5, sender: 'me', type: 'audio', text: 'Audio message', audioData: { duration: '0:05' }, timestamp: '12:33 PM' },
-            { id: 6, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:34 PM' },
-            { id: 7, sender: 'other', type: 'text', text: 'বাই', timestamp: '12:35 PM' },
-            { id: 8, sender: 'me', type: 'audio', text: 'Audio message', audioData: { duration: '0:07' }, timestamp: '12:36 PM' },
-            { id: 9, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '1:41 PM' },
-            { id: 10, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '1:41 PM' },
-            { id: 11, sender: 'me', type: 'emoji', text: '👍', emoji: '👍', timestamp: '1:41 PM' },
+            { id: 1, senderId: soponIslam.username, type: 'audio', text: 'Audio message', audioData: { duration: '0:09' }, timestamp: '12:31 PM' },
+            { id: 2, senderId: soponIslam.username, type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:31 PM' },
+            { id: 3, senderId: mariaKhan.username, type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:32 PM' },
+            { id: 4, senderId: mariaKhan.username, type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:32 PM' },
+            { id: 5, senderId: mariaKhan.username, type: 'audio', text: 'Audio message', audioData: { duration: '0:05' }, timestamp: '12:33 PM' },
+            { id: 6, senderId: mariaKhan.username, type: 'emoji', text: '👍', emoji: '👍', timestamp: '12:34 PM' },
+            { id: 7, senderId: soponIslam.username, type: 'text', text: 'বাই', timestamp: '12:35 PM' },
+            { id: 8, senderId: mariaKhan.username, type: 'audio', text: 'Audio message', audioData: { duration: '0:07' }, timestamp: '12:36 PM' },
+            { id: 9, senderId: mariaKhan.username, type: 'emoji', text: '👍', emoji: '👍', timestamp: '1:41 PM' },
+            { id: 10, senderId: mariaKhan.username, type: 'emoji', text: '👍', emoji: '👍', timestamp: '1:41 PM' },
+            { id: 11, senderId: mariaKhan.username, type: 'emoji', text: '👍', emoji: '👍', timestamp: '1:41 PM' },
         ],
     },
     {
         id: 2,
-        user: rakibHasan,
+        participantIds: [mariaKhan.username, rakibHasan.username],
         messages: [
-            { id: 1, sender: 'other', type: 'text', text: 'kire koi tui?', timestamp: '2:00 PM' },
+            { id: 1, senderId: rakibHasan.username, type: 'text', text: 'kire koi tui?', timestamp: '2:00 PM' },
         ],
     },
      {
         id: 3,
-        user: tusharEmran,
+        participantIds: [mariaKhan.username, tusharEmran.username],
         messages: [
-            { id: 1, sender: 'other', type: 'text', text: 'Hey, saw your new video. It\'s awesome!', timestamp: 'Yesterday' },
-            { id: 2, sender: 'me', type: 'text', text: 'Thanks! Glad you liked it.', timestamp: 'Yesterday' },
+            { id: 1, senderId: tusharEmran.username, type: 'text', text: 'Hey, saw your new video. It\'s awesome!', timestamp: 'Yesterday' },
+            { id: 2, senderId: mariaKhan.username, type: 'text', text: 'Thanks! Glad you liked it.', timestamp: 'Yesterday' },
         ],
     },
 ];

@@ -5,6 +5,7 @@ import { SearchIcon, BackIcon, HeartIconFilled } from '../constants';
 import VideoInfo from './VideoInfo';
 import VideoActions from './VideoActions';
 import type { Video, User, Comment as CommentType } from '../types';
+import MusicTicker from './MusicTicker';
 import type { View } from '../App';
 import ShareMenu from './ShareMenu';
 // FIX: Updated import to use named export for CommentsSheet.
@@ -141,7 +142,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, lo
         </div>
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end z-20">
+      <div className="absolute bottom-0 left-0 right-0 p-4 pb-16 lg:pb-4 flex items-end z-20">
         <div className="flex-grow">
           <VideoInfo video={video} onSelectUser={onSelectUser} />
         </div>
@@ -201,6 +202,7 @@ const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView, startIndex, onBack, loggedInUser, onToggleObserve, onVideoReaction, onAddComment, onLikeComment }) => {
     const [currentVideo, setCurrentVideo] = useState(startIndex || 0);
     const containerRef = useRef<HTMLDivElement>(null);
+    const currentVideoData = videos[currentVideo];
 
     useEffect(() => {
         if (startIndex !== undefined && containerRef.current) {
@@ -286,6 +288,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavig
                 )}
                 <div className="w-10 h-10"></div>
             </header>
+
+            {currentView === 'feed' && (
+                 <MusicTicker
+                    coverUrl={currentVideoData?.musicCoverUrl}
+                    title={currentVideoData?.audio?.title}
+                    artist={currentVideoData?.audio?.artist}
+                />
+            )}
         </div>
     );
 };

@@ -82,7 +82,7 @@ export interface ShopPost {
 
 export interface Message {
   id: number;
-  sender: 'me' | 'other';
+  senderId: string;
   text: string;
   timestamp: string;
   type?: 'text' | 'audio' | 'emoji';
@@ -94,7 +94,7 @@ export interface Message {
 
 export interface Conversation {
   id: number;
-  user: User;
+  participantIds: string[];
   messages: Message[];
 }
 

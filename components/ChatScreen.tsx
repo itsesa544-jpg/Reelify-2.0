@@ -5,17 +5,20 @@ import MessageBubble from './MessageBubble';
 interface ChatScreenProps {
   conversation: Conversation;
   loggedInUser: User;
-  onSendMessage: (conversationId: number, message: Omit<Message, 'id'>) => void;
+  allUsers: User[];
+  onSendMessage: (conversationId: number, message: Omit<Message, 'id' | 'senderId'>) => void;
   onBack: () => void;
   onSelectUser: (user: User) => void;
 }
 
-const ChatScreen: React.FC<ChatScreenProps> = ({ conversation, loggedInUser, onSendMessage, onBack, onSelectUser }) => {
+const ChatScreen: React.FC<ChatScreenProps> = ({ conversation, loggedInUser, allUsers, onSendMessage, onBack, onSelectUser }) => {
   const [inputText, setInputText] = useState('');
   const messagesAreaRef = useRef<HTMLDivElement>(null);
 
+  const otherParticipantId = conversation.participantIds.find(id => id !== loggedInUser.username);
+  const otherUser = allUsers.find(u => u.username === otherParticipantId);
+
   useEffect(() => {
-    // Scroll to the bottom of the chat on initial load and when new messages arrive
     if (messagesAreaRef.current) {
       messagesAreaRef.current.scrollTop = messagesAreaRef.current.scrollHeight;
     }
@@ -23,17 +26,22 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ conversation, loggedInUser, onS
 
   const handleSend = () => {
     const trimmedText = inputText.trim();
-    const messageType = trimmedText ? 'text' : 'emoji';
-
-    const newMessage: Omit<Message, 'id'> = {
-      sender: 'me',
-      text: trimmedText || '👍',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      type: messageType,
-      emoji: messageType === 'emoji' ? '👍' : undefined,
-    };
-    
-    onSendMessage(conversation.id, newMessage);
+    if (!trimmedText && !inputText) { // Send emoji only if input is empty
+        const emojiMessage: Omit<Message, 'id' | 'senderId'> = {
+            text: '👍',
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            type: 'emoji',
+            emoji: '👍',
+        };
+        onSendMessage(conversation.id, emojiMessage);
+    } else if (trimmedText) {
+        const textMessage: Omit<Message, 'id' | 'senderId'> = {
+            text: trimmedText,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            type: 'text',
+        };
+        onSendMessage(conversation.id, textMessage);
+    }
     setInputText('');
   };
   
@@ -43,6 +51,15 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ conversation, loggedInUser, onS
     }
   };
 
+  if (!otherUser) {
+    return (
+      <div className="w-full h-full bg-white flex items-center justify-center">
+        <p>User not found.</p>
+        <button onClick={onBack} className="ml-4 p-2 bg-gray-200 rounded">Back</button>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full bg-white text-black flex flex-col">
       {/* Header */}
@@ -50,10 +67,10 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ conversation, loggedInUser, onS
         <button onClick={onBack} className="text-2xl text-[#0084ff] mr-4 p-1.5">
           <i className="fas fa-arrow-left"></i>
         </button>
-        <div className="flex-grow flex items-center" onClick={() => onSelectUser(conversation.user)}>
-          <img src={conversation.user.avatar} alt={conversation.user.name} className="w-10 h-10 rounded-full mr-2.5 object-cover" />
+        <div className="flex-grow flex items-center cursor-pointer" onClick={() => onSelectUser(otherUser)}>
+          <img src={otherUser.avatar} alt={otherUser.name} className="w-10 h-10 rounded-full mr-2.5 object-cover" />
           <div>
-            <h3 className="text-base font-semibold">{conversation.user.name}</h3>
+            <h3 className="text-base font-semibold">{otherUser.name}</h3>
             <p className="text-xs text-gray-500">Active now</p>
           </div>
         </div>
@@ -68,7 +85,12 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ conversation, loggedInUser, onS
       <main ref={messagesAreaRef} className="flex-grow overflow-y-auto p-4 bg-white">
         <div className="flex flex-col gap-2">
           {conversation.messages.map(message => (
-            <MessageBubble key={message.id} message={message} otherUserAvatar={conversation.user.avatar} />
+            <MessageBubble 
+              key={message.id} 
+              message={message} 
+              otherUserAvatar={otherUser.avatar}
+              loggedInUsername={loggedInUser.username}
+            />
           ))}
         </div>
       </main>
