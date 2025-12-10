@@ -1,7 +1,5 @@
-
-
 import React from 'react';
-import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost, Review, Comment, Message } from './types';
+import type { Community, Video, ShopPost, Conversation, Notification, GalleryMedia, User, PhotoPost, Review, Comment, Message, Audio } from './types';
 
 export const formatNumber = (num: number): string => {
     if (num >= 1000000) {
@@ -125,6 +123,11 @@ const sampleComments: Comment[] = [
   },
 ];
 
+const summerVibesAudio: Audio = {
+    title: "Summer Vibes - Upbeat Chill",
+    artist: "Soundwave Collective",
+    coverUrl: "https://res.cloudinary.com/dlklqihg6/image/upload/v1764031351/ehxzfirmajfwnn72tu11.jpg",
+};
 
 export const initialVideosData: Video[] = [
     {
@@ -138,12 +141,8 @@ export const initialVideosData: Video[] = [
         likes: 1500,
         comments: 2,
         shares: 280,
-        musicCoverUrl: "https://res.cloudinary.com/dlklqihg6/image/upload/v1764031351/ehxzfirmajfwnn72tu11.jpg",
         commentData: sampleComments,
-        audio: {
-            title: "Summer Vibes - Upbeat Chill",
-            artist: "Soundwave Collective",
-        },
+        audio: summerVibesAudio,
     },
     {
         id: 2,
@@ -156,11 +155,11 @@ export const initialVideosData: Video[] = [
         likes: 2100,
         comments: 0,
         shares: 450,
-        musicCoverUrl: "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=800",
         commentData: [],
         audio: {
             title: "Morning Brew",
             artist: "Jazzy Cafe",
+            coverUrl: "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=800",
         },
     },
     {
@@ -174,12 +173,8 @@ export const initialVideosData: Video[] = [
         likes: 3200,
         comments: 0,
         shares: 600,
-        musicCoverUrl: "https://images.pexels.com/photos/2129796/pexels-photo-2129796.jpeg?auto=compress&cs=tinysrgb&w=800",
         commentData: [],
-        audio: {
-            title: "City Lights - Lo-fi",
-            artist: "Urban Groove",
-        },
+        audio: summerVibesAudio,
     },
     {
         id: 4,
@@ -192,11 +187,11 @@ export const initialVideosData: Video[] = [
         likes: 4500,
         comments: 0,
         shares: 800,
-        musicCoverUrl: "https://images.pexels.com/photos/1531660/pexels-photo-1531660.jpeg?auto=compress&cs=tinysrgb&w=800",
         commentData: [],
         audio: {
             title: "Ocean's Breath",
             artist: "Nature Sounds",
+            coverUrl: "https://images.pexels.com/photos/1531660/pexels-photo-1531660.jpeg?auto=compress&cs=tinysrgb&w=800",
         },
     },
 ];

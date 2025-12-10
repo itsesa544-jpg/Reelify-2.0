@@ -1,14 +1,10 @@
-
-
 import React, { useRef, useEffect, useState } from 'react';
 import { SearchIcon, BackIcon, HeartIconFilled } from '../constants';
 import VideoInfo from './VideoInfo';
 import VideoActions from './VideoActions';
-import type { Video, User, Comment as CommentType } from '../types';
-import MusicTicker from './MusicTicker';
+import type { Video, User, Comment as CommentType, Audio } from '../types';
 import type { View } from '../App';
 import ShareMenu from './ShareMenu';
-// FIX: Updated import to use named export for CommentsSheet.
 import { CommentsSheet } from './CommentsSheet';
 
 interface VideoItemProps {
@@ -20,6 +16,7 @@ interface VideoItemProps {
   onVideoReaction: (videoId: number, reaction: string | undefined) => void;
   onAddComment: (videoId: number, text: string) => void;
   onLikeComment: (videoId: number, commentId: number) => void;
+  onSelectAudio: (audio: Audio) => void;
 }
 
 const PlayPauseIcon = ({ isPlaying }: { isPlaying: boolean }) => (
@@ -37,7 +34,7 @@ const PlayPauseIcon = ({ isPlaying }: { isPlaying: boolean }) => (
 );
 
 
-const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, loggedInUser, onToggleObserve, onVideoReaction, onAddComment, onLikeComment }) => {
+const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, loggedInUser, onToggleObserve, onVideoReaction, onAddComment, onLikeComment, onSelectAudio }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPlayPauseIcon, setShowPlayPauseIcon] = useState(false);
@@ -155,6 +152,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, isActive, onSelectUser, lo
             onVideoReaction={onVideoReaction}
             onOpenShareMenu={() => setIsShareMenuOpen(true)}
             onOpenCommentsMenu={() => setIsCommentsSheetOpen(true)}
+            onSelectAudio={onSelectAudio}
           />
         </div>
       </div>
@@ -184,6 +182,7 @@ interface VideoPlayerProps {
   onVideoReaction: (videoId: number, reaction: string | undefined) => void;
   onAddComment: (videoId: number, text: string) => void;
   onLikeComment: (videoId: number, commentId: number) => void;
+  onSelectAudio: (audio: Audio) => void;
 }
 
 const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> = ({ label, active, onClick }) => (
@@ -199,10 +198,9 @@ const NavTab: React.FC<{ label: string; active: boolean; onClick: () => void }> 
 );
 
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView, startIndex, onBack, loggedInUser, onToggleObserve, onVideoReaction, onAddComment, onLikeComment }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavigate, currentView, startIndex, onBack, loggedInUser, onToggleObserve, onVideoReaction, onAddComment, onLikeComment, onSelectAudio }) => {
     const [currentVideo, setCurrentVideo] = useState(startIndex || 0);
     const containerRef = useRef<HTMLDivElement>(null);
-    const currentVideoData = videos[currentVideo];
 
     useEffect(() => {
         if (startIndex !== undefined && containerRef.current) {
@@ -263,6 +261,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavig
                           onVideoReaction={onVideoReaction}
                           onAddComment={onAddComment}
                           onLikeComment={onLikeComment}
+                          onSelectAudio={onSelectAudio}
                         />
                     </div>
                 ))}
@@ -288,14 +287,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videos, onSelectUser, onNavig
                 )}
                 <div className="w-10 h-10"></div>
             </header>
-
-            {currentView === 'feed' && (
-                 <MusicTicker
-                    coverUrl={currentVideoData?.musicCoverUrl}
-                    title={currentVideoData?.audio?.title}
-                    artist={currentVideoData?.audio?.artist}
-                />
-            )}
         </div>
     );
 };

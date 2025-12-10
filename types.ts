@@ -1,5 +1,11 @@
 
 
+export interface Audio {
+  title: string;
+  artist: string;
+  coverUrl: string;
+}
+
 export interface User {
   username: string;
   avatar: string;
@@ -43,10 +49,7 @@ export interface Video {
   comments: number;
   shares: number;
   commentData?: Comment[];
-  audio?: {
-    title: string;
-    artist: string;
-  };
+  audio?: Audio;
   musicCoverUrl?: string;
   myReaction?: string;
   reactions?: { [key: string]: number };

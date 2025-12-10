@@ -17,10 +17,11 @@ import UploadModal from './components/UploadModal';
 import UploadPage from './components/UploadPage';
 import CreatePhotoPostPage from './components/CreatePhotoPostPage';
 import ChatScreen from './components/ChatScreen';
-import type { User, Video, GalleryMedia, ShopPost, PhotoPost, Comment, Conversation, Message } from './types';
+import MusicPage from './components/MusicPage';
+import type { User, Video, GalleryMedia, ShopPost, PhotoPost, Comment, Conversation, Message, Audio } from './types';
 import { initialVideosData, mariaKhan, tusharEmran, mdesa, allUsers as initialAllUsers, photoPostsData as initialPhotoPosts, shopPostsData as initialShopPosts, conversationsData as initialConversations } from './constants';
 
-export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload' | 'createPhotoPost' | 'chat';
+export type View = 'feed' | 'foryou' | 'profile' | 'inbox' | 'editProfile' | 'postCreation' | 'photos' | 'observing' | 'userFeed' | 'videoEditor' | 'photoPost' | 'shopDetail' | 'upload' | 'createPhotoPost' | 'chat' | 'musicPage';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -103,6 +104,8 @@ const App: React.FC = () => {
   const [initialUploadTab, setInitialUploadTab] = useState<'video' | 'photo' | 'shop'>('video');
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryMedia | null>(null);
   const [selectedShopPost, setSelectedShopPost] = useState<ShopPost | null>(null);
+  const [selectedAudio, setSelectedAudio] = useState<Audio | null>(null);
+  const [userFeedSourceView, setUserFeedSourceView] = useState<View>('profile');
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const switchableAccounts = [mariaKhan, tusharEmran, mdesa];
@@ -111,7 +114,11 @@ const App: React.FC = () => {
     try {
       localStorage.setItem('vibe-isLoggedIn', String(isLoggedIn));
       localStorage.setItem('vibe-loggedInUser', JSON.stringify(loggedInUser));
-      localStorage.setItem('vibe-allVideos', JSON.stringify(allVideos));
+      // Filter out temporary blob URLs before saving videos to avoid issues on reload
+      const persistentVideos = allVideos.map(v => 
+          v.videoUrl.startsWith('blob:') ? { ...v, videoUrl: '', posterUrl: '' } : v
+      ).filter(v => v.videoUrl !== '');
+      localStorage.setItem('vibe-allVideos', JSON.stringify(persistentVideos));
       localStorage.setItem('vibe-allUsers', JSON.stringify(allUsers));
       localStorage.setItem('vibe-allPhotoPosts', JSON.stringify(allPhotoPosts));
       localStorage.setItem('vibe-allShopPosts', JSON.stringify(allShopPosts));
@@ -214,7 +221,24 @@ const App: React.FC = () => {
   const handleEditorNext = (videoUrl: string) => { setVideoToPostUrl(videoUrl); setCurrentView('postCreation'); };
 
   const handlePublishVideo = (videoData: { title: string; description: string; videoUrl: string; hashtags: string[] }) => {
-    const newVideo: Video = { id: Date.now(), user: loggedInUser, title: videoData.title, caption: videoData.description, videoUrl: videoData.videoUrl, posterUrl: videoData.videoUrl, hashtags: videoData.hashtags, likes: 0, comments: 0, shares: 0 };
+    const newVideo: Video = {
+      id: Date.now(),
+      user: loggedInUser,
+      title: videoData.title,
+      caption: videoData.description,
+      videoUrl: videoData.videoUrl,
+      posterUrl: videoData.videoUrl, // In a real app, generate a thumbnail
+      hashtags: videoData.hashtags,
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      audio: {
+        title: "Original Sound",
+        artist: loggedInUser.name,
+        coverUrl: loggedInUser.avatar,
+      },
+      musicCoverUrl: loggedInUser.avatar,
+    };
     setAllVideos(prevVideos => [newVideo, ...prevVideos]);
     setCurrentView('feed');
   };
@@ -236,22 +260,44 @@ const App: React.FC = () => {
   const handlePhotoReaction = (postId: number, reaction: string) => {
     setAllPhotoPosts(prevPosts => prevPosts.map(post => {
         if (post.id !== postId) return post;
-        const updatedPost = { ...post, stats: { ...post.stats }, reactions: { ...post.reactions } };
-        const stats = updatedPost.stats!; const reactions = updatedPost.reactions!; const currentReaction = updatedPost.myReaction;
+        
+        const updatedStats = { ...(post.stats || { likes: 0, comments: 0, shares: 0, views: 0 }) };
+        const updatedReactions = { ...(post.reactions || {}) };
+        const currentReaction = post.myReaction;
+        let updatedMyReaction = currentReaction;
+
         if (currentReaction === reaction) {
-          updatedPost.myReaction = undefined;
-          if (stats.likes > 0) stats.likes--;
-          if (reactions[currentReaction] > 1) reactions[currentReaction]--; else delete reactions[currentReaction];
-        } else {
-          if (currentReaction) {
-            if (reactions[currentReaction] > 1) reactions[currentReaction]--; else delete reactions[currentReaction];
+          // Untoggle
+          updatedMyReaction = undefined;
+          if (updatedStats.likes > 0) updatedStats.likes = updatedStats.likes - 1;
+          
+          if ((updatedReactions[currentReaction] || 0) > 1) {
+              updatedReactions[currentReaction] = (updatedReactions[currentReaction] || 0) - 1;
           } else {
-            stats.likes++;
+              delete updatedReactions[currentReaction];
           }
-          updatedPost.myReaction = reaction;
-          reactions[reaction] = (reactions[reaction] || 0) + 1;
+        } else {
+          // Toggle or switch
+          if (currentReaction) {
+            if ((updatedReactions[currentReaction] || 0) > 1) {
+                updatedReactions[currentReaction] = (updatedReactions[currentReaction] || 0) - 1;
+            } else {
+                delete updatedReactions[currentReaction];
+            }
+          } else {
+            updatedStats.likes = updatedStats.likes + 1;
+          }
+          
+          updatedMyReaction = reaction;
+          updatedReactions[reaction] = (updatedReactions[reaction] || 0) + 1;
         }
-        return updatedPost;
+
+        return { 
+            ...post, 
+            stats: updatedStats, 
+            reactions: updatedReactions, 
+            myReaction: updatedMyReaction 
+        };
       })
     );
   };
@@ -259,25 +305,41 @@ const App: React.FC = () => {
   const handleVideoReaction = (videoId: number, reaction: string | undefined) => {
     setAllVideos(prevVideos => prevVideos.map(video => {
         if (video.id !== videoId) return video;
-        const updatedVideo = { ...video, reactions: { ...video.reactions } };
-        const reactions = updatedVideo.reactions!; const currentReaction = updatedVideo.myReaction;
+        
+        const updatedVideo = { ...video, reactions: { ...(video.reactions || {}) } };
+        const reactions = updatedVideo.reactions!;
+        const currentReaction = updatedVideo.myReaction;
+
         if (reaction && currentReaction === reaction) {
+          // Untoggle
           updatedVideo.myReaction = undefined;
-          if (updatedVideo.likes > 0) updatedVideo.likes--;
-          if (reactions[currentReaction] > 1) reactions[currentReaction]--; else delete reactions[currentReaction];
-        } else {
-          if (currentReaction) {
-            if (reactions[currentReaction] > 1) reactions[currentReaction]--; else delete reactions[currentReaction];
-          } else if (reaction) {
-            updatedVideo.likes++;
-          }
-          if (reaction) {
-            updatedVideo.myReaction = reaction;
-            reactions[reaction] = (reactions[reaction] || 0) + 1;
+          if (updatedVideo.likes > 0) updatedVideo.likes = updatedVideo.likes - 1;
+          
+          if ((reactions[currentReaction] || 0) > 1) {
+              reactions[currentReaction] = (reactions[currentReaction] || 0) - 1;
           } else {
-            if (currentReaction && updatedVideo.likes > 0) updatedVideo.likes--;
-            updatedVideo.myReaction = undefined;
+              delete reactions[currentReaction];
           }
+        } else {
+            // Toggle on or switch
+            if (currentReaction) {
+                if ((reactions[currentReaction] || 0) > 1) {
+                    reactions[currentReaction] = (reactions[currentReaction] || 0) - 1;
+                } else {
+                    delete reactions[currentReaction];
+                }
+            } else if (reaction) {
+                updatedVideo.likes = updatedVideo.likes + 1;
+            }
+
+            if (reaction) {
+                updatedVideo.myReaction = reaction;
+                reactions[reaction] = (reactions[reaction] || 0) + 1;
+            } else {
+                // If explicit 'undefined' passed as reaction (rare case in this logic but possible)
+                if (currentReaction && updatedVideo.likes > 0) updatedVideo.likes = updatedVideo.likes - 1;
+                updatedVideo.myReaction = undefined;
+            }
         }
         return updatedVideo;
       })
@@ -311,7 +373,9 @@ const App: React.FC = () => {
     const startIndex = userVideos.findIndex(v => v.id === videoId);
     if (startIndex !== -1) {
         setUserFeedVideos(userVideos); setUserFeedStartIndex(startIndex);
-        setViewedUser(user); setCurrentView('userFeed');
+        setViewedUser(user);
+        setUserFeedSourceView('profile');
+        setCurrentView('userFeed');
     }
   };
   
@@ -326,7 +390,7 @@ const App: React.FC = () => {
     }
   };
 
-  const handleBackFromUserFeed = () => setCurrentView('profile');
+  const handleBackFromUserFeed = () => setCurrentView(userFeedSourceView);
   
   const handleSelectConversation = (conversation: Conversation) => {
     setSelectedConversation(conversation);
@@ -368,6 +432,30 @@ const App: React.FC = () => {
     }));
   };
 
+  const handleSelectAudio = (audio: Audio) => {
+    setSelectedAudio(audio);
+    setCurrentView('musicPage');
+  };
+
+  const handleBackFromMusicPage = () => {
+    setSelectedAudio(null);
+    setCurrentView('feed');
+  };
+
+  const handlePlayVideosFromMusicPage = (videos: Video[], startIndex: number) => {
+    setUserFeedVideos(videos);
+    setUserFeedStartIndex(startIndex);
+    setUserFeedSourceView('musicPage');
+    setCurrentView('userFeed');
+  };
+
+  const handleUseSound = (audio: Audio) => {
+    alert(`Using sound: ${audio.title}. In a real app, this would open the camera with this audio.`);
+    // Navigate to camera/upload would go here
+    setIsUploadModalOpen(true);
+  };
+
+
   if (!isLoggedIn) return <AuthPage onLoginSuccess={handleLoginSuccess} />;
 
   const observingVideos = allVideos.filter(video => loggedInUser.observing.includes(video.user.username));
@@ -375,13 +463,13 @@ const App: React.FC = () => {
   let pageContent;
   switch (currentView) {
     case 'feed':
-      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUser} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} />;
+      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUser} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} onSelectAudio={handleSelectAudio} />;
       break;
     case 'observing':
-      pageContent = <VideoPlayer videos={observingVideos} onSelectUser={handleSelectUser} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} />;
+      pageContent = <VideoPlayer videos={observingVideos} onSelectUser={handleSelectUser} onNavigate={handleNavigate} currentView={currentView} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} onSelectAudio={handleSelectAudio} />;
       break;
     case 'userFeed':
-        pageContent = <VideoPlayer videos={userFeedVideos} onSelectUser={handleSelectUser} onNavigate={handleNavigate} currentView={currentView} startIndex={userFeedStartIndex} onBack={handleBackFromUserFeed} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} />;
+        pageContent = <VideoPlayer videos={userFeedVideos} onSelectUser={handleSelectUser} onNavigate={handleNavigate} currentView={currentView} startIndex={userFeedStartIndex} onBack={handleBackFromUserFeed} loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} onSelectAudio={handleSelectAudio} />;
         break;
     case 'photos':
       pageContent = <PhotoFeedPage posts={allPhotoPosts} onReactionSelect={handlePhotoReaction} />;
@@ -424,8 +512,12 @@ const App: React.FC = () => {
         pageContent = photoToPostUrl ? <CreatePhotoPostPage imageUrl={photoToPostUrl} user={loggedInUser} onBack={() => setCurrentView('upload')} onPublish={handlePublishPhoto} /> : null;
         if (!photoToPostUrl) setCurrentView('upload');
         break;
+    case 'musicPage':
+        pageContent = selectedAudio ? <MusicPage audio={selectedAudio} allVideos={allVideos} onBack={handleBackFromMusicPage} onPlayVideos={handlePlayVideosFromMusicPage} onUseSound={handleUseSound} /> : null;
+        if (!selectedAudio) setCurrentView('feed');
+        break;
     default:
-      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUser} onNavigate={handleNavigate} currentView='feed' loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} />;
+      pageContent = <VideoPlayer videos={allVideos} onSelectUser={handleSelectUser} onNavigate={handleNavigate} currentView='feed' loggedInUser={loggedInUser} onToggleObserve={handleToggleObserve} onVideoReaction={handleVideoReaction} onAddComment={handleAddComment} onLikeComment={handleLikeComment} onSelectAudio={handleSelectAudio} />;
   }
 
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Video, User } from '../types';
+import type { Video, User, Audio } from '../types';
 import { MusicNoteIcon, formatNumber, CheckmarkIcon } from '../constants';
 
 interface VideoActionsProps {
@@ -10,6 +10,7 @@ interface VideoActionsProps {
   onVideoReaction: (videoId: number, reaction: string | undefined) => void;
   onOpenShareMenu: () => void;
   onOpenCommentsMenu: () => void;
+  onSelectAudio: (audio: Audio) => void;
 }
 
 const ActionButton = ({ icon, label, onClick }: { icon: React.ReactNode, label: string, onClick?: () => void }) => (
@@ -17,11 +18,11 @@ const ActionButton = ({ icon, label, onClick }: { icon: React.ReactNode, label: 
         <div className="w-12 h-12 flex items-center justify-center bg-black/40 rounded-full group-hover:bg-purple-600 transition-colors">
             {icon}
         </div>
-        <span className="text-xs font-bold">{label}</span>
+        <span className="text-xs font-bold drop-shadow-md">{label}</span>
     </button>
 );
 
-const VideoActions: React.FC<VideoActionsProps> = ({ video, onSelectUser, loggedInUser, onToggleObserve, onVideoReaction, onOpenShareMenu, onOpenCommentsMenu }) => {
+const VideoActions: React.FC<VideoActionsProps> = ({ video, onSelectUser, loggedInUser, onToggleObserve, onVideoReaction, onOpenShareMenu, onOpenCommentsMenu, onSelectAudio }) => {
     const iconClasses = "w-7 h-7";
     const isObserving = loggedInUser.observing.includes(video.user.username);
     const isOwnProfile = loggedInUser.username === video.user.username;
@@ -30,8 +31,10 @@ const VideoActions: React.FC<VideoActionsProps> = ({ video, onSelectUser, logged
         onVideoReaction(video.id, '❤️');
     };
 
+    const musicCover = video.musicCoverUrl || video.audio?.coverUrl;
+
   return (
-    <div className="flex flex-col items-center gap-5">
+    <div className="flex flex-col items-center gap-4">
         <div className="relative mb-2">
             <button onClick={() => onSelectUser(video.user)} className="group">
                 <img src={video.user.avatar} alt={video.user.username} className="w-12 h-12 rounded-full border-2 border-purple-500 group-hover:border-cyan-400 transition-colors"/>
@@ -55,11 +58,11 @@ const VideoActions: React.FC<VideoActionsProps> = ({ video, onSelectUser, logged
             onClick={handleLikeClick}
         >
             <div className="w-12 h-12 flex items-center justify-center bg-black/40 rounded-full group-hover:bg-purple-600 transition-colors">
-                 <svg xmlns="http://www.w3.org/2000/svg" className={`${iconClasses} transition-colors`} fill={video.myReaction === '❤️' ? 'rgb(239 68 68)' : 'none'} viewBox="0 0 24 24" stroke={video.myReaction === '❤️' ? 'rgb(239 68 68)' : 'currentColor'}>
+                 <svg xmlns="http://www.w3.org/2000/svg" className={`${iconClasses} transition-colors`} fill={video.myReaction === '❤️' ? 'rgb(239 68 68)' : 'currentColor'} viewBox="0 0 24 24" stroke={video.myReaction === '❤️' ? 'rgb(239 68 68)' : 'currentColor'}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                  </svg>
             </div>
-            <span className="text-xs font-bold text-white">{formatNumber(video.likes)}</span>
+            <span className="text-xs font-bold text-white drop-shadow-md">{formatNumber(video.likes)}</span>
         </button>
 
         <ActionButton 
@@ -72,11 +75,17 @@ const VideoActions: React.FC<VideoActionsProps> = ({ video, onSelectUser, logged
             label={formatNumber(video.shares)}
             icon={<svg xmlns="http://www.w3.org/2000/svg" className={iconClasses} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.368a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>}
         />
-        {video.musicCoverUrl && (
+        
+        {musicCover && (
             <div className="mt-4">
-                <div className="w-12 h-12 rounded-full bg-black/50 p-1 animate-spin [animation-duration:5s]">
-                    <img src={video.musicCoverUrl} alt="audio track" className="w-full h-full rounded-full object-cover"/>
-                </div>
+                <button 
+                    onClick={() => video.audio && onSelectAudio(video.audio)}
+                    className="w-12 h-12 rounded-full bg-[#1A1B20] p-[5px] animate-[spin_5s_linear_infinite] flex items-center justify-center relative border border-gray-600"
+                >
+                    <img src={musicCover} alt="audio track" className="w-full h-full rounded-full object-cover"/>
+                    {/* Fita / Vinyl Center Hole */}
+                    <div className="absolute w-2 h-2 bg-[#1A1B20] rounded-full z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border border-gray-600"></div>
+                </button>
             </div>
         )}
     </div>
